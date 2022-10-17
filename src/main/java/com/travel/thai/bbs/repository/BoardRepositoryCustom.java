@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface BoardRepositoryCustom {
     PageImpl<Board> search(Search search, Pageable pageable);
+    PageImpl<Board> searchByKeyword(Search search, Pageable pageable);
 }

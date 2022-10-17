@@ -1,6 +1,7 @@
 package com.travel.thai.bbs.controller;
 
 import com.travel.thai.bbs.domain.Board;
+import com.travel.thai.bbs.domain.PageDto;
 import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.bbs.service.BoardService;
@@ -38,6 +39,8 @@ public class BoardController {
             Map<String, Object> map = new HashMap<>();
             Page<Board> list = boardService.searchBoard(search);
             map.put("list", list);
+            map.put("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+            map.put("search", search);
 
             entity = new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception e) {

@@ -11,7 +11,18 @@
     <div class="container">
         <div class="board-list">
         </div>
+        <div class="board-paging">
+        </div>
         <div class="search-area">
+            <select class="search-select">
+                <option value="all">제목+내용</option>
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+            </select>
+            <input class="search-input" placeholder="검색어를 입력하세요.">
+            <button class="search-btn" onclick="search()">
+                <div class="search-ico"></div>
+            </button>
 
         </div>
     </div>

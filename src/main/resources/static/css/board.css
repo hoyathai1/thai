@@ -48,11 +48,121 @@ body {
     color: #b62713;
 }
 .more-btn {
+    border-bottom: 1px solid #bcbcbc;
 }
 .more-btn > .btn_img {
     background: url("/img/arrow-down.png") no-repeat;
     background-size: contain;
     width: 32px;
-    height: 64px;
+    height: 32px;
     margin:0 auto;  /*중앙정렬*/
+}
+
+
+/*paging*/
+.board-paging {
+    height: 32px;
+    border-bottom: 2px solid #bcbcbc;
+}
+
+.board-paging > .page-prev {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.board-paging > .page-next {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.board-paging > .page-move {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.board-paging > .page-number {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 62.5%;
+    float: left;
+}
+
+.board-paging > .page-number > div {
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    color: #7c7874;
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+}
+
+.board-paging > .page-number > div.on {
+    color: #002875;
+}
+
+/* search */
+.search-area {
+    display : flex;
+    justify-content: center;
+    align-items : center;
+    margin: 5px;
+}
+
+.search-area > .search-select {
+    height: 32px;
+    border-bottom: 1px solid #7c7874;
+    border-top: 1px solid #7c7874;
+    border-left: 1px solid #7c7874;
+    border-right: none;
+    color: #7c7874;
+}
+
+.search-area > .search-input {
+    height: 32px;
+    width: 60%;
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 1px solid #7c7874;
+    border-bottom: 1px solid #7c7874;
+    color: #7c7874;
+    padding-left: 10px;
+}
+
+.search-area > .search-btn {
+    height: 32px;
+    width: 40px;
+    border-top: 1px solid #7c7874;
+    border-bottom: 1px solid #7c7874;
+    border-right: 1px solid #7c7874;
+    border-left: none;
+    background-color:transparent;
+}
+
+.search-area > .search-btn > .search-ico {
+    background: url("/img/search.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 70%;
+    height: 70%;
 }

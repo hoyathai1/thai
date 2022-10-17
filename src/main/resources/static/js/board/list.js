@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    getList(0,15);
+    getList('', '', 0,15);
 });
 
-function getList(page, pageSize) {
+function getList(keyword, content, page, pageSize) {
     $.ajax({
         type : 'post',
         url : '/board/list',
@@ -12,6 +12,8 @@ function getList(page, pageSize) {
         },
         dataType : 'json',
         data : JSON.stringify({
+            keyword: keyword,
+            content: content,
             pageNum : page,
             pageSize : pageSize
         }),
@@ -41,6 +43,7 @@ function setListHtml(data) {
 
     $(".board-list").append(listHtml)
 
+    //  더보기 버튼
     if (data.list.last != true) {
         $(".more-btn").remove();
 
@@ -48,7 +51,7 @@ function setListHtml(data) {
         var pageSize = Number(15);
 
         var moreBtnHtml = "";
-        moreBtnHtml += "<div class='more-btn' onclick='getList(" + page + "," + pageSize + ")'>";
+        moreBtnHtml += "<div class='more-btn' onclick='getList(" + data.search.keyword + "," + data.search.content + ", " + page + "," + pageSize + ")'>";
         moreBtnHtml += "<div class='btn_img'></div>";
         moreBtnHtml += "</div>";
 
@@ -56,6 +59,76 @@ function setListHtml(data) {
     } else {
         $(".more-btn").remove();
     }
+
+    // 페이징 버튼
+    setPagingBtn(data)
+
+    // 검색창 값 세팅
+    setSearch(data);
+}
+
+function setSearch(data) {
+    var content = data.search.content;
+    if (!(typeof content == "undefined" || content == "" || content == null)) {
+        $(".search-select").val(data.search.keyword).prop("selected", true);
+        $(".search-input").val(data.search.content);
+    }
+}
+
+function setPagingBtn(data) {
+    var pageHtml = "";
+
+    // prev
+    pageHtml += "<div class='page-prev' onclick='movePage(\"prev\", " + data.pageDto.startPage + ")'>";
+    pageHtml += "<";
+    pageHtml += "</div>";
+
+    // page
+    pageHtml += "<div class='page-number'>";
+    for(var i = data.pageDto.startPage ; i < data.pageDto.endPage+1 ; i++) {
+        if (data.pageDto.curPage == i) {
+            pageHtml += "<div class='on' onclick='movePage(\"page\", " + i + ")'>" + Number(i + 1) + "</div>";
+        } else {
+            pageHtml += "<div onclick='movePage(\"page\", " + i + ")'>" + Number(i + 1) + "</div>";
+        }
+    }
+    pageHtml += "</div>";
+
+    // next
+    pageHtml += "<div class='page-next' onclick='movePage(\"next\", " + data.pageDto.endPage + ")'>";
+    pageHtml += ">";
+    pageHtml += "</div>";
+
+    // move
+    pageHtml += "<div class='page-move'>";
+    pageHtml += ">>";
+    pageHtml += "</div>";
+
+
+    $(".board-paging").html(pageHtml);
+}
+
+function movePage(type, page) {
+    var pageSize = Number(15);
+    var keyword = $('.search-select').val();
+    var content = $('.search-input').val();
+
+    init();
+    getList(keyword, content, page, pageSize);
+}
+
+function search() {
+    var pageSize = Number(15);
+    var keyword = $(".search-select").val();
+    var content = $(".search-input").val();
+
+    init();
+    getList(keyword, content, 0, pageSize);
+}
+
+function init() {
+    $(".board-list").html("");
+    $(".board-paging").html("");
 }
 
 function getBoardTime(timeValue) {
