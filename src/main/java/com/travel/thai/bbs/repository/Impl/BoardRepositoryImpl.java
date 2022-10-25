@@ -8,17 +8,20 @@ import com.travel.thai.bbs.domain.Board;
 import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.bbs.repository.BoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.sql.Clob;
 import java.util.List;
 
 import static com.travel.thai.bbs.domain.QBoard.board;
 
 @RequiredArgsConstructor
 public class BoardRepositoryImpl implements BoardRepositoryCustom {
-
     private final JPAQueryFactory queryFactory;
 
     private static final String ALL = "all";
@@ -61,11 +64,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         BooleanBuilder whereBuilder = new BooleanBuilder();
         if (ALL.equals(search.getKeyword())) {
             whereBuilder.and(board.title.contains(search.getContent()))
-            .or(board.content.eq(search.getContent()));
+            .or(board.contents.contains(search.getContent()));
         } else if (TITLE.equals(search.getKeyword())) {
             whereBuilder.and(board.title.contains(search.getContent()));
         } else if (CONTENT.equals(search.getKeyword())) {
-            whereBuilder.and(board.content.contains(search.getContent()));
+            whereBuilder.and(board.contents.contains(search.getContent()));
+
         }
 
         List<Board> results = queryFactory
@@ -97,5 +101,32 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .fetch().size();
 
         return new PageImpl<>(results, pageable, count);
+    }
+
+    @Override
+    public Board searchOne(Search search) {
+        Board result = queryFactory
+                .select(Projections.constructor(Board.class,
+                        board.id,
+                        board.title,
+                        board.author,
+                        board.contents,
+                        board.createDate,
+                        board.view
+                ))
+                .from(board)
+                .where(board.id.eq(search.getBoardNum()))
+                .fetchOne();
+
+        return result;
+    }
+
+    @Override
+    public void increseViewCount(Search search) {
+        queryFactory
+                .update(board)
+                .set(board.view, board.view.add(1))
+                .where(board.id.eq(search.getBoardNum()))
+                .execute();
     }
 }

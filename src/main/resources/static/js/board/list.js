@@ -27,7 +27,7 @@ function setListHtml(data) {
     var listHtml = "";
 
     $(data.list.content).each(function () {
-        listHtml += "<div class='board' data-id='" + this.id + "'>";
+        listHtml += "<div class='board' data-id='" + this.id + "' onclick='goView(" + this.id + ")'>";
         listHtml += "   <div class='content'>";
         listHtml += "       <div class='title'>" + this.title + "</div>";
         listHtml += "       <div class='info'>";
@@ -51,7 +51,7 @@ function setListHtml(data) {
         var pageSize = Number(15);
 
         var moreBtnHtml = "";
-        moreBtnHtml += "<div class='more-btn' onclick='getList(" + data.search.keyword + "," + data.search.content + ", " + page + "," + pageSize + ")'>";
+        moreBtnHtml += "<div class='more-btn' onclick='getList(\"" + data.search.keyword + "\",\"" + data.search.content + "\", " + page + "," + pageSize + ")'>";
         moreBtnHtml += "<div class='btn_img'></div>";
         moreBtnHtml += "</div>";
 
@@ -124,6 +124,10 @@ function search() {
 
     init();
     getList(keyword, content, 0, pageSize);
+}
+
+function goView(id) {
+    location.href = "/board/view?boardNum=" + id + "&";
 }
 
 function init() {

@@ -31,7 +31,7 @@ public class BoardRepoTest {
 
         while( (sLine = inFile.readLine()) != null ) {
             Board board = new Board();
-            board.setContent("1");
+            board.setContents("1");
             board.setAuthor("박부박");
             board.setTitle(sLine);
             boardRepository.save(board);
@@ -40,7 +40,7 @@ public class BoardRepoTest {
         List<Board> list = boardRepository.findAll();
 
         list.forEach(
-                x-> System.out.println(x.getTitle() + " | " + x.getAuthor() + " | " + x.getContent())
+                x-> System.out.println(x.getTitle() + " | " + x.getAuthor() + " | " + x.getContents())
         );
     }
 
@@ -57,7 +57,7 @@ public class BoardRepoTest {
         List<Board> list = boardRepository.findAll();
 
         list.forEach(
-                x-> System.out.println("" + x.getTitle() + " | " + x.getAuthor() + " | " + x.getContent())
+                x-> System.out.println("" + x.getTitle() + " | " + x.getAuthor() + " | " + x.getContents())
         );
     }
 }

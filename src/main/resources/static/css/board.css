@@ -11,34 +11,34 @@ body {
 .board-list {
 
 }
-.board-list > .board {
+.board-list .board {
     display: flex;
     border-bottom: 1px solid #bcbcbc;
 }
-.board-list > .board > .content {
+.board-list .board .content {
     width: 90%;
     padding: 4px;
 }
-.board-list > .board > .content > .title {
+.board-list .board .content .title {
     font-size: 14px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
-.board-list > .board > .content > .info {
+.board-list .board .content .info {
     font-size: 12px;
     color: #7c7874;
     padding-top: 4px;
 }
-.board-list > .board > .content > .info > div {
+.board-list .board .content .info div {
     float: left;
     margin-right: 2%;
 }
-.board-list > .board > .content > .info > div.view-count:before {
+.board-list .board .content .info div.view-count:before {
     content: '조회 ';
 }
 /* 댓글 정보 ( 댓글 개수) */
-.board-list > .board > .reply {
+.board-list .board .reply {
     width: 10%;
     display: flex;
     align-items: center;
@@ -50,7 +50,7 @@ body {
 .more-btn {
     border-bottom: 1px solid #bcbcbc;
 }
-.more-btn > .btn_img {
+.more-btn .btn_img {
     background: url("/img/arrow-down.png") no-repeat;
     background-size: contain;
     width: 32px;
@@ -65,7 +65,7 @@ body {
     border-bottom: 2px solid #bcbcbc;
 }
 
-.board-paging > .page-prev {
+.board-paging .page-prev {
     display: flex;
     height: 100%;
     align-items: center;
@@ -76,7 +76,7 @@ body {
     font-weight: bold;
 }
 
-.board-paging > .page-next {
+.board-paging .page-next {
     display: flex;
     height: 100%;
     align-items: center;
@@ -87,7 +87,7 @@ body {
     font-weight: bold;
 }
 
-.board-paging > .page-move {
+.board-paging .page-move {
     display: flex;
     height: 100%;
     align-items: center;
@@ -98,7 +98,7 @@ body {
     font-weight: bold;
 }
 
-.board-paging > .page-number {
+.board-paging .page-number {
     display: flex;
     height: 100%;
     align-items: center;
@@ -107,7 +107,7 @@ body {
     float: left;
 }
 
-.board-paging > .page-number > div {
+.board-paging .page-number div {
     float: left;
     font-size: 14px;
     font-weight: bold;
@@ -117,7 +117,7 @@ body {
     text-align: center;
 }
 
-.board-paging > .page-number > div.on {
+.board-paging .page-number div.on {
     color: #002875;
 }
 
@@ -129,7 +129,7 @@ body {
     margin: 5px;
 }
 
-.search-area > .search-select {
+.search-area .search-select {
     height: 32px;
     border-bottom: 1px solid #7c7874;
     border-top: 1px solid #7c7874;
@@ -138,7 +138,7 @@ body {
     color: #7c7874;
 }
 
-.search-area > .search-input {
+.search-area .search-input {
     height: 32px;
     width: 60%;
     border-left: 0px;
@@ -149,7 +149,7 @@ body {
     padding-left: 10px;
 }
 
-.search-area > .search-btn {
+.search-area .search-btn {
     height: 32px;
     width: 40px;
     border-top: 1px solid #7c7874;
@@ -159,10 +159,222 @@ body {
     background-color:transparent;
 }
 
-.search-area > .search-btn > .search-ico {
+.search-area .search-btn .search-ico {
     background: url("/img/search.png") no-repeat;
     background-size: contain;
     background-color: transparent;
     width: 70%;
     height: 70%;
+}
+
+
+/* view */
+.view {
+
+}
+
+.view .view-header {
+    padding: 12px 12px 10px;
+    border-bottom: 1px solid #bcbcbc;
+}
+
+.view .view-header .title {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.view .view-header .title-sub {
+    display: flex;
+    font-size: 12px;
+    color: #7c7874;
+    padding-top: 4px;
+}
+
+.view .view-header .title-sub .author {
+}
+
+.view .view-header .title-sub .author:after {
+    margin-left: 8px;
+    margin-right: 8px;
+    display: inline-block;
+    background-color: #7c7874;
+    width: 1px;
+    height: 9px;
+    content: "";
+
+}
+
+.view .view-header .title-sub .createDate {
+}
+
+.view .view-body {
+    padding: 12px 12px 10px;
+}
+
+.view .view-body .board-info {
+    font-size: 12px;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.view .view-body .board-info .view-count:before {
+    content: "조회수";
+    margin-right: 3px;
+    color: #7c7874;
+}
+
+.view .view-body .board-info .view-count {
+    color: #7c7874;
+}
+
+.view .view-body .board-info .view-count:after {
+    margin-left: 8px;
+    margin-right: 8px;
+    display: inline-block;
+    background-color: #7c7874;
+    width: 1px;
+    height: 9px;
+    content: "";
+}
+
+.view .view-body .board-info .view-recom:before {
+    content: "추천";
+    margin-right: 3px;
+    color: #7c7874;
+}
+
+.view .view-body .board-info .view-recom {
+    color: #7c7874;
+}
+
+.view .view-body .board-info .view-recom:after {
+    margin-left: 8px;
+    margin-right: 8px;
+    display: inline-block;
+    background-color: #7c7874;
+    width: 1px;
+    height: 9px;
+    content: "";
+}
+
+.view .view-body .board-info .view-replay-cnt:before {
+    content: "댓글";
+    margin-right: 3px;
+    color: #7c7874;
+}
+
+.view .view-body .board-info .view-replay-cnt {
+    color: #7c7874;
+}
+
+.view .view-body .board-content {
+    font-size: 14px;
+}
+
+.view .view-body .board-content div {
+    padding: 2px;
+}
+
+.view .view-body .board-content img{
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+
+/* register */
+.register {
+
+}
+
+.register .subject {
+    padding: 12px 12px 10px;
+    display: flex;  /* 자식노드 정렬 */
+}
+
+.register .subject h4 {
+    margin: 0;
+}
+
+.register .subject button {
+    width: 75px;
+    border: 1px solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: auto; /* 우측 정렬 */
+    background-color: transparent;
+}
+
+.register .title {
+    border-top: 1px solid #bcbcbc;
+    width: 100%;
+}
+
+.register .title input.ipt {
+    width: 100%;
+    border: 0;
+    padding: 12px 12px 10px;
+    /*라인박스 높이*/
+    line-height: 1.5;
+}
+
+.register .user-info {
+    border-top: 1px solid #bcbcbc;
+    width: 100%;
+    display: flex;  /* 버튼 정렬 */
+}
+
+.register .user-info .name {
+    width: 50%;
+}
+
+.register .user-info .password {
+    width: 50%;
+}
+
+.register .user-info input.ipt {
+    border: 0;
+    padding: 12px 12px 10px;
+    width: 100%;
+    outline: none;
+}
+
+.register .editor-menu {
+    border-top: 1px solid #bcbcbc;
+    width: 100%;
+    padding: 8px 12px;
+    display: flex;  /* 버튼 정렬 */
+}
+
+.register .editor-menu button.btn {
+    padding: 8px 12px;
+    border:none;
+    background-color:transparent;
+}
+
+.register .editor-menu button.btn.active {
+    color: #FF0000;
+}
+
+.register .editor-menu input#img-selector {
+    display: none;
+}
+
+.register .content {
+    border-top: 1px solid #bcbcbc;
+    width: 100%;
+}
+
+.register .content .text-box {
+    width: 100%;
+    overflow: auto;
+    height: 400px;
+    min-height: 200px;
+    box-sizing: border-box;
+    padding: 12px;
+    font-size: 20px;
+}
+
+/* editor */
+.register .content div#editor img {
+    max-width: 100%!important;
+    max-height: 100%!important;
 }

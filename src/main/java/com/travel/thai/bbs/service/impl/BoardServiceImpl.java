@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -31,4 +32,21 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.search(search, pageable);
     }
 
+    @Override
+    public Board searchOne(Search search) {
+        return boardRepository.searchOne(search);
+    }
+
+
+
+    @Override
+    public Board saveBoard(Board board) {
+        return boardRepository.save(board);
+    }
+
+    @Override
+    @Transactional
+    public void increseViewCount(Search search) {
+        boardRepository.increseViewCount(search);
+    }
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Search {
+    private Long boardNum;
     private int pageNum;
     private int pageSize;
     private String keyword;

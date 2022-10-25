@@ -23,9 +23,12 @@ public class Board {
 
     private String title;
 
-    private String content;
+    @Lob
+    private String contents;
 
     private String author;
+
+    private String password;
 
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
@@ -44,12 +47,21 @@ public class Board {
         this.updateDate = LocalDateTime.now();
     }
 
-
     @Builder
     public Board(Long id, String title, String author, LocalDateTime createDate, int view) {
         this.id = id;
         this.title = title;
         this.author = author;
+        this.createDate = createDate;
+        this.view = view;
+    }
+
+    @Builder
+    public Board(Long id, String title, String author, String contents, LocalDateTime createDate, int view) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.contents = contents;
         this.createDate = createDate;
         this.view = view;
     }
