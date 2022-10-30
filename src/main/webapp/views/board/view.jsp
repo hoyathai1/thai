@@ -31,9 +31,9 @@
             </div>
         </div>
         <div class="btn-area">
-            <button class="btn four">수정</button>
-            <button class="btn four">삭제</button>
-            <button class="btn four on">글쓰기</button>
+            <button class="btn four" onclick="">수정</button>
+            <button class="btn four" onclick="">삭제</button>
+            <button class="btn four on" onclick="goRegister()">글쓰기</button>
             <button class="btn four" onclick="goList()">목록보기</button>
         </div>
 
@@ -62,6 +62,8 @@
         </div>
     </div>
 </div>
+
+
 
 <input type="hidden" name="boardNum" value="${search.boardNum}">
 <input type="hidden" name="pageNum" value="${search.pageNum}">

@@ -11,6 +11,12 @@ function goList() {
     location.href = "/board/list?" + makeQueryUrl();
 }
 
+function goRegister() {
+    location.href = "/board/register";
+}
+
+
+
 function makeQueryUrl() {
     var pageNum = $("input[name=pageNum]").val();
     var pageSize = $("input[name=pageSize]").val();

@@ -92,10 +92,7 @@ imageSelector.addEventListener('change', function (e) {
     const files = e.target.files;
     var size = files[0].size || files[0].fileSize;
 
-    console.log("size is " + size);
-
     if (!!files) {
-
         for (var i=0; i < files.length; i++) {
             insertImageDate(files[i]);
         }
@@ -104,10 +101,32 @@ imageSelector.addEventListener('change', function (e) {
 
 function insertImageDate(file) {
     const reader = new FileReader();
-    reader.addEventListener('load', function (e) {
-        focusEditor();
-        document.execCommand('insertImage', false, `${reader.result}`);
-    });
+
+    // reader.addEventListener('load', function (e) {
+    //     focusEditor();
+    //     document.execCommand('insertImage', false, `${reader.result}`);
+    // });
+
+    reader.onload = (base64) => {
+        const image = new Image();
+
+        image.src = base64.target.result;
+
+        image.onload = (e) => {
+            const $canvas = document.createElement(`canvas`);
+            const ctx = $canvas.getContext(`2d`);
+
+            $canvas.width = e.target.width;
+            $canvas.height = e.target.height;
+
+            ctx.drawImage(e.target, 0, 0);
+
+            // 용량이 줄어든 base64 이미지
+            focusEditor();
+            document.execCommand('insertImage', false, $canvas.toDataURL(`image/jpeg`, 0.5));
+        }
+    }
+
     reader.readAsDataURL(file);
 }
 
@@ -155,4 +174,30 @@ function makeQueryUrl() {
     var content = $("input[name=content]").val();
 
     return "pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+}
+
+function imageSizeChange( image ) {
+
+    let canvas = document.createElement("canvas"),
+        max_size = 1280,
+        // 최대 기준을 1280으로 잡음.
+        width = image.width,
+        height = image.height;
+    if (width > height) {
+        // 가로가 길 경우
+        if (width > max_size) {
+            height *= max_size / width;
+            width = max_size;
+        }
+    } else {
+        // 세로가 길 경우
+        if (height > max_size) {
+            width *= max_size / height;
+            height = max_size;
+        }
+    }
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext("2d").drawImage(image, 0, 0, width, height);
+    this.imgUrl = canvas.toDataURL("image/jpeg", 0.5);
 }
