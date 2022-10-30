@@ -25,3 +25,74 @@ input:autofill:active {
     font-size: 14px;
     line-height: 1.5;
 }
+
+/*
+    Button style
+*/
+.btn-area {
+    display: flex;
+    justify-content: center;
+    height: 32px;
+    margin-top: 8px;
+    margin-bottom: 10px;
+
+}
+
+.between {
+    display: flex;
+    justify-content: space-between;
+    height: 32px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    padding-right: 20px;
+    padding-left: 20px;
+
+}
+
+
+/**
+    버튼 스타일
+ */
+.btn-area button.btn {
+    border: 1px #464646 solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: #464646;
+}
+
+.btn-area button.small {
+    width: 20%;
+}
+
+.btn-area button.right {
+}
+
+.btn-area button.two {
+    width: 40%;
+    margin-right: 10px;
+}
+
+.btn-area button.four {
+    width: 20%;
+    margin-right: 10px;
+}
+
+.btn-area button.btn.on {
+    background-color: #464646;
+    color: white;
+}
+
+/*
+    글자 스타일
+*/
+.fnt-bold {
+    font-weight: bold;
+}
+
+.fnt-red {
+    color: #b62713;
+}
+
+/*
+    입력 스타일
+*/

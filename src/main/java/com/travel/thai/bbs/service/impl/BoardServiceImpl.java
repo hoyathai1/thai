@@ -1,6 +1,7 @@
 package com.travel.thai.bbs.service.impl;
 
 import com.travel.thai.bbs.domain.Board;
+import com.travel.thai.bbs.domain.BoardDto;
 import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.bbs.service.BoardService;
@@ -17,17 +18,11 @@ public class BoardServiceImpl implements BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
-    public Page<Board> searchBoard(Search search) {
+    public Page<BoardDto> searchBoard(Search search) {
 
         Pageable pageable = PageRequest.of(
                 search.getPageNum(), search.getPageSize()
         );
-
-
-        if (StringUtils.isNotEmpty(search.getContent())) {
-            // 검색
-            return boardRepository.searchByKeyword(search, pageable);
-        }
 
         return boardRepository.search(search, pageable);
     }
@@ -49,4 +44,5 @@ public class BoardServiceImpl implements BoardService {
     public void increseViewCount(Search search) {
         boardRepository.increseViewCount(search);
     }
+
 }

@@ -13,4 +13,6 @@ public class Search {
     private int pageSize;
     private String keyword;
     private String content;
+
+    private String type;
 }

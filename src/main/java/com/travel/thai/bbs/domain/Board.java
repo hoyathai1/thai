@@ -1,30 +1,34 @@
 package com.travel.thai.bbs.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Table(name = "BOARD")
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String type;
+
     private String title;
 
     @Lob
     private String contents;
+
+    @Lob
+    private String contentsTxt;
 
     private String author;
 
@@ -35,6 +39,9 @@ public class Board {
 
     @ColumnDefault("0")
     private int view;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     @PrePersist // 데이터 생성이 이루어질때 사전 작업
     public void prePersist() {
@@ -64,5 +71,26 @@ public class Board {
         this.contents = contents;
         this.createDate = createDate;
         this.view = view;
+    }
+
+    @Builder
+    public Board(Long id, String title, String author, LocalDateTime createDate, int view, List<Comment> comments) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.createDate = createDate;
+        this.view = view;
+        this.comments = comments;
+    }
+
+    @Builder
+    public Board(Long id, String title, String author, String contents, LocalDateTime createDate, int view, List<Comment> comments) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.contents = contents;
+        this.createDate = createDate;
+        this.view = view;
+        this.comments = comments;
     }
 }

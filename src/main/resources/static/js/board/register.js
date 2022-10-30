@@ -15,7 +15,33 @@ function btnRegister() {
     var name = $("input[name=name]").val();
     var password = $("input[name=password]").val();
     var contents = $("#editor").html();
+    var contentsTxt = "";
 
+    if (isEmpty(title) || lengthCheck(title, 1)) {
+        alert("제목을 입력해주세요.")
+        return;
+    }
+
+    if (isEmpty(name) || lengthCheck(name, 1)) {
+        alert("닉네임을 입력해주세요.")
+        return;
+    }
+
+    if (isEmpty(password)) {
+        alert("비밀번호를 입력해주세요.")
+        return;
+    }
+
+    if (lengthCheck(password, 4)) {
+        alert("비밀번호를 최소 4자리 이상 입력하셔야 합니다. 쉬운 비밀번호는 타인이 수정 또는 삭제하기 쉬우니, 어려운 비밀번호를 입력해 주세요.");
+    }
+
+    if (isEmpty(contents) || lengthCheck(title, 1)) {
+        alert("내을 입력해주세요.")
+        return;
+    }
+
+    contentsTxt = $("#editor").text();
 
     $.ajax({
         type : 'post',
@@ -29,9 +55,11 @@ function btnRegister() {
             title: title,
             author: name,
             password: password,
-            contents : contents
+            contents : contents,
+            contentsTxt : contentsTxt,
+            type: "thai"
         }),
-        success : function (result) {
+        success : function () {
             location.href="/board/list";
         }
     });
@@ -62,8 +90,15 @@ btnImage.addEventListener('click', function () {
 
 imageSelector.addEventListener('change', function (e) {
     const files = e.target.files;
+    var size = files[0].size || files[0].fileSize;
+
+    console.log("size is " + size);
+
     if (!!files) {
-        insertImageDate(files[0]);
+
+        for (var i=0; i < files.length; i++) {
+            insertImageDate(files[i]);
+        }
     }
 });
 
@@ -107,4 +142,17 @@ function checkStyle() {
     } else {
         btnStrike.classList.remove('active');
     }
+}
+
+function goList() {
+    location.href="/board/list?" + makeQueryUrl();
+}
+
+function makeQueryUrl() {
+    var pageNum = $("input[name=pageNum]").val();
+    var pageSize = $("input[name=pageSize]").val();
+    var keyword = $("input[name=keyword]").val();
+    var content = $("input[name=content]").val();
+
+    return "pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
 }

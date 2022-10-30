@@ -1,5 +1,8 @@
 $(document).ready(function () {
-    getList('', '', 0,15);
+    var pageNum = $("input[name=pageNum]").val();
+    var keyword = $(".search-select").val();
+    var content = $(".search-input").val();
+    getList(keyword, content, pageNum,15);
 });
 
 function getList(keyword, content, page, pageSize) {
@@ -12,6 +15,7 @@ function getList(keyword, content, page, pageSize) {
         },
         dataType : 'json',
         data : JSON.stringify({
+            type : "thai",
             keyword: keyword,
             content: content,
             pageNum : page,
@@ -36,7 +40,7 @@ function setListHtml(data) {
         listHtml += "           <div class='view-count'>" + this.view + "</div>";
         listHtml += "       </div>";
         listHtml += "   </div>";
-        listHtml += "   <div class='reply'>0</div>";
+        listHtml += "   <div class='reply'>" + this.commentCount + "</div>";
         listHtml += "</div>";
 
     });
@@ -115,19 +119,31 @@ function movePage(type, page) {
 
     init();
     getList(keyword, content, page, pageSize);
+
+    $('input[name=pageNum]').val(page);
 }
 
 function search() {
-    var pageSize = Number(15);
     var keyword = $(".search-select").val();
     var content = $(".search-input").val();
 
-    init();
-    getList(keyword, content, 0, pageSize);
+    location.href = "/board/list?pageNum=0&keyword=" + keyword + "&content=" + content;
+}
+
+function makeQueryUrl() {
+    var pageNum = $("input[name=pageNum]").val();
+    var keyword = $(".search-select").val();
+    var content = $(".search-input").val();
+
+    return "pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
 }
 
 function goView(id) {
-    location.href = "/board/view?boardNum=" + id + "&";
+    location.href = "/board/view?boardNum=" + id + "&" + makeQueryUrl();
+}
+
+function goRegister() {
+    location.href = "/board/register?" + makeQueryUrl();
 }
 
 function init() {

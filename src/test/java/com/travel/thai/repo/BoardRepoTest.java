@@ -31,7 +31,9 @@ public class BoardRepoTest {
 
         while( (sLine = inFile.readLine()) != null ) {
             Board board = new Board();
+            board.setType("thai");
             board.setContents("1");
+            board.setContentsTxt("1");
             board.setAuthor("박부박");
             board.setTitle(sLine);
             boardRepository.save(board);

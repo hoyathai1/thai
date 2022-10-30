@@ -208,7 +208,9 @@ body {
 }
 
 .view .view-body {
-    padding: 12px 12px 10px;
+    padding: 12px 12px 20px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #bcbcbc;
 }
 
 .view .view-body .board-info {
@@ -280,6 +282,219 @@ body {
     max-height: 100%!important;
 }
 
+
+/**
+    상세 화면의 댓글 리스트
+ */
+.view .comment {
+
+}
+
+.view .comment .comment-info {
+    display: flex;
+    align-items: center;
+    border-top: 2px solid #bcbcbc;
+    /*border-bottom: 2px solid #bcbcbc;*/
+    padding: 12px 12px 10px;
+}
+
+.view .comment .comment-info div {
+    margin-right: 5px;
+}
+
+.view .comment .comment-info .comment-cnt {
+    color: #b62713;
+}
+
+.view .comment .comment-info .refresh-btn {
+    height: 14px;
+    width: 14px;
+    padding: 0px;
+    border: none;
+    background-color:transparent;
+}
+
+.view .comment .comment-info .refresh-btn .refresh-ico {
+    background: url("/img/refresh.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+}
+
+.view .comment .comment-form {
+    padding: 12px 12px 10px;
+    border-top: 2px solid #bcbcbc;
+}
+
+.view .comment .comment-form .user-info {
+    display: flex;
+    border-top: 1px solid #989898;
+    border-left: 1px solid #989898;
+    border-right: 1px solid #989898;
+    border-bottom: none;
+}
+
+.view .comment .comment-form .user-info .ipt {
+    flex: 1;
+    border: 0;
+    outline: none;
+    padding: 8px;
+}
+
+.view .comment .comment-form .user-info .ipt:first-child {
+    border-right: 1px solid #989898;
+}
+
+.view .comment .comment-form .user-info .ipt:focus {
+    border: 2px solid #989898;
+}
+
+.view .comment .comment-form .comment-content {
+    height: 100px;
+    border: 1px solid #989898;
+}
+
+.view .comment .comment-form .comment-content textarea {
+    border: 0;
+    outline: none;
+    resize:none;
+    width: 100%;
+    height: 100px;
+    padding: 8px;
+}
+
+.view .comment .comment-form .comment-content textarea:focus {
+    border: 2px solid #989898;
+}
+
+.view .comment .comment-form .btn-area {
+    justify-content: end;
+    padding: 10px;
+    margin: 0px;
+    border-left: 1px solid #989898;
+    border-right: 1px solid #989898;
+    border-bottom: 1px solid #989898;
+}
+
+.view .comment .comment-list {
+
+}
+
+.view .comment .comment-list .comment {
+    border-top: 1px solid #bcbcbc;
+    padding: 12px 12px 10px;
+}
+
+.view .comment .comment-list .add {
+    background-color: #F7F5FF;
+    padding: 12px 12px 10px 20px;
+}
+
+.view .comment .comment-list .comment:active {
+    background-color: #F7F5FF;
+    transition: color 0.5s ease-in-out;
+}
+
+.view .comment .comment-list .comment div {
+    padding-bottom: 4px;
+}
+
+.view .comment .comment-list .comment div.add{
+    padding-top: 2px;
+    padding-left: 24px;
+}
+
+.view .comment .comment-list .comment .author {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.view .comment .comment-list .comment .content {
+    font-size: 13px;
+    word-break: break-all;
+}
+
+.view .comment .comment-list .comment .createDate {
+    font-size: 12px;
+    color: #7c7874;
+}
+
+/* 대 댓글 */
+.add-comment-form {
+    border-top: 1px solid #bcbcbc;
+    background-color: #F9F9F9;
+    /*padding-left: 20px;*/
+    /*padding-right: 15px;*/
+    /*padding-bottom: 15px;*/
+    /*padding-top: 10px;*/
+    /*padding-top, padding-right, padding-bottom, and padding-left*/
+    padding: 10px 15px 15px 15px;
+}
+
+ .add-ico {
+    background: url(/img/arrow-down.png) no-repeat;
+    background-size: contain;
+    width: 18px;
+    height: 18px;
+    transform: rotate(45deg);
+    position: absolute;
+}
+
+.add-comment-form .add-user-info {
+    display: flex;
+    border-top: 1px solid #989898;
+    border-left: 1px solid #989898;
+    border-right: 1px solid #989898;
+    border-bottom: none;
+    margin-left: 20px;
+}
+
+.add-comment-form .add-user-info .ipt {
+    flex: 1;
+    border: 0;
+    outline: none;
+    padding: 8px;
+}
+
+.add-comment-form .add-user-info .ipt:first-child {
+    border-right: 1px solid #989898;
+}
+
+.add-comment-form .add-user-info .ipt:focus {
+    border: 2px solid #989898;
+}
+
+.add-comment-form .add-comment-conetent {
+    height: 100px;
+    border: 1px solid #989898;
+    margin-left: 20px;
+}
+
+.add-comment-form .add-comment-conetent textarea {
+    border: 0;
+    outline: none;
+    resize:none;
+    width: 100%;
+    height: 100px;
+    padding: 8px;
+}
+
+.add-comment-form .add-comment-conetent textarea:focus {
+    border: 2px solid #989898;
+}
+
+.add-comment-form .btn-area {
+    justify-content: end;
+    /*margin-left: 20px;*/
+    margin: 0px 0px 0px 20px;
+    padding: 10px;
+    background-color: white;
+    border-left: 1px solid #989898;
+    border-right: 1px solid #989898;
+    border-bottom: 1px solid #989898;
+}
+
 /* register */
 .register {
 
@@ -288,6 +503,7 @@ body {
 .register .subject {
     padding: 12px 12px 10px;
     display: flex;  /* 자식노드 정렬 */
+    align-items: center;
 }
 
 .register .subject h4 {
@@ -296,7 +512,9 @@ body {
 
 .register .subject button {
     width: 75px;
-    border: 1px solid;
+    border: 1px #464646 solid;
+    color: #464646;
+    font-weight: bold;
     padding-top: 5px;
     padding-bottom: 5px;
     margin-left: auto; /* 우측 정렬 */
@@ -361,6 +579,7 @@ body {
 .register .content {
     border-top: 1px solid #bcbcbc;
     width: 100%;
+    border-bottom: 1px solid #bcbcbc;
 }
 
 .register .content .text-box {
@@ -378,3 +597,28 @@ body {
     max-width: 100%!important;
     max-height: 100%!important;
 }
+
+.register .info {
+    font-size: 12px;
+    height: 120px;
+    background-color: #F4FFFF;
+    padding-top: 20px;
+}
+
+.register .info ul {
+    padding-left:20px;
+    margin: 0px;
+
+}
+
+.register .info ul li{
+    margin-bottom: 10px;
+    padding-right: 10px;
+    color: #464646
+}
+
+
+
+
+
+
