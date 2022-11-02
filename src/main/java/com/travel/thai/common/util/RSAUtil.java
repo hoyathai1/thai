@@ -12,8 +12,8 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class RSAUtil {
-    private static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCQ+jaLiOaShPhRAvjXyU/6mbB4qxFMDS0MIW7cCUfyxAcoN+HdHvPZKfwJ2wpIS8KoZTJb5EF+8yfq+e7xk+PzyemSPIww2ZQ5Qlt46EdPb1ki3MuCIb1UJNzjl5o0cHy9fPc0id1ci0jCPDhzPMhuO7Xiipt3bRRG07K1HsLGOwIDAQAB";
-    private static final String PRIVATE_KEY = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAJD6NouI5pKE+FEC+NfJT/qZsHirEUwNLQwhbtwJR/LEByg34d0e89kp/AnbCkhLwqhlMlvkQX7zJ+r57vGT4/PJ6ZI8jDDZlDlCW3joR09vWSLcy4IhvVQk3OOXmjRwfL189zSJ3VyLSMI8OHM8yG47teKKm3dtFEbTsrUewsY7AgMBAAECgYA1Fbl1PEqZKeE24Ky3bro/W5k3hgQOYeC1yWQrY6aZqNeqDVRBwDyvruTfwvmv4TXErVFUPm8RCf3610t735gethRnePmLn00SLIG/tl9t6X887JqXb/k4u285as8tn2jP+zVYExRPZsOdp/kc3v2cityaFrhRcuDwbqf/ciysGQJBAMX17fKwB9GycTe7CFwO0mcBwYT4+LJJdZgUcoDGyv+x9tgDMS/axVxXyi1CMtoqxsCfjyOBlYiSN6gKutvuQb8CQQC7e5a/LQG1zj5Ez5GK5XTRqo3cwDgujVkAO4eb5GFLbZjz/SnIrQR0dCuUH1MxGbphJB67PDtHFj7BDpIWEOKFAkALWGjmu8f28K8kboewHvlYBfW9VTeLoEIpESLu1nXT6bMn9ibfgz5EaJOhvGWFs2XorDxb4JVdWmPuMY88A4+pAkAQmoVjMO0x2K4TEf7luiR6XQxrPGq9VK9JIfyEhdlIANDG6ujEaO44EgG6AHwxoQGskLJYCqGFTicIme2+HoixAkA7HslED/qS4BJLtI38vvfF+KxAVN7aWmHYEOJVFeO9LOrOcXjB/t3Yjwx1GHkBkIW0dRR5MKoBvQztfbh5Y0WK";
+    private static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCLlSOzkpX7oWVtm_qhpJ2hGZbqMw56vSL8rT1xEGDHb07kIXi-1cmScsonb-Oap_DFIbgpk8eAg_c4djuiFLHlv7pQkNUoydfC6AcZCt6ciDxLBE-9NSckX1cdQYoo5rurkTYQPFTrSM7rlfFC6lv-tWvbs34MO0IHnZSrUOvZ9QIDAQAB";
+    private static final String PRIVATE_KEY = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAIuVI7OSlfuhZW2b-qGknaEZluozDnq9IvytPXEQYMdvTuQheL7VyZJyyidv45qn8MUhuCmTx4CD9zh2O6IUseW_ulCQ1SjJ18LoBxkK3pyIPEsET701JyRfVx1Biijmu6uRNhA8VOtIzuuV8ULqW_61a9uzfgw7QgedlKtQ69n1AgMBAAECgYAcLGIkYLX9MDp0wUL5VWyrk6quYtfNVle1gJIiPBgMqR7XVRo2CpjBAoJjK2ZZVQR4BbJSUg22luxTbSnkMSEm3FlB3OzglrrpUoExfAs0bONVuTr3NdAO-DZgMFXhemt_67Ksm6Y5u4XB4JYrg7EyU_qziUBppOkcQnF9OgnQAQJBAOoOWVN_De61CPX7GDAOMXRj2lYqLY6NxbG_tfwS7VB4RQd31hfyngQVkUkmVU5gIvrjuSG8DQu1U_OLJSQS6vUCQQCYq02-VBAad8z2Gdw3E0rzLrQYQ748yqp1cSeCWT1IwWGZaEtcJJP9INMr5FEzslsMQioURlCFCTv-nTtTzdMBAkBOksyYBDI4LZw5f7bqAwnFKfRVMsmibqOsfVBptCzo88cwr6E23uL_OgJRDUZcDlgP47z1vzyd7pylSNQKHTO1AkBTq98J5uyEdRAh-P5WOP6k1P3jJo2Gp9RQVVm_-MS7sTCacSyMLYfl_S1_KrzORnvb9g812Wub3fnBi87OGUoBAkBsQbi3JfgkigIJiOOSn3U3haJrNYPlTqjGqgoF7xMM0_TfFUa4tZFUrcpxSMYvB_iRrDzWjaHddGzS8ah2_N42";
 
     /**
      * 1024비트 RSA 키쌍을 생성
@@ -48,7 +48,7 @@ public class RSAUtil {
         PrivateKey privateKey = RSAUtil.getPrivateKeyFromBase64Encrypted(PRIVATE_KEY);
 
         Cipher cipher = Cipher.getInstance("RSA");
-        byte[] byteEncrypted = Base64.getDecoder().decode(encrypted.getBytes());
+        byte[] byteEncrypted = Base64.getUrlDecoder().decode(encrypted.getBytes());
 
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] bytePlain = cipher.doFinal(byteEncrypted);
@@ -65,7 +65,7 @@ public class RSAUtil {
 
     public static PrivateKey getPrivateKeyFromBase64Encrypted(String base64PrivateKey)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] decodedBase64PrivateKey = Base64.getDecoder().decode(base64PrivateKey);
+        byte[] decodedBase64PrivateKey = Base64.getUrlDecoder().decode(base64PrivateKey);
 
         return KeyFactory.getInstance("RSA")
                 .generatePrivate(new PKCS8EncodedKeySpec(decodedBase64PrivateKey));

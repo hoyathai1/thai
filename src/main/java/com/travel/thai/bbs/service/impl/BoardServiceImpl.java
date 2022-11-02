@@ -5,7 +5,7 @@ import com.travel.thai.bbs.domain.BoardDto;
 import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.bbs.service.BoardService;
-import com.travel.thai.common.util.StringUtils;
+import com.travel.thai.common.util.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +36,13 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Board saveBoard(Board board) {
+        try {
+            String encPassword = RSAUtil.encryptRSA(board.getPassword());
+            board.setPassword(encPassword);
+        } catch (Exception e) {
+            // TODO: 예외처리
+        }
+
         return boardRepository.save(board);
     }
 
@@ -45,4 +52,51 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.increseViewCount(search);
     }
 
+    @Override
+    public boolean isCheckPassword (Search search) {
+        boolean isPassword = false;
+        try {
+            String dbPassword = boardRepository.getPassword(search.getBoardNum());
+            //String decPassword = RSAUtil.decryptRSA(search.getPassword());
+            String dbDecPassword = RSAUtil.decryptRSA(dbPassword);
+
+            if (dbDecPassword.equals(search.getPassword())) {
+                    isPassword = true;
+            }
+        } catch (Exception e) {
+            // TODO: 예외 처리
+            // 복호화 에러 있을수있음
+            isPassword = false;
+        }
+
+        return isPassword;
+    }
+
+    @Override
+    @Transactional
+    public boolean modifyBoard(Board board) {
+        boolean isModify = false;
+
+        try {
+            String dbPassword = boardRepository.getPassword(board.getId());
+            String dbDecPassword = RSAUtil.decryptRSA(dbPassword);
+
+            if (dbDecPassword.equals(board.getPassword())) {
+                boardRepository.modifyBoard(board);
+                isModify = true;
+            }
+        } catch (Exception e) {
+            // TODO: 예외 처리
+            // 복호화 에러 있을수있음
+            isModify = false;
+        }
+
+        return isModify;
+    }
+
+    @Override
+    @Transactional
+    public void deleteBoard(Search search) {
+        boardRepository.deleteBoard(search.getBoardNum());
+    }
 }

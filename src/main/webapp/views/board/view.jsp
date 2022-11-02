@@ -31,8 +31,8 @@
             </div>
         </div>
         <div class="btn-area">
-            <button class="btn four" onclick="">수정</button>
-            <button class="btn four" onclick="">삭제</button>
+            <button class="btn four" onclick="modifyBtn()">수정</button>
+            <button class="btn four" onclick="deleteBtn()">삭제</button>
             <button class="btn four on" onclick="goRegister()">글쓰기</button>
             <button class="btn four" onclick="goList()">목록보기</button>
         </div>
@@ -63,7 +63,18 @@
     </div>
 </div>
 
-
+<%--<div class="modal">--%>
+    <%--<div class="modal-display">--%>
+        <%--<div class="modal-content">--%>
+            <%--<b>비밀번호를 입력하세요.</b>--%>
+            <%--<input class="ipt" type="text" name="modal-password">--%>
+            <%--<div class="modal-btn-area btn-area">--%>
+                <%--<button class="btn two" onclick="modalClose()">취소</button>--%>
+                <%--<button class="btn right two on">확인</button>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+<%--</div>--%>
 
 <input type="hidden" name="boardNum" value="${search.boardNum}">
 <input type="hidden" name="pageNum" value="${search.pageNum}">

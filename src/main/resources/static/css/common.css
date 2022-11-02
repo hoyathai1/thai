@@ -1,0 +1,29 @@
+/*
+    warning 화면
+*/
+.warning {
+    display: flex;
+    flex-direction: column;
+    padding-top: 150px;
+}
+
+.warning .warn-ico {
+    background-image: url(/img/warning.png);
+    /*background-size: contain;*/
+    width: 100px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    margin: auto;
+
+}
+
+.warning .warn1 {
+    margin: auto;
+}
+
+.warning .warn2 {
+    margin: auto;
+    color: #b62713;
+
+}

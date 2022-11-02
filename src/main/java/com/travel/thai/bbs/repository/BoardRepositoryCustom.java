@@ -15,4 +15,7 @@ public interface BoardRepositoryCustom {
     void increseViewCount(Search search);
     boolean isExistBoard(long boardNum);
     Board existBoard(long boardNum);
+    void deleteBoard(long boardNum);
+    String getPassword(long boardNum);
+    void modifyBoard(Board board);
 }

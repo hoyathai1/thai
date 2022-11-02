@@ -1,7 +1,7 @@
 input:-webkit-autofill,
- input:-webkit-autofill:hover,
- input:-webkit-autofill:focus,
- input:-webkit-autofill:active {
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
      -webkit-text-fill-color: #000;
      -webkit-box-shadow: 0 0 0px 1000px #fff inset;
      box-shadow: 0 0 0px 1000px #fff inset;
@@ -64,12 +64,13 @@ input:autofill:active {
     width: 20%;
 }
 
-.btn-area button.right {
-}
-
 .btn-area button.two {
     width: 40%;
     margin-right: 10px;
+}
+
+.btn-area button.right {
+    margin-right: 0px;
 }
 
 .btn-area button.four {
@@ -81,6 +82,8 @@ input:autofill:active {
     background-color: #464646;
     color: white;
 }
+
+
 
 /*
     글자 스타일
@@ -96,3 +99,54 @@ input:autofill:active {
 /*
     입력 스타일
 */
+
+
+/*
+    모달창
+*/
+.modal {
+    position: fixed;
+    top:0; left: 0; bottom: 0; right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.modal .modal-display {
+    position: absolute;
+    top: 40%;
+    left: 15%;
+    background-color: white;
+    border-radius: 10px;
+    width: 70%;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal .modal-display .modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal .modal-display .modal-content .ipt {
+    border: 1px solid #989898;
+    outline: none;
+    padding: 6px;
+    margin-top: 5px;
+    width: 67%;
+}
+
+.modal .modal-display .modal-content .ipt:focus {
+    border: 2px solid #989898;
+}
+
+.modal .modal-content .modal-btn-area {
+    width: 70%;
+}
+
+.modal .modal-content .modal-btn-area button {
+    width: 45%
+}

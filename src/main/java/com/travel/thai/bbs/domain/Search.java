@@ -9,10 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Search {
     private Long boardNum;
+    private Long commentNum;
     private int pageNum;
     private int pageSize;
     private String keyword;
     private String content;
 
     private String type;
+
+    private String password;
 }

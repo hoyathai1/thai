@@ -3,7 +3,9 @@ package com.travel.thai.bbs.repository.Impl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.travel.thai.bbs.domain.*;
+import com.travel.thai.bbs.domain.Board;
+import com.travel.thai.bbs.domain.BoardDto;
+import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.bbs.repository.BoardRepositoryCustom;
 import com.travel.thai.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -49,8 +51,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         comment.id.count().intValue()
                 ))
                 .from(board)
-                .leftJoin(comment).on(board.id.eq(comment.upper))
-                .where(whereBuilder.and(board.type.eq(search.getType())))
+                .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
+                .where(whereBuilder.and(board.type.eq(search.getType())).and(board.isDel.isFalse()))
                 .groupBy(board.id)
                 .orderBy(board.createDate.desc())
                 .offset(pageable.getOffset())   // 페이지 번호
@@ -60,7 +62,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         int count = queryFactory
                 .selectOne()
                 .from(board)
-                .where(whereBuilder.and(board.type.eq(search.getType())))
+                .where(whereBuilder.and(board.type.eq(search.getType())).and(board.isDel.isFalse()))
                 .orderBy(board.createDate.desc())
                 .fetch().size();
 
@@ -79,7 +81,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         board.view
                 ))
                 .from(board)
-                .where(board.id.eq(search.getBoardNum()))
+                .where(board.id.eq(search.getBoardNum()).and(board.isDel.isFalse()))
                 .fetchOne();
 
         return result;
@@ -111,7 +113,35 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         .where(board.id.eq(boardNum))
         .fetchFirst();
 
+        return result;
+    }
+
+    @Override
+    public void deleteBoard(long boardNum) {
+        queryFactory
+                .update(board)
+                .set(board.isDel, true)
+                .where(board.id.eq(boardNum))
+                .execute();
+    }
+
+    @Override
+    public String getPassword(long boardNum) {
+        String result = queryFactory.select(board.password)
+                .from(board)
+                .where(board.id.eq(boardNum))
+                .fetchOne();
 
         return result;
+    }
+
+    @Override
+    public void modifyBoard(Board param) {
+        queryFactory.update(board)
+                .set(board.title, param.getTitle())
+                .set(board.contents, param.getContents())
+                .set(board.contentsTxt, param.getContentsTxt())
+                .where(board.id.eq(param.getId()))
+                .execute();
     }
 }

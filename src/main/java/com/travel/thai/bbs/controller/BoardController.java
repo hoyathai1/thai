@@ -3,6 +3,8 @@ package com.travel.thai.bbs.controller;
 import com.travel.thai.bbs.domain.*;
 import com.travel.thai.bbs.service.BoardService;
 import com.travel.thai.bbs.service.CommentService;
+import com.travel.thai.common.util.RSAUtil;
+import com.travel.thai.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -73,6 +75,7 @@ public class BoardController {
         ResponseEntity<String> entity = null;
 
         try {
+            commentDto.setIp(request.getRemoteAddr());
             Comment result = commentService.saveComment(commentDto);
 
             entity = new ResponseEntity(result, HttpStatus.OK);
@@ -107,6 +110,23 @@ public class BoardController {
         return entity;
     }
 
+    @RequestMapping(value = "/delete/comment", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteComment(HttpServletRequest request, HttpServletResponse response
+            ,@RequestBody Search search)  {
+        ResponseEntity<String> entity = null;
+
+        try {
+            boolean result = commentService.deleteComment(search);
+
+            entity = new ResponseEntity(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search) {
         return "board/register";
@@ -117,12 +137,100 @@ public class BoardController {
                                                 , @RequestBody Board board) {
         ResponseEntity<String> entity = null;
 
-        log.info("board content is {}", board.getContents());
-
         try {
+            board.setIp(request.getRemoteAddr());
             Board result = boardService.saveBoard(board);
 
             entity = new ResponseEntity(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/modify", method = RequestMethod.GET)
+    public String modify(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search, Model model) {
+        try {
+            if (StringUtils.isEmpty(search.getPassword())) {
+                return "redirect:/warning";
+            }
+            String encPassword = RSAUtil.decryptRSA(search.getPassword());
+            search.setPassword(encPassword);
+            boolean result = boardService.isCheckPassword(search);
+
+            if (!result) {
+                return "redirect:/warning";
+            }
+
+            Board board = boardService.searchOne(search);
+            model.addAttribute("board", board);
+            model.addAttribute("search", search);
+        } catch (Exception e) {
+            return "redirect:/warning";
+        }
+
+        return "board/modify";
+    }
+
+    @RequestMapping(value = "/modify", method = RequestMethod.POST)
+    public ResponseEntity<String> modifyAjax(HttpServletRequest request, HttpServletResponse response
+            , @RequestBody Board board) {
+        ResponseEntity<String> entity = null;
+
+        try {
+            boolean result = boardService.modifyBoard(board);
+
+            entity = new ResponseEntity(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    /**
+     * 게시물 비밀번호 확인
+     *
+     * @param request
+     * @param response
+     * @param search
+     * @return
+     */
+    @RequestMapping(value = "/check", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> checkAjax(HttpServletRequest request, HttpServletResponse response
+            , @RequestBody Search search) {
+        ResponseEntity<Map<String, Object>> entity = null;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+
+            if ("modify".equals(search.getType())) {
+                boolean result = boardService.isCheckPassword(search);
+
+                if (result) {
+                    // 비밀번호 일치
+                    String encPassword = RSAUtil.encryptRSA(search.getPassword());
+                    String url = "/board/modify?boardNum=" + search.getBoardNum() + "&password=" + encPassword;
+                    map.put("redirect", url);
+                }
+
+                map.put("result", result);
+            } else if ("delete".equals(search.getType())) {
+                boolean result = boardService.isCheckPassword(search);
+
+                if (result) {
+                    boardService.deleteBoard(search);
+                }
+
+                String url = "/board/list";
+                map.put("redirect", url);
+                map.put("result", result);
+            }
+
+            entity = new ResponseEntity(map, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             entity = new ResponseEntity(HttpStatus.BAD_REQUEST);

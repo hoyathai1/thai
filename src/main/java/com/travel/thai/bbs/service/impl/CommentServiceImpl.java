@@ -7,8 +7,8 @@ import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.bbs.repository.CommentRepository;
 import com.travel.thai.bbs.service.CommentService;
+import com.travel.thai.common.util.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,9 +29,10 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = new Comment();
         comment.setAuthor(commentDto.getAuthor());
-        comment.setPassword(commentDto.getPassword());
+//        comment.setPassword(commentDto.getPassword());
         comment.setContent(commentDto.getContent());
         comment.setUpper(commentDto.getBoardId());
+        comment.setIp(commentDto.getIp());
 
         if (commentDto.getParentId() != null) {
             Comment parent = new Comment();
@@ -40,6 +41,14 @@ public class CommentServiceImpl implements CommentService {
             comment.setBoard(null);
         } else {
             comment.setBoard(board);
+        }
+
+        // password
+        try {
+            String encPassword = RSAUtil.encryptRSA(commentDto.getPassword());
+            comment.setPassword(encPassword);
+        } catch (Exception e) {
+            // TODO: 예외처리
         }
 
         return commentRepository.save(comment);
@@ -53,5 +62,26 @@ public class CommentServiceImpl implements CommentService {
         );
 
         return commentRepository.search(search, pageable);
+    }
+
+    @Override
+    public boolean deleteComment(Search search) {
+        boolean result = false;
+
+        try {
+            String dbPassword = commentRepository.searchPassword(search);
+            String decDbPassword = RSAUtil.decryptRSA(dbPassword);
+
+            if (decDbPassword.equals(search.getPassword())) {
+                commentRepository.deleteComment(search.getCommentNum());
+                result = true;
+            }
+
+        } catch (Exception e) {
+            // TODO: 예외처리
+            System.out.println("error");
+        }
+
+        return result;
     }
 }

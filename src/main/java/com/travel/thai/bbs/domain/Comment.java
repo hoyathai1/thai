@@ -1,11 +1,9 @@
 package com.travel.thai.bbs.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,6 +21,8 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String ip;
 
     private String author;
 
@@ -48,12 +48,16 @@ public class Comment {
 
     private Long upper;
 
+    @ColumnDefault(value = "false")
+    private boolean isDel;
+
     // 데이터 생성이 이루어질때 사전 작업
     @PrePersist
     public void prePersist() {
         this.createDate = LocalDateTime.now();
     }
 
+    @Builder
     public Comment(Long id, String author, String content, LocalDateTime createDate) {
         this.id = id;
         this.author = author;
@@ -61,6 +65,7 @@ public class Comment {
         this.createDate = createDate;
     }
 
+    @Builder
     public Comment(Long id, String author, String content, LocalDateTime createDate, Comment comment) {
         this.id = id;
         this.author = author;

@@ -13,6 +13,7 @@ public class CommentDto {
     private String content;
     private Long boardId;
     private Long parentId;
+    private String ip;
 
     private Page<Comment> list;
 

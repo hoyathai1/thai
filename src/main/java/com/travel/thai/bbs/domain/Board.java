@@ -20,6 +20,8 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String ip;
+
     private String type;
 
     private String title;
@@ -37,8 +39,11 @@ public class Board {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
-    @ColumnDefault("0")
+    @ColumnDefault("1")
     private int view;
+
+    @ColumnDefault(value = "false")
+    private boolean isDel;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
