@@ -78,7 +78,18 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     public void deleteComment(Long id) {
         queryFactory.update(comment)
                 .set(comment.isDel, true)
-                .where(comment.id.eq(id))
+                .where(comment.id.eq(id).or(comment.parent.id.eq(id)))
                 .execute();
+
+    }
+
+    @Override
+    public String searchForUserId(Long id) {
+        String userId = queryFactory
+                            .select(comment.userId)
+                            .from(comment)
+                            .where(comment.id.eq(id))
+                            .fetchOne();
+        return userId;
     }
 }

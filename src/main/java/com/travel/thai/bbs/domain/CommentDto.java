@@ -14,6 +14,7 @@ public class CommentDto {
     private Long boardId;
     private Long parentId;
     private String ip;
+    private String userId;
 
     private Page<Comment> list;
 

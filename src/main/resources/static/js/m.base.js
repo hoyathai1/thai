@@ -1,9 +1,9 @@
 function isEmpty(str) {
-    if (str.replace(/\s| /gi, "").length == 0) {
+    if (str == null || str == "" || str == undefined || str == "undefined") {
         return true;
     }
 
-    if (str == null || str == "" || str == undefined || str == "undefined") {
+    if (str.replace(/\s| /gi, "").length == 0) {
         return true;
     }
 
@@ -14,7 +14,7 @@ function isEmpty(str) {
     길이 체크
     length 보다 짧으면 return true
  */
-function lengthCheck(str, length) {
+function lengthCheckUnder(str, length) {
     var replaceStr = str.replace(/\s/g, "");    // 공백 제거
 
     if (replaceStr.length  < length) {
@@ -22,6 +22,71 @@ function lengthCheck(str, length) {
     }
 
     return false
+}
+
+/*
+    길이 체크
+    length 보다 길면 return true
+ */
+function lengthCheckOver(str, length) {
+    var replaceStr = str.replace(/\s/g, "");    // 공백 제거
+
+    if (replaceStr.length  > length) {
+        return true
+    }
+
+    return false
+}
+
+/*
+    한글 체크
+ */
+function checkKor(str) {
+    const regExp = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g;
+    if(regExp.test(str)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+
+/*
+    영어 체크
+ */
+function checkEng(str) {
+    const regExp = /[a-zA-Z]/g; // 영어
+    if(regExp.test(str)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+/**
+ * 숫자체크
+ */
+function checkNum(str) {
+    const regExp = /[0-9]/g;
+    if(regExp.test(str)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+/**
+ * 특수 문자 체크
+ * @param str
+ * @returns {boolean}
+ */
+function checkSpecial(str) {
+    const regExp = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+    if(regExp.test(str)) {
+        return true;
+    }else{
+        return false;
+    }
 }
 
 /**
@@ -56,6 +121,22 @@ function openModal(msg, type, callback) {
 
 
         $(document).on("click", "#modal-btn", callback);
+    } else if (type == 'type2') {
+        $(document).off("click", "#modal-btn");
+
+        modalHtml = "<div class='modal'>" +
+            "    <div class='modal-display'>" +
+            "        <div class='modal-content'>" +
+            "            <b>" + msg + "</b>" +
+            "            <div class='modal-btn-area btn-area'>" +
+            "                <button class='btn two' onclick='modalClose()'>취소</button>" +
+            "                <button class='btn right two on' id='modal-btn'>확인</button>" +
+            "            </div>" +
+            "        </div>" +
+            "    </div>" +
+            "</div>";
+
+        $(document).on("click", "#modal-btn", callback);
     }
 
     $(".container").append(modalHtml);
@@ -79,4 +160,3 @@ function setModal() {
         }
     });
 }
-

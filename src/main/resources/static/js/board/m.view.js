@@ -1,3 +1,8 @@
+const urlParams = new URL(location.href).searchParams;
+const category = urlParams.get('category');
+const best = urlParams.get('best');
+const bType = urlParams.get('type');
+
 var currentCommentPage = 0;
 
 $(document).ready(function () {
@@ -12,7 +17,7 @@ function goList() {
 }
 
 function goRegister() {
-    location.href = "/board/register";
+    location.href = "/board/register?" + makeQueryUrl();
 }
 
 
@@ -23,7 +28,7 @@ function makeQueryUrl() {
     var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
 
-    return "pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return "type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
 }
 
 function getCommentList(page) {
@@ -50,20 +55,60 @@ function getCommentList(page) {
 
 function setListHtml(data) {
     var listHtml = "";
+    var isLogin = $("input[name=isLogin]").val();
+    var loginId = $("input[name=loginId]").val();
 
     $(data.list.content).each(function () {
         listHtml += "<div class='comment' id='comment_" + this.id + "' data-id='" + this.id + "' onclick='setCommentChidrenForm(" + this.id + ")'>";
-        listHtml += "<div class='x-btn' onclick='deleteCommentBtn(" + this.id + ")'></div>";
-        listHtml += "   <div class='author'>" + this.author + "</div>";
+        if (this.user) {
+            if (isLogin === 'true' && this.userId == loginId) {
+                // 로그인 = 등록인
+                listHtml += "   <div class='x-btn' onclick='deleteCommentBtnByOwner(" + this.id + ")'></div>";
+                listHtml += "   <div class='author'>" + this.author + "</div>";
+            } else {
+                // 유저 등록
+                listHtml += "   <div class='author'>" + this.author + "</div>";
+            }
+        } else {
+            // 비회원 등록
+            if (isLogin === 'true') {
+                listHtml += "   <div class='author'>" + this.author + " (" + this.ip + ")</div>";
+            } else {
+                listHtml += "   <div class='x-btn' onclick='deleteCommentBtn(" + this.id + ")'></div>";
+                listHtml += "   <div class='author'>" + this.author + " (" + this.ip + ")</div>";
+            }
+        }
+
         listHtml += "   <div class='content'>" + this.content + "</div>";
         listHtml += "   <div class='createDate'>" + getReplyTime(this.createDate) + "</div>";
         listHtml += "</div>";
 
         $(this.children).each(function (e) {
             listHtml += "<div class='comment add'>";
-            listHtml += "<div class='x-btn' onclick='deleteCommentBtn(" + this.id + ")'></div>";
-            listHtml += "    <div class='add-ico'></div>"
-            listHtml += "   <div class='author add'>" + this.author + "</div>";
+
+            if (this.user) {
+                if (isLogin === 'true' && this.userId == loginId) {
+                    // 로그인 = 등록인
+                    listHtml += "   <div class='x-btn' onclick='deleteCommentBtnByOwner(" + this.id + ")'></div>";
+                    listHtml += "    <div class='add-ico'></div>"
+                    listHtml += "   <div class='author add'>" + this.author + "</div>";
+                } else {
+                    // 유저 등록
+                    listHtml += "    <div class='add-ico'></div>"
+                    listHtml += "   <div class='author add'>" + this.author + "</div>";
+                }
+            } else {
+                // 비회원 등록
+                if (isLogin === 'true') {
+                    listHtml += "    <div class='add-ico'></div>"
+                    listHtml += "   <div class='author add'>" + this.author + " (" + this.ip + ")</div>";
+                } else {
+                    listHtml += "   <div class='x-btn' onclick='deleteCommentBtn(" + this.id + ")'></div>";
+                    listHtml += "    <div class='add-ico'></div>"
+                    listHtml += "   <div class='author add'>" + this.author + " (" + this.ip + ")</div>";
+                }
+            }
+
             listHtml += "   <div class='content add'>" + this.content + "</div>";
             listHtml += "   <div class='createDate add'>" + getReplyTime(this.createDate) + "</div>";
             listHtml += "</div>";
@@ -75,6 +120,7 @@ function setListHtml(data) {
 
     var total_comment_cnt = data.totalCount;
     $(".comment-cnt").html("[" + total_comment_cnt + "]");
+    $(".view-replay-cnt").text(total_comment_cnt);
 }
 
 function setCommentChidrenForm(id) {
@@ -85,19 +131,27 @@ function setCommentChidrenForm(id) {
 
     $(".add-comment-form").remove();
 
+    var isLogin = $("input[name=isLogin]").val();
     var strHtml = "";
 
     strHtml += "<div class='add-comment-form' data-id='" + id + "'>";
     strHtml += "    <div class='add-ico'></div>";
-    strHtml += "    <div class='add-user-info'>";
-    strHtml += "        <input type='text' class='ipt' name='add-nickname' placeholder='닉네임'> ";
-    strHtml += "        <input type='password' class='ipt' name='add-password' placeholder='비밀번호'>";
-    strHtml += "    </div>";
+    if (isLogin === 'false') {
+        strHtml += "    <div class='add-user-info'>";
+        strHtml += "        <input type='text' class='ipt' name='add-nickname' placeholder='닉네임'> ";
+        strHtml += "        <input type='password' class='ipt' name='add-password' placeholder='비밀번호'>";
+        strHtml += "    </div>";
+    }
     strHtml += "    <div class='add-comment-conetent'>";
     strHtml += "        <textarea name='add-commentContent' maxlength='200' placeholder='내용'></textarea>";
     strHtml += "    </div>";
     strHtml += "    <div class='btn-area'>";
-    strHtml += "        <button class='btn on small' onclick='registerCommentToComment(" + id + ")'>등록</button>";
+    if (isLogin === 'false') {
+        strHtml += "        <button class='btn on small' onclick='registerCommentToComment(" + id + ")'>등록</button>";
+    } else {
+        // 로그인 버튼
+        strHtml += "        <button class='btn on small' onclick='registerCommentToCommentByUser(" + id + ")'>등록</button>";
+    }
     strHtml += "    </div>";
     strHtml += "</div>";
 
@@ -110,7 +164,7 @@ function registerComment () {
     var commentPassword = $("input[name=commentPassword]").val();
     var commentContent = $("textarea[name=commentContent]").val();
 
-    if (isEmpty(nickname) || lengthCheck(nickname, 1)) {
+    if (isEmpty(nickname) || lengthCheckUnder(nickname, 1)) {
         alert("닉네임을 입력해주세요.")
         return;
     }
@@ -120,12 +174,12 @@ function registerComment () {
         return;
     }
 
-    if (lengthCheck(commentPassword, 4)) {
+    if (lengthCheckUnder(commentPassword, 4)) {
         alert("비밀번호를 최소 4자리 이상 입력하셔야 합니다. 쉬운 비밀번호는 타인이 수정 또는 삭제하기 쉬우니, 어려운 비밀번호를 입력해 주세요.");
         return;
     }
 
-    if (isEmpty(commentContent) || lengthCheck(commentContent, 1)) {
+    if (isEmpty(commentContent) || lengthCheckUnder(commentContent, 1)) {
         alert("내을 입력해주세요.")
         return;
     }
@@ -155,13 +209,42 @@ function registerComment () {
     });
 }
 
+function registerCommentByOwner () {
+    var boardId = $("input[name=boardNum]").val();
+    var commentContent = $("textarea[name=commentContent]").val();
+
+    if (isEmpty(commentContent) || lengthCheckUnder(commentContent, 1)) {
+        alert("내을 입력해주세요.")
+        return;
+    }
+
+    $.ajax({
+        type : 'post',
+        url : '/board/save/comment',
+        headers : {
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "POST"
+        },
+        dataType : 'text',
+        data : JSON.stringify({
+            content : commentContent,
+            boardId : boardId
+        }),
+        success : function () {
+            getCommentList(currentCommentPage);
+
+            $("textarea[name=commentContent]").val("");
+        }
+    });
+}
+
 function registerCommentToComment (parent_id) {
     var boardId = $("input[name=boardNum]").val();
     var nickname = $("input[name=add-nickname]").val();
     var commentPassword = $("input[name=add-password]").val();
     var commentContent = $("textarea[name=add-commentContent]").val();
 
-    if (isEmpty(nickname) || lengthCheck(nickname, 1)) {
+    if (isEmpty(nickname) || lengthCheckUnder(nickname, 1)) {
         alert("닉네임을 입력해주세요.")
         return;
     }
@@ -171,12 +254,12 @@ function registerCommentToComment (parent_id) {
         return;
     }
 
-    if (lengthCheck(commentPassword, 4)) {
+    if (lengthCheckUnder(commentPassword, 4)) {
         alert("비밀번호를 최소 4자리 이상 입력하셔야 합니다. 쉬운 비밀번호는 타인이 수정 또는 삭제하기 쉬우니, 어려운 비밀번호를 입력해 주세요.");
         return;
     }
 
-    if (isEmpty(commentContent) || lengthCheck(commentContent, 1)) {
+    if (isEmpty(commentContent) || lengthCheckUnder(commentContent, 1)) {
         alert("내을 입력해주세요.")
         return;
     }
@@ -192,6 +275,42 @@ function registerCommentToComment (parent_id) {
         data : JSON.stringify({
             author : nickname,
             password : commentPassword,
+            content : commentContent,
+            boardId : boardId,
+            parentId : parent_id
+        }),
+        success : function () {
+            getCommentList(currentCommentPage);
+
+            $(".add-comment-form").remove();
+        }
+    });
+}
+
+function registerCommentToCommentByUser (parent_id) {
+    var boardId = $("input[name=boardNum]").val();
+    var commentContent = $("textarea[name=add-commentContent]").val();
+    var isLogin = $("input[name=isLogin]").val();
+    
+    if (isLogin === 'false') {
+        alert("잘못된접근입니다.")
+        return;
+    }
+    
+    if (isEmpty(commentContent) || lengthCheckUnder(commentContent, 1)) {
+        alert("내을 입력해주세요.")
+        return;
+    }
+
+    $.ajax({
+        type : 'post',
+        url : '/board/save/comment',
+        headers : {
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "POST"
+        },
+        dataType : 'text',
+        data : JSON.stringify({
             content : commentContent,
             boardId : boardId,
             parentId : parent_id
@@ -242,6 +361,33 @@ function modifyBtn() {
     });
 }
 
+function likesBtn() {
+    var boardNum = $("input[name=boardNum]").val();
+
+    $.ajax({
+        type : 'post',
+        url : '/board/likes',
+        headers : {
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "POST"
+        },
+        dataType : 'json',
+        data : JSON.stringify({
+            boardId : boardNum
+        }),
+        success : function (data) {
+            $(".likes-cnt").text(data.likes);
+            $(".view-recom").text(data.likes);
+
+            if (data.isLikes) {
+                $(".like-ico").addClass("on");
+            } else {
+                $(".like-ico").removeClass("on")
+            }
+        }
+    });
+}
+
 function deleteBtn() {
     openModal('비밀번호를 입력하세요.', 'type1', function () {
         var boardNum = $("input[name=boardNum]").val();
@@ -280,6 +426,64 @@ function deleteBtn() {
     });
 }
 
+function deleteBtnByOwner() {
+    openModal('삭제를 하시겠습니까?', 'type2', function () {
+        var boardNum = $("input[name=boardNum]").val();
+
+        $.ajax({
+            type : 'post',
+            url : '/board/deleteByOwner',
+            headers : {
+                "Content-Type" : "application/json",
+                "X-HTTP-Method-Override" : "POST"
+            },
+            dataType : 'json',
+            data : JSON.stringify({
+                boardNum : boardNum,
+                type: "delete"
+            }),
+            success : function (data) {
+                if (data.result) {
+                    location.href=data.redirect;
+                } else {
+                    modalClose();
+                    alert ("비밀번호가 틀렸습니다.");
+                }
+
+            }
+        });
+    });
+}
+
+function modifyBtnByOwner() {
+    openModal('수정 하시겠습니까?', 'type2', function () {
+        var boardNum = $("input[name=boardNum]").val();
+
+        $.ajax({
+            type : 'post',
+            url : '/board/modifyByOwner',
+            headers : {
+                "Content-Type" : "application/json",
+                "X-HTTP-Method-Override" : "POST"
+            },
+            dataType : 'json',
+            data : JSON.stringify({
+                boardNum : boardNum,
+                type: "delete"
+            }),
+            success : function (data) {
+                if (data.result) {
+                    location.href=data.redirect + "&" + makeQueryUrl();
+                } else {
+                    modalClose();
+                    alert ("비밀번호가 틀렸습니다.");
+                }
+
+            }
+        });
+    });
+}
+
 function deleteCommentBtn(commentNum) {
     event.stopPropagation();
 
@@ -294,18 +498,18 @@ function deleteCommentBtn(commentNum) {
         }
 
         $.ajax({
-            type : 'post',
-            url : '/board/delete/comment',
-            headers : {
-                "Content-Type" : "application/json",
-                "X-HTTP-Method-Override" : "POST"
+            type: 'post',
+            url: '/board/delete/comment',
+            headers: {
+                "Content-Type": "application/json",
+                "X-HTTP-Method-Override": "POST"
             },
-            dataType : 'json',
-            data : JSON.stringify({
-                commentNum : commentNum,
-                password : password
+            dataType: 'json',
+            data: JSON.stringify({
+                commentNum: commentNum,
+                password: password
             }),
-            success : function (data) {
+            success: function (data) {
                 if (data) {
                     getCommentList(currentCommentPage);
                     modalClose();
@@ -314,6 +518,33 @@ function deleteCommentBtn(commentNum) {
 
                     alert("비밀번호가 틀립니다.");
                 }
+
+            }
+        });
+    });
+}
+
+function deleteCommentBtnByOwner(commentNum) {
+    event.stopPropagation();
+
+    openModal('댓글을 삭제하시겠습니까?', 'type2', function () {
+        $.ajax({
+            type : 'post',
+            url : '/board/delete/comment',
+            headers : {
+                "Content-Type" : "application/json",
+                "X-HTTP-Method-Override" : "POST"
+            },
+            dataType : 'json',
+            data : JSON.stringify({
+                commentNum : commentNum
+            }),
+            success : function (data) {
+                if (data) {
+                    getCommentList(currentCommentPage);
+                }
+
+                modalClose();
 
             }
         });

@@ -1,12 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
-<head>
-    <title>Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet"  type="text/css" href="/css/base.css">
-    <link rel="stylesheet"  type="text/css" href="/css/board.css">
-</head>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<jsp:include page="/views/common/header.jsp"/>
+<link rel="stylesheet"  type="text/css" href="/css/m.board.css">
+
 <body>
     <div class="container">
         <div class="register">
@@ -15,6 +12,14 @@
                 <button id="btn-register" onclick="btnModify();">수정</button>
             </div>
             <div class="title">
+                <%--<span class="board-type-name">${board.typeName}</span>--%>
+                <select class="register-select" name="s-type">
+                    <c:forEach items="${boardType}" var="bt">
+                        <option value="${bt.type}" <c:if test="${bt.type eq board.type}">selected</c:if>>
+                                ${bt.name}
+                        </option>
+                    </c:forEach>
+                </select>
                 <input class="ipt" type="text" maxlength="40" id="title" name="title" autocomplete="off" placeholder="제목" value="${board.title}">
             </div>
             <div class="user-info">
@@ -70,7 +75,9 @@
     <input type="hidden" name="content" value="${search.content}">
 
     <script type="text/javascript" src="/js/jquery-3.6.1.min.js"></script>
-    <script type="text/javascript" src="/js/board/modify.js"></script>
+    <script type="text/javascript" src="/js/board/m.modify.js"></script>
     <script type="text/javascript" src="/js/m.base.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeIHAIjAAAAAAmC25HnQn-fNgwQy-z0S4bpP9Nd"></script>
+    <script type="text/javascript" src="/js/common/captcha.js"></script>
 </body>
-</html>
+<jsp:include page="/views/common/footer.jsp"/>

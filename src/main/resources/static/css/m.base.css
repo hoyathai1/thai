@@ -1,0 +1,368 @@
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+     -webkit-text-fill-color: #000;
+     -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+     box-shadow: 0 0 0px 1000px #fff inset;
+     transition: background-color 5000s ease-in-out 0s;
+ }
+
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:autofill:active {
+    -webkit-text-fill-color: #000;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    box-shadow: 0 0 0px 1000px #fff inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Text box placeholder setting */
+[contenteditable=true]:empty:not(:focus):before {
+    content: attr(placeholder);
+    color: #9ea0ab;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+:root{
+    --black_gray: #464646;
+    --gray: #646464;
+    --light_gray: #828282;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+}
+
+.container {
+    padding-left: 2px;
+    overflow: hidden;
+
+    height: auto;
+    min-height: 100%;
+    padding-bottom: 90px;
+
+}
+
+/*
+    Button style
+*/
+.btn-area {
+    display: flex;
+    justify-content: center;
+    height: 32px;
+    margin-top: 8px;
+    margin-bottom: 10px;
+
+}
+
+.between {
+    display: flex;
+    justify-content: space-between;
+    height: 32px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    padding-right: 20px;
+    padding-left: 20px;
+
+}
+
+
+/**
+    버튼 스타일
+ */
+.btn-area button.btn {
+    border: 1px var(--gray) solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--gray);
+}
+
+.btn-area button.small {
+    width: 20%;
+}
+
+.btn-area button.one {
+    width: 100%;
+}
+
+.btn-area button.two {
+    width: 40%;
+    margin-right: 10px;
+}
+
+.btn-area button.right {
+    margin-right: 0px;
+}
+
+.btn-area button.four {
+    width: 20%;
+    margin-right: 10px;
+}
+
+.btn-area button.btn.on {
+    background-color: var(--gray);
+    color: white;
+}
+
+
+
+/*
+    글자 스타일
+*/
+.fnt-bold {
+    font-weight: bold;
+}
+
+.fnt-red {
+    color: #b62713;
+}
+
+.fnt-gray {
+    color: #555;
+}
+
+/*
+    입력 스타일
+*/
+
+
+
+/*
+    모달창
+*/
+.modal {
+    position: fixed;
+    top:0; left: 0; bottom: 0; right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.modal .modal-display {
+    position: absolute;
+    top: 40%;
+    left: 15%;
+    background-color: white;
+    border-radius: 10px;
+    width: 70%;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal .modal-display .modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal .modal-display .modal-content .ipt {
+    border: 1px solid #989898;
+    outline: none;
+    padding: 6px;
+    margin-top: 5px;
+    width: 67%;
+}
+
+.modal .modal-display .modal-content .ipt:focus {
+    border: 2px solid #989898;
+}
+
+.modal .modal-content .modal-btn-area {
+    width: 70%;
+}
+
+.modal .modal-content .modal-btn-area button {
+    width: 45%
+}
+
+
+/**
+    헤더
+ */
+
+.header-top {
+    height: 40px;
+    background-color: var(--gray);
+    display: flex;
+    padding: 5px;
+    align-items:center;
+}
+
+.header-top .header-logo {
+    background: url("/img/thai.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+}
+
+.header-top .header-logo-font {
+    margin-left: 10px;
+    width: 100%;
+}
+
+.header-top .header-logo-font span {
+    font-size: 25px;
+    color: white;
+}
+
+.header-top .header-info {
+    display: flex;
+    width: 420px;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    justify-content: flex-end;
+}
+
+.header-top .header-info.two {
+    display: flex;
+    width: 220px;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+
+.header-top .header-info div {
+    margin-left: 20px;
+}
+
+.header-top .header-info .menu {
+    margin-right: 10px;
+}
+
+/**
+    카테고리정보
+ */
+.header-category {
+    height: 40px;
+    display: flex;
+    border-bottom: 1px solid #bcbcbc;
+    align-items: center;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.header-category.bottom-on {
+    border-bottom: 5px solid #bcbcbc;
+}
+
+.header-category .category-log {
+    background: url("/img/pattaya.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 50px;
+    height: 100%;
+}
+
+.header-category .category-name {
+    font-size: 22px;
+    text-align: center;
+    align-items: center;
+}
+
+.header-category .category-btn {
+    display: flex;
+    justify-content: center;
+    height: 32px;
+    margin-left:auto;
+}
+
+.header-category .category-btn button {
+    width: 75px;
+    border: 1px var(--gray) solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--gray);
+    display: none;
+}
+
+
+/**
+    네비게이션
+ */
+.header-gnb {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    border-bottom: 1px solid #bcbcbc;
+}
+.header-gnb li {
+    float: left;
+    flex: 1;
+}
+
+.header-gnb li:after {
+    content: "";
+    border: 0.1px solid var(--gray);
+    display: block;
+    height: 15px;
+    top: 100px;
+    position: absolute;
+    margin: -1px;
+}
+
+.header-gnb li a {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 15px;
+    color: var(--light_gray);
+    font-weight: bold;
+}
+
+.header-gnb li a.on {
+    /*color: black;*/
+    color: #2828CD;
+}
+
+.header-gnb li a:hover {
+    /*color: black;*/
+    color: #2828CD;
+}
+
+/*
+    유저 헤더
+*/
+.user-header {
+    margin-top: 10px;
+    padding: 10px 10px 10px 10px;
+}
+
+.user-header .user-header-logo-font {
+    text-align: center;
+    font-size: 20px;
+}
+
+
+/**
+    푸터
+ */
+.footer {
+    background-color: var(--light_gray);
+    height: 64px;
+    position : relative;
+    transform : translateY(-100%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer span {
+    font-size: 12px;
+    color: white;
+}

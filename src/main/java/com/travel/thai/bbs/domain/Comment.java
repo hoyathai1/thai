@@ -24,6 +24,10 @@ public class Comment {
 
     private String ip;
 
+    private String userId;
+
+    private boolean isUser;
+
     private String author;
 
     private String password;
@@ -74,4 +78,13 @@ public class Comment {
         this.children.add(comment);
     }
 
+    public String getIp() {
+        if (isUser) {
+            return "";
+        } else {
+            String[] arr = ip.split("\\.");
+
+            return arr[0] + "." +arr[1];
+        }
+    }
 }

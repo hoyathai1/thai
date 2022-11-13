@@ -25,6 +25,16 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
 
+    private static final String BEST = "Y";
+
+    private static final String TYPE_BOARD = "board";
+    private static final String TYPE_INFO = "info";
+    private static final String TYPE_FUN = "fun";
+    private static final String TYPE_FIND = "find";     // 이푸알
+
+
+    private static final int BEST_SIZE = 10;
+
     @Override
     public PageImpl<BoardDto> search(Search search, Pageable pageable) {
         BooleanBuilder whereBuilder = new BooleanBuilder();
@@ -41,6 +51,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
             }
         }
 
+        if (BEST.equals(search.getBest())) {
+            whereBuilder.and(board.likes.size().gt(BEST_SIZE));
+        } else {
+            if (!ALL.equals(search.getType())) {
+                whereBuilder.and(board.type.eq(search.getType()));
+            }
+        }
+
         List<BoardDto> results = queryFactory
                 .select(Projections.constructor(BoardDto.class,
                         board.id,
@@ -48,11 +66,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         board.author,
                         board.createDate,
                         board.view,
-                        comment.id.count().intValue()
+                        comment.id.count().intValue(),
+                        board.likes.size(),
+                        board.isUser,
+                        board.ip
                 ))
                 .from(board)
                 .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
-                .where(whereBuilder.and(board.type.eq(search.getType())).and(board.isDel.isFalse()))
+                .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
                 .groupBy(board.id)
                 .orderBy(board.createDate.desc())
                 .offset(pageable.getOffset())   // 페이지 번호
@@ -62,7 +83,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         int count = queryFactory
                 .selectOne()
                 .from(board)
-                .where(whereBuilder.and(board.type.eq(search.getType())).and(board.isDel.isFalse()))
+                .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
                 .orderBy(board.createDate.desc())
                 .fetch().size();
 
@@ -70,15 +91,20 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public Board searchOne(Search search) {
-        Board result = queryFactory
-                .select(Projections.constructor(Board.class,
+    public BoardDto searchOne(Search search) {
+        BoardDto result = queryFactory
+                .select(Projections.constructor(BoardDto.class,
                         board.id,
                         board.title,
                         board.author,
                         board.contents,
                         board.createDate,
-                        board.view
+                        board.view,
+                        board.likes.size(),
+                        board.isUser,
+                        board.userId,
+                        board.ip,
+                        board.type
                 ))
                 .from(board)
                 .where(board.id.eq(search.getBoardNum()).and(board.isDel.isFalse()))
@@ -141,6 +167,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .set(board.title, param.getTitle())
                 .set(board.contents, param.getContents())
                 .set(board.contentsTxt, param.getContentsTxt())
+                .set(board.type, param.getType())
                 .where(board.id.eq(param.getId()))
                 .execute();
     }

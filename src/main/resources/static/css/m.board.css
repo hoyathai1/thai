@@ -1,12 +1,3 @@
-body {
-    margin: 0px;
-    padding: 0px;
-}
-
-.container {
-    padding-left: 2px;
-    overflow: hidden;
-}
 
 .board-list {
 
@@ -37,6 +28,16 @@ body {
 .board-list .board .content .info div.view-count:before {
     content: '조회 ';
 }
+
+.board-list .board .content .info div.likes-count:before {
+    content: '추천 ';
+    color: #7c7874;
+}
+
+.board-list .board .content .info div.likes-count {
+    color: #b62713;
+}
+
 /* 댓글 정보 ( 댓글 개수) */
 .board-list .board .reply {
     width: 10%;
@@ -282,6 +283,41 @@ body {
     max-height: 100%!important;
 }
 
+.view .view-body .likes {
+    display: flex;
+    justify-content: center;
+}
+
+.view .view-body .likes .likes-btn {
+    width: 20%;
+    height: 80px;
+    background-color: #E6E6E6;
+    border: none;
+    margin: 20px;
+    border-radius: 50%;
+}
+
+.view .view-body .likes .likes-btn .likes-cnt {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.view .view-body .likes .likes-btn .like-ico {
+    background: url("/img/like-off.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+    margin: auto;
+    margin-top: 5px;
+}
+
+.view .view-body .likes .likes-btn .like-ico.on {
+    background: url("/img/like-on.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+}
 
 /**
     상세 화면의 댓글 리스트
@@ -314,6 +350,7 @@ body {
     background-color:transparent;
 }
 
+
 .view .comment .comment-info .refresh-btn .refresh-ico {
     background: url("/img/refresh.png") no-repeat;
     background-size: contain;
@@ -321,7 +358,6 @@ body {
     width: 100%;
     height: 100%;
 }
-
 .view .comment .comment-form {
     padding: 12px 12px 10px;
     border-top: 2px solid #bcbcbc;
@@ -522,8 +558,8 @@ body {
 
 .register .subject button {
     width: 75px;
-    border: 1px #464646 solid;
-    color: #464646;
+    border: 1px var(--gray) solid;
+    color: var(--gray);
     font-weight: bold;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -534,10 +570,24 @@ body {
 .register .title {
     border-top: 1px solid #bcbcbc;
     width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.register .title .board-type-name {
+    width: 15%;
+    border: 0;
+    text-align: center;
+}
+
+.register .title select {
+    width: 15%;
+    border: 0;
+    text-align: center;
 }
 
 .register .title input.ipt {
-    width: 100%;
+    width: 85%;
     border: 0;
     padding: 12px 12px 10px;
     /*라인박스 높이*/
@@ -638,7 +688,7 @@ body {
 .register .info ul li{
     margin-bottom: 10px;
     padding-right: 10px;
-    color: #464646
+    color: var(--gray)
 }
 
 

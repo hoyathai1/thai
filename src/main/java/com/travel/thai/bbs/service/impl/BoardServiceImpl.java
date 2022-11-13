@@ -6,6 +6,7 @@ import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.bbs.service.BoardService;
 import com.travel.thai.common.util.RSAUtil;
+import com.travel.thai.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +29,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board searchOne(Search search) {
+    public BoardDto searchOne(Search search) {
         return boardRepository.searchOne(search);
     }
 
@@ -37,8 +38,10 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board saveBoard(Board board) {
         try {
-            String encPassword = RSAUtil.encryptRSA(board.getPassword());
-            board.setPassword(encPassword);
+            if (!board.isUser()) {
+                String encPassword = RSAUtil.encryptRSA(board.getPassword());
+                board.setPassword(encPassword);
+            }
         } catch (Exception e) {
             // TODO: 예외처리
         }
@@ -74,10 +77,24 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public boolean modifyBoard(Board board) {
+    public boolean modifyBoard(Board board, User user) {
         boolean isModify = false;
 
         try {
+            if (user != null) {
+                Search search = new Search();
+                search.setBoardNum(board.getId());
+                BoardDto result = boardRepository.searchOne(search);
+
+                if (user.getUserId().equals(result.getUserId())) {
+                    boardRepository.modifyBoard(board);
+                    isModify = true;
+                    return isModify;
+                } else {
+                    return isModify;
+                }
+            }
+
             String dbPassword = boardRepository.getPassword(board.getId());
             String dbDecPassword = RSAUtil.decryptRSA(dbPassword);
 

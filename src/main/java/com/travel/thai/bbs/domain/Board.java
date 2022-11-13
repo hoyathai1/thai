@@ -22,9 +22,15 @@ public class Board {
 
     private String ip;
 
+    private String category;
+
     private String type;
 
     private String title;
+
+    private boolean isUser;
+
+    private String userId;
 
     @Lob
     private String contents;
@@ -47,6 +53,9 @@ public class Board {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Likes> likes;
 
     @PrePersist // 데이터 생성이 이루어질때 사전 작업
     public void prePersist() {

@@ -1,21 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet"  type="text/css" href="/css/base.css">
-    <link rel="stylesheet"  type="text/css" href="/css/board.css">
-</head>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<jsp:include page="/views/common/header.jsp"/>
+<link rel="stylesheet"  type="text/css" href="/css/m.board.css">
+
 <body>
+    <sec:authorize access="isAuthenticated()">
+        <sec:authentication property="principal" var="principal" />
+    </sec:authorize>
+
     <div class="container">
         <div class="register">
             <div class="subject">
                 <h4>글쓰기</h4>
-                <button id="btn-register" onclick="btnRegister();">등록</button>
+                <c:if test="${empty principal}">
+                    <button class="btn-register" onclick="btnRegister();">등록</button>
+                </c:if>
+                <c:if test="${not empty principal}">
+                    <button class="btn-register" onclick="btnRegisterLogin();">등록</button>
+                </c:if>
             </div>
             <div class="title">
+                <select class="register-select" name="s-type">
+                    <c:forEach items="${boardType}" var="bt">
+                        <option value="${bt.type}">
+                            ${bt.name}
+                        </option>
+                    </c:forEach>
+                </select>
                 <input class="ipt" type="text" maxlength="40" id="title" name="title" autocomplete="off" placeholder="제목">
             </div>
+            <c:if test="${empty principal}">
             <div class="user-info">
                 <div class="name">
                     <input class="ipt" type="text" maxlength="10" id="name" name="name" placeholder="닉네임" value="">
@@ -24,6 +39,7 @@
                     <input class="ipt" type="password" maxlength="10" id="password" name="password" placeholder="패스워드" value="">
                 </div>
             </div>
+            </c:if>
             <div class="editor-menu">
                 <button class="btn" id="btn-bold">
                     <b>B</b>
@@ -57,7 +73,12 @@
 
             <div class="btn-area between">
                 <button class="btn small" onclick="goList();">취소</button>
+                <c:if test="${empty principal}">
                 <button class="btn small" onclick="btnRegister();">등록</button>
+                </c:if>
+                <c:if test="${not empty principal}">
+                <button class="btn small" onclick="btnRegisterLogin();">등록</button>
+                </c:if>
             </div>
         </div>
     </div>
@@ -68,7 +89,9 @@
     <input type="hidden" name="content" value="${search.content}">
 
     <script type="text/javascript" src="/js/jquery-3.6.1.min.js"></script>
-    <script type="text/javascript" src="/js/board/register.js"></script>
+    <script type="text/javascript" src="/js/board/m.register.js"></script>
     <script type="text/javascript" src="/js/m.base.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeIHAIjAAAAAAmC25HnQn-fNgwQy-z0S4bpP9Nd"></script>
+    <script type="text/javascript" src="/js/common/captcha.js"></script>
 </body>
-</html>
+<jsp:include page="/views/common/footer.jsp"/>

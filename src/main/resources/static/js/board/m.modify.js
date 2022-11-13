@@ -1,3 +1,8 @@
+const urlParams = new URL(location.href).searchParams;
+const category = urlParams.get('category');
+const best = urlParams.get('best');
+const bType = urlParams.get('type');
+
 const editor = document.getElementById('editor');
 const btnBold = document.getElementById('btn-bold');
 const btnItalic = document.getElementById('btn-italic');
@@ -15,13 +20,14 @@ function btnModify() {
     var title = $("input[name=title]").val();
     var password = $("input[name=password]").val();
     var contents = $("#editor").html();
+    var sType = $(".register-select").val();
 
-    if (isEmpty(title) || lengthCheck(title, 1)) {
+    if (isEmpty(title) || lengthCheckUnder(title, 1)) {
         alert("제목을 입력해주세요.")
         return;
     }
 
-    if (isEmpty(contents) || lengthCheck(title, 1)) {
+    if (isEmpty(contents) || lengthCheckUnder(title, 1)) {
         alert("내을 입력해주세요.")
         return;
     }
@@ -41,7 +47,8 @@ function btnModify() {
             title: title,
             password: password,
             contents : contents,
-            contentsTxt : contentsTxt
+            contentsTxt : contentsTxt,
+            type: sType
         }),
         success : function (data) {
             goBack();
@@ -158,7 +165,7 @@ function makeQueryUrl() {
     var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
 
-    return "pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return "type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
 }
 
 function imageSizeChange( image ) {

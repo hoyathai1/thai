@@ -16,9 +16,26 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class CommonController {
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String main(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        return "redirect:/board/list?type=all&best=&category=thai&pageNum=0";
+    }
+
+    @RequestMapping(value = "/menu", method = RequestMethod.GET)
+    public String menu(HttpServletRequest request, HttpServletResponse response, Model model) {
+        String uri = request.getHeader("Referer");
+        if (uri != null && !uri.contains("/login")) {
+            request.getSession().setAttribute("prevPage", uri);
+        }
+
+
+
+        return "/common/menu";
+    }
+
     @RequestMapping(value = "/warning", method = RequestMethod.GET)
     public String checkAjax(HttpServletRequest request, HttpServletResponse response, Model model) {
-
 
         return "/common/warning";
     }

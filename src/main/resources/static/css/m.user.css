@@ -1,0 +1,316 @@
+
+.signUp {
+    padding: 10px;
+}
+
+.signUp .id {
+    height: 60px;
+    margin-bottom: 5px;
+}
+
+.signUp .id h4 {
+    margin: 0px 0px 5px 0px;
+}
+
+.signUp .id input.ipt {
+    width: 100%;
+    height: 60%;
+    border: 1px solid #989898;
+    outline: none;
+    padding: 5px 5px 5px 10px;
+}
+
+.signUp .id input.ipt:focus {
+    border: 2px solid #989898;
+}
+
+.signUp .info {
+    padding: 10px;
+}
+
+.signUp .info span {
+    font-size: 12px;
+    display: block;
+}
+
+.signUp .info span:before {
+    content: " - ";
+}
+
+.signUp .password {
+    margin-top: 20px;
+}
+
+.signUp .password h4 {
+    margin: 0px 0px 0px 0px;
+}
+
+.signUp .password .ipt {
+    width: 100%;
+    height: 36px;
+    border: 1px solid #989898;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    outline: none;
+    padding: 5px 5px 5px 10px;
+}
+
+.signUp .password input.ipt:focus {
+    border: 2px solid #989898;
+}
+
+
+.signUp .name {
+    height: 60px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.signUp .name h4 {
+    margin: 0px 0px 5px 0px;
+}
+
+.signUp .name input.ipt {
+    width: 100%;
+    height: 60%;
+    border: 1px solid #989898;
+    outline: none;
+    padding: 5px 5px 5px 10px;
+}
+
+.signUp .name input.ipt:focus {
+    border: 2px solid #989898;
+}
+
+.signUp .email {
+    margin-top: 20px;
+}
+
+.signUp .email h4 {
+    margin: 0px 0px 5px 0px;
+}
+
+.signUp .email span {
+
+}
+
+.signUp .email input.ipt {
+    height: 36px;
+    border: 1px solid #989898;
+    outline: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px 5px 5px 10px;
+}
+
+.signUp .email input.ipt.email1 {
+    width: 30%;
+}
+
+.signUp .email input.ipt.email2 {
+    width: 30%;
+}
+
+.signUp .email input.ipt:focus {
+    border: 2px solid #989898;
+}
+
+.signUp .email .domain {
+    width: 30%;
+    height: 36px;
+    border: 1px solid #989898;
+    outline: none;
+}
+
+.signUp .email .domain:focus {
+    border: 2px solid #989898;
+}
+
+.signUp .btn-area {
+    margin-top: 20px;
+}
+
+/*
+    로그인
+ */
+.login {
+    padding: 10px;
+}
+
+.login form {
+    margin: 0px 0px 0px 0px;
+}
+
+.login .id {
+    height: 36px;
+    margin-bottom: 10px;
+}
+
+.login .id .ipt {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #989898;
+    outline: none;
+    padding: 5px 5px 5px 10px;
+}
+
+.login .password {
+    height: 36px;
+}
+
+.login .password .ipt {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #989898;
+    outline: none;
+    padding: 5px 5px 5px 10px;
+}
+
+.login .btn-area .btn {
+    height: 44px;
+}
+
+.login .info {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.login .info span {
+    font-size: 12px;
+    display: block;
+}
+
+.login .info span:before {
+    content: " - ";
+}
+
+.login .remember {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.login .remember label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.login .remember input {
+    background: url("/img/check.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 14px;
+    height: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.login .remember input:checked {
+    background: url("/img/checked.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+}
+
+.login .user-btn {
+    margin-top: 40px;
+    border-top: 1px solid #989898;
+    display: flex;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.login .user-btn .signUp-btn {
+    margin-right: 10px;
+}
+
+.login .user-btn .find-pwd-btn {}
+
+
+/**
+    비밀번호 찾기
+ */
+.find-pwd {
+    padding: 10px;
+}
+
+.find-pwd .email {
+    margin-top: 20px;
+}
+
+.find-pwd .email h4 {
+    margin: 0px 0px 5px 0px;
+}
+
+.find-pwd .email span {
+
+}
+
+.find-pwd .email input.ipt {
+    height: 36px;
+    border: 1px solid #989898;
+    outline: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px 5px 5px 10px;
+}
+
+.find-pwd .email input.ipt.email1 {
+    width: 30%;
+}
+
+.find-pwd .email input.ipt.email2 {
+    width: 30%;
+}
+
+.find-pwd .email input.ipt:focus {
+    border: 2px solid #989898;
+}
+
+.find-pwd .email .domain {
+    width: 30%;
+    height: 36px;
+    border: 1px solid #989898;
+    outline: none;
+}
+
+.find-pwd .email .domain:focus {
+    border: 2px solid #989898;
+}
+
+.find-pwd .info {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.find-pwd .info span {
+    font-size: 12px;
+    display: block;
+}
+
+.find-pwd .info span:before {
+    content: " - ";
+}
+
+.find-pwd .id {
+    height: 60px;
+    margin-bottom: 5px;
+}
+
+.find-pwd .id h4 {
+    margin: 0px 0px 5px 0px;
+}
+
+.find-pwd .id input.ipt {
+    width: 100%;
+    height: 60%;
+    border: 1px solid #989898;
+    outline: none;
+    padding: 5px 5px 5px 10px;
+}
+
+.find-pwd .id input.ipt:focus {
+    border: 2px solid #989898;
+}

@@ -1,15 +1,22 @@
 package com.travel.thai.bbs.controller;
 
 import com.travel.thai.bbs.domain.*;
+import com.travel.thai.bbs.service.BoardCategoryService;
 import com.travel.thai.bbs.service.BoardService;
 import com.travel.thai.bbs.service.CommentService;
+import com.travel.thai.bbs.service.LikesService;
+import com.travel.thai.common.util.LogUtil;
 import com.travel.thai.common.util.RSAUtil;
 import com.travel.thai.common.util.StringUtils;
+import com.travel.thai.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,19 +34,30 @@ import java.util.Map;
 @Slf4j
 public class BoardController {
     @Autowired
-    BoardService boardService;
+    private BoardService boardService;
 
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
+
+    @Autowired
+    private LikesService likesService;
+
+    @Autowired
+    private BoardCategoryService boardCategoryService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String list(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search) {
+    public String list(HttpServletRequest request, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user, Model model) {
+        log.info("[BoardController.list][GET]" + LogUtil.setUserInfo(request, user));
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+
         return "board/list";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> listAjax(@RequestBody Search search) {
-        System.out.println("" + search.getPageNum() +"|"+ search.getPageSize());
+    public ResponseEntity<Map<String, Object>> listAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.listAjax][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<Map<String, Object>> entity;
 
         try {
@@ -59,24 +77,38 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public String view(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search, Model model) {
-        Board board = boardService.searchOne(search);
+    public String view(HttpServletRequest request, @ModelAttribute("search") Search search, Model model
+                        , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.view][GET]" + LogUtil.setUserInfo(request, user));
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+
+        BoardDto board = boardService.searchOne(search);
+        int likes = likesService.getLikesCount(search.getBoardNum());
+        boolean isLikes = false;
+
+        if (user != null) {
+            isLikes = likesService.isLikesByUserId(search.getBoardNum(), user.getUserId());
+        } else {
+            isLikes = likesService.isLikesByIp(search.getBoardNum(), request.getRemoteAddr());
+        }
         boardService.increseViewCount(search);
 
+        model.addAttribute("isLikes", isLikes);
+        model.addAttribute("likes", likes);
         model.addAttribute("board", board);
-
 
         return "board/view";
     }
 
     @RequestMapping(value = "/save/comment", method = RequestMethod.POST)
-    public ResponseEntity<String> saveComment(HttpServletRequest request, HttpServletResponse response
-            , @RequestBody CommentDto commentDto)  {
+    public ResponseEntity<String> saveComment(HttpServletRequest request, @RequestBody CommentDto commentDto, @AuthenticationPrincipal User user)  {
+        log.info("[BoardController.saveComment][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<String> entity = null;
 
         try {
             commentDto.setIp(request.getRemoteAddr());
-            Comment result = commentService.saveComment(commentDto);
+            Comment result = commentService.saveComment(commentDto, user);
 
             entity = new ResponseEntity(result, HttpStatus.OK);
         } catch (Exception e) {
@@ -88,8 +120,8 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/search/comment", method = RequestMethod.POST)
-    public ResponseEntity<String> searchComment(HttpServletRequest request, HttpServletResponse response
-            ,@RequestBody Search search)  {
+    public ResponseEntity<String> searchComment(HttpServletRequest request, @RequestBody Search search, @AuthenticationPrincipal User user) {
+        log.info("[BoardController.searchComment][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<String> entity = null;
 
         try {
@@ -111,12 +143,12 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/delete/comment", method = RequestMethod.POST)
-    public ResponseEntity<String> deleteComment(HttpServletRequest request, HttpServletResponse response
-            ,@RequestBody Search search)  {
+    public ResponseEntity<String> deleteComment(HttpServletRequest request, @RequestBody Search search, @AuthenticationPrincipal User user)  {
+        log.info("[BoardController.deleteComment][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<String> entity = null;
 
         try {
-            boolean result = commentService.deleteComment(search);
+            boolean result = commentService.deleteComment(search, user);
 
             entity = new ResponseEntity(result, HttpStatus.OK);
         } catch (Exception e) {
@@ -128,19 +160,32 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String register(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search) {
+    public String register(HttpServletRequest request, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user, Model model) {
+        log.info("[BoardController.deleteComment][GET]" + LogUtil.setUserInfo(request, user));
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+
         return "board/register";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<String> registerAjax(HttpServletRequest request, HttpServletResponse response
-                                                , @RequestBody Board board) {
+    public ResponseEntity<String> registerAjax(HttpServletRequest request, @RequestBody Board board, @AuthenticationPrincipal User user) {
+        log.info("[BoardController.registerAjax][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<String> entity = null;
 
         try {
-            board.setIp(request.getRemoteAddr());
-            Board result = boardService.saveBoard(board);
+            if (user != null) {
+                // 로그인 글쓰기
+                board.setUserId(user.getUserId());
+                board.setUser(true);
+                board.setAuthor(user.getName());
+            } else {
+                // 비로그인 글쓰기
+                board.setUser(false);
+                board.setIp(request.getRemoteAddr());
+            }
 
+            Board result = boardService.saveBoard(board);
             entity = new ResponseEntity(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,22 +196,40 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/modify", method = RequestMethod.GET)
-    public String modify(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search, Model model) {
+    public String modify(HttpServletRequest request, @ModelAttribute("search") Search search, Model model
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.modify][GET]" + LogUtil.setUserInfo(request, user));
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+
         try {
-            if (StringUtils.isEmpty(search.getPassword())) {
-                return "redirect:/warning";
-            }
-            String encPassword = RSAUtil.decryptRSA(search.getPassword());
-            search.setPassword(encPassword);
-            boolean result = boardService.isCheckPassword(search);
+            if (user != null) {
+                BoardDto board = boardService.searchOne(search);
 
-            if (!result) {
-                return "redirect:/warning";
-            }
+                if (user.getUserId().equals(board.getUserId())) {
+                    board.setTypeName(boardCategoryService.getBoardTypeName(board.getType()));
+                    model.addAttribute("board", board);
+                    model.addAttribute("search", search);
+                } else {
+                    return "redirect:/warning";
+                }
+            } else {
+                if (StringUtils.isEmpty(search.getPassword())) {
+                    return "redirect:/warning";
+                }
+                String encPassword = RSAUtil.decryptRSA(search.getPassword());
+                search.setPassword(encPassword);
+                boolean result = boardService.isCheckPassword(search);
 
-            Board board = boardService.searchOne(search);
-            model.addAttribute("board", board);
-            model.addAttribute("search", search);
+                if (!result) {
+                    return "redirect:/warning";
+                }
+
+                BoardDto board = boardService.searchOne(search);
+                board.setTypeName(boardCategoryService.getBoardTypeName(board.getType()));
+                model.addAttribute("board", board);
+                model.addAttribute("search", search);
+            }
         } catch (Exception e) {
             return "redirect:/warning";
         }
@@ -176,11 +239,12 @@ public class BoardController {
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public ResponseEntity<String> modifyAjax(HttpServletRequest request, HttpServletResponse response
-            , @RequestBody Board board) {
+            , @RequestBody Board board, @AuthenticationPrincipal User user) {
+        log.info("[BoardController.modifyAjax][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<String> entity = null;
 
         try {
-            boolean result = boardService.modifyBoard(board);
+            boolean result = boardService.modifyBoard(board, user);
 
             entity = new ResponseEntity(result, HttpStatus.OK);
         } catch (Exception e) {
@@ -201,13 +265,14 @@ public class BoardController {
      */
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> checkAjax(HttpServletRequest request, HttpServletResponse response
-            , @RequestBody Search search) {
+            , @RequestBody Search search, @AuthenticationPrincipal User user) {
+        log.info("[BoardController.checkAjax][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<Map<String, Object>> entity = null;
 
         try {
             Map<String, Object> map = new HashMap<>();
 
-            if ("modify".equals(search.getType())) {
+            if ("modify".equals(search.getCategory())) {
                 boolean result = boardService.isCheckPassword(search);
 
                 if (result) {
@@ -218,10 +283,10 @@ public class BoardController {
                 }
 
                 map.put("result", result);
-            } else if ("delete".equals(search.getType())) {
+            } else if ("delete".equals(search.getCategory())) {
                 boolean result = boardService.isCheckPassword(search);
-
-                if (result) {
+                BoardDto baordDto = boardService.searchOne(search);
+                if (result && baordDto.isUser()) {
                     boardService.deleteBoard(search);
                 }
 
@@ -234,6 +299,103 @@ public class BoardController {
         } catch (Exception e) {
             e.printStackTrace();
             entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/deleteByOwner", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> deleteByOwnerAjax(HttpServletRequest request, HttpServletResponse response
+            , @RequestBody Search search, @AuthenticationPrincipal User user) {
+        log.info("[BoardController.deleteByOwnerAjax][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity = null;
+        boolean result = false;
+        String url = "";
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+
+            BoardDto board = boardService.searchOne(search);
+
+            if (user != null && board != null) {
+                if (user.getUserId().equals(board.getUserId())) {
+                    boardService.deleteBoard(search);
+
+                    result = true;
+                    url = "/board/list";
+                }
+            }
+
+            map.put("redirect", url);
+            map.put("result", result);
+
+            entity = new ResponseEntity(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/modifyByOwner", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> modifyByOwnerAjax(HttpServletRequest request, HttpServletResponse response
+            , @RequestBody Search search, @AuthenticationPrincipal User user) {
+        log.info("[BoardController.modifyByOwner][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity = null;
+        boolean result = false;
+        String url = "";
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+
+            BoardDto board = boardService.searchOne(search);
+
+            if (user != null && board != null) {
+                if (user.getUserId().equals(board.getUserId())) {
+                    result = true;
+                    url = "/board/modify?boardNum=" + search.getBoardNum();
+                }
+            }
+
+            map.put("redirect", url);
+            map.put("result", result);
+
+            entity = new ResponseEntity(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/likes", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> likesAjax(HttpServletRequest request, HttpServletResponse response
+            , @RequestBody LikesDto likesDto, @AuthenticationPrincipal User user) {
+        log.info("[BoardController.likesAjax][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity = null;
+        boolean result = false;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+
+            if (user != null) {
+                likesDto.setUserId(user.getUserId());
+                result = likesService.likeThePost(likesDto);
+            } else {
+                likesDto.setIp(request.getRemoteAddr());
+                result = likesService.likeThePost(likesDto);
+            }
+
+            int likesCount = likesService.getLikesCount(likesDto.getBoardId());
+            map.put("likes", likesCount);
+            map.put("isLikes", result);
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return entity;

@@ -15,7 +15,10 @@ public class Search {
     private String keyword;
     private String content;
 
-    private String type;
+    private String category;   // 게시판 종류
+    private String type;   // 해당개시판 종류
+
+    private String best;
 
     private String password;
 }

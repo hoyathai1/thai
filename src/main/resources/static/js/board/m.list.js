@@ -1,11 +1,24 @@
+const urlParams = new URL(location.href).searchParams;
+const category = urlParams.get('category');
+const best = urlParams.get('best');
+const bType = urlParams.get('type');
+
 $(document).ready(function () {
     var pageNum = $("input[name=pageNum]").val();
     var keyword = $(".search-select").val();
     var content = $(".search-input").val();
     getList(keyword, content, pageNum,15);
+
+    if(best == 'Y') {
+        $("#bestBtn").html("전체글보기");
+    } else {
+        $("#bestBtn").html("인기글보기");
+    }
 });
 
 function getList(keyword, content, page, pageSize) {
+    $("input[name=pageNum]").val(page);
+
     $.ajax({
         type : 'post',
         url : '/board/list',
@@ -15,7 +28,9 @@ function getList(keyword, content, page, pageSize) {
         },
         dataType : 'json',
         data : JSON.stringify({
-            type : "thai",
+            best : best,
+            type : bType,
+            category : category,
             keyword: keyword,
             content: content,
             pageNum : page,
@@ -35,9 +50,16 @@ function setListHtml(data) {
         listHtml += "   <div class='content'>";
         listHtml += "       <div class='title'>" + this.title + "</div>";
         listHtml += "       <div class='info'>";
-        listHtml += "           <div>" + this.author + "</div>";
+
+        if (this.user) {
+            listHtml += "           <div><b>" + this.author + "</b></div>";
+        } else {
+            listHtml += "           <div>" + this.author + "(" + this.ip + ")</div>";
+        }
+
         listHtml += "           <div>" + getBoardTime(this.createDate) + "</div>";
         listHtml += "           <div class='view-count'>" + this.view + "</div>";
+        listHtml += "           <div class='likes-count'>" + this.likes + "</div>";
         listHtml += "       </div>";
         listHtml += "   </div>";
         listHtml += "   <div class='reply'>" + this.commentCount + "</div>";
@@ -45,7 +67,7 @@ function setListHtml(data) {
 
     });
 
-    $(".board-list").append(listHtml)
+    $(".board-list").append(listHtml);
 
     //  더보기 버튼
     if (data.list.last != true) {
@@ -83,7 +105,12 @@ function setPagingBtn(data) {
     var pageHtml = "";
 
     // prev
-    pageHtml += "<div class='page-prev' onclick='movePage(\"prev\", " + data.pageDto.startPage + ")'>";
+    if (data.pageDto.startPage == 0) {
+        pageHtml += "<div class='page-prev' onclick='movePage(\"prev\", " + Number(data.pageDto.startPage) + ")'>";
+    } else {
+        pageHtml += "<div class='page-prev' onclick='movePage(\"prev\", " + Number(data.pageDto.startPage - 1) + ")'>";
+    }
+
     pageHtml += "<";
     pageHtml += "</div>";
 
@@ -99,7 +126,11 @@ function setPagingBtn(data) {
     pageHtml += "</div>";
 
     // next
-    pageHtml += "<div class='page-next' onclick='movePage(\"next\", " + data.pageDto.endPage + ")'>";
+    if (data.pageDto.endPage == 0) {
+        pageHtml += "<div class='page-next' onclick='movePage(\"next\", " + Number(data.pageDto.endPage) + ")'>";
+    } else {
+        pageHtml += "<div class='page-next' onclick='movePage(\"next\", " + Number(data.pageDto.endPage + 1) + ")'>";
+    }
     pageHtml += ">";
     pageHtml += "</div>";
 
@@ -127,15 +158,15 @@ function search() {
     var keyword = $(".search-select").val();
     var content = $(".search-input").val();
 
-    location.href = "/board/list?pageNum=0&keyword=" + keyword + "&content=" + content;
+    location.href = "/board/list?type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=0&keyword=" + keyword + "&content=" + content;
 }
 
 function makeQueryUrl() {
     var pageNum = $("input[name=pageNum]").val();
-    var keyword = $(".search-select").val();
+    var keyword = $(".searc\h-select").val();
     var content = $(".search-input").val();
 
-    return "pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
+    return "type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
 }
 
 function goView(id) {
@@ -144,6 +175,18 @@ function goView(id) {
 
 function goRegister() {
     location.href = "/board/register?" + makeQueryUrl();
+}
+
+function goBest() {
+    var param_best = "";
+
+    if(best == "Y") {
+        param_best = "";
+    } else {
+        param_best = "Y";
+    }
+
+    location.href = "/board/list?type=" + bType + "&best=" + param_best + "&category=" + category + "&pageNum=0";
 }
 
 function init() {

@@ -1,6 +1,10 @@
 package com.travel.thai.repo;
 
 import com.travel.thai.bbs.domain.Board;
+import com.travel.thai.bbs.domain.BoardCategory;
+import com.travel.thai.bbs.domain.BoardType;
+import com.travel.thai.bbs.repository.BoardCategoryRepository;
+import com.travel.thai.bbs.repository.BoardCategoryTypeRepository;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.common.util.RSAUtil;
 import org.junit.jupiter.api.Test;
@@ -20,6 +24,7 @@ import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 public class BoardRepoTest {
@@ -30,6 +35,12 @@ public class BoardRepoTest {
     @Autowired
     private BoardRepository boardRepository;
 
+    @Autowired
+    private BoardCategoryRepository categoryRepository;
+
+    @Autowired
+    private BoardCategoryTypeRepository categoryTypeRepository;
+
 //    @Test
     public void save() throws Exception {
         File file = resourceLoader.getResource("classpath:dumyDate.txt").getFile();
@@ -37,13 +48,23 @@ public class BoardRepoTest {
         BufferedReader inFile = new BufferedReader(new FileReader(file));
         String sLine = null;
 
-        while( (sLine = inFile.readLine()) != null ) {
+        for (int i=0; i < 999; i++) {
             Board board = new Board();
-            board.setType("thai");
-            board.setContents("1");
-            board.setContentsTxt("1");
-            board.setAuthor("박부박");
-            board.setTitle(sLine);
+            String ip1 = String.valueOf((int)(Math.random()*255));
+            String ip2 = String.valueOf((int)(Math.random()*255));
+            String ip3 = String.valueOf((int)(Math.random()*255));
+            String ip4 = String.valueOf((int)(Math.random()*255));
+            String textNum = String.valueOf((int)(Math.random()*1000));
+
+            board.setIp(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
+            board.setCategory("thai");
+            board.setType("board");
+            board.setAuthor("임시" + i);
+            board.setPassword("1234");
+            board.setTitle("[title] " + textNum);
+            board.setContents("[content] " + textNum);
+            board.setUser(false);
+
             boardRepository.save(board);
         }
 
@@ -71,7 +92,7 @@ public class BoardRepoTest {
         );
     }
 
-    @Test
+//    @Test
     public void rsaTest() throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException, UnsupportedEncodingException {
         KeyPair keyPair = RSAUtil.genRSAKeyPair();
 
@@ -100,6 +121,56 @@ public class BoardRepoTest {
         // base64 암호화한 String 에서 Private Key 를 다시생성한후 복호화 테스트를 진행
 //        PrivateKey privateKeyRe = RSAUtil.getPrivateKeyFromBase64Encrypted(base64PrivateKey);
 //        String decryptedReRe = RSAUtil.decryptRSA(encryptedRe, privateKeyRe);
+
+
+    }
+
+
+//    @Test
+    public void category() {
+        BoardCategory bc = new BoardCategory();
+
+        bc.setId("thai");
+        bc.setName("태국");
+        bc.setUse(true);
+
+        categoryRepository.save(bc);
+
+    }
+
+//    @Test
+    public void sub_category() {
+        BoardType bt = new BoardType();
+        bt.setCategoryId("thai");
+        bt.setName("여행");
+        bt.setType("board");
+        bt.setOrderBy(1);
+        bt.setUse(true);
+        categoryTypeRepository.save(bt);
+
+        bt = new BoardType();
+        bt.setCategoryId("thai");
+        bt.setName("뉴스");
+        bt.setType("news");
+        bt.setOrderBy(2);
+        bt.setUse(true);
+        categoryTypeRepository.save(bt);
+
+        bt = new BoardType();
+        bt.setCategoryId("thai");
+        bt.setName("정보");
+        bt.setType("info");
+        bt.setOrderBy(1);
+        bt.setUse(true);
+        categoryTypeRepository.save(bt);
+
+        bt = new BoardType();
+        bt.setCategoryId("thai");
+        bt.setName("이푸알");
+        bt.setType("find");
+        bt.setOrderBy(1);
+        bt.setUse(true);
+        categoryTypeRepository.save(bt);
 
 
     }

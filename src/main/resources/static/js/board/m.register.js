@@ -1,3 +1,8 @@
+const urlParams = new URL(location.href).searchParams;
+const category = urlParams.get('category');
+const best = urlParams.get('best');
+const bType = urlParams.get('type');
+
 const editor = document.getElementById('editor');
 const btnBold = document.getElementById('btn-bold');
 const btnItalic = document.getElementById('btn-italic');
@@ -16,13 +21,14 @@ function btnRegister() {
     var password = $("input[name=password]").val();
     var contents = $("#editor").html();
     var contentsTxt = "";
+    var sType = $(".register-select").val();
 
-    if (isEmpty(title) || lengthCheck(title, 1)) {
+    if (isEmpty(title) || lengthCheckUnder(title, 1)) {
         alert("제목을 입력해주세요.")
         return;
     }
 
-    if (isEmpty(name) || lengthCheck(name, 1)) {
+    if (isEmpty(name) || lengthCheckUnder(name, 1)) {
         alert("닉네임을 입력해주세요.")
         return;
     }
@@ -32,11 +38,11 @@ function btnRegister() {
         return;
     }
 
-    if (lengthCheck(password, 4)) {
+    if (lengthCheckUnder(password, 4)) {
         alert("비밀번호를 최소 4자리 이상 입력하셔야 합니다. 쉬운 비밀번호는 타인이 수정 또는 삭제하기 쉬우니, 어려운 비밀번호를 입력해 주세요.");
     }
 
-    if (isEmpty(contents) || lengthCheck(title, 1)) {
+    if (isEmpty(contents) || lengthCheckUnder(title, 1)) {
         alert("내을 입력해주세요.")
         return;
     }
@@ -57,10 +63,52 @@ function btnRegister() {
             password: password,
             contents : contents,
             contentsTxt : contentsTxt,
-            type: "thai"
+            category: category,
+            type: sType
         }),
         success : function () {
-            location.href="/board/list";
+            location.href="/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
+        }
+    });
+}
+
+function btnRegisterLogin() {
+    var title = $("input[name=title]").val();
+    var contents = $("#editor").html();
+    var sType = $(".register-select").val();
+    var contentsTxt = "";
+
+    if (isEmpty(title) || lengthCheckUnder(title, 1)) {
+        alert("제목을 입력해주세요.")
+        return;
+    }
+
+    if (isEmpty(contents) || lengthCheckUnder(title, 1)) {
+        alert("내을 입력해주세요.")
+        return;
+    }
+
+    contentsTxt = $("#editor").text();
+
+    $.ajax({
+        type : 'post',
+        url : '/board/register',
+        headers : {
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "POST"
+        },
+        dataType : 'text',
+        data : JSON.stringify({
+            title: title,
+            contents : contents,
+            contentsTxt : contentsTxt,
+            category: category,
+            type: sType,
+            best: best
+        }),
+        success : function () {
+            location.href="/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
+        }, error : function () {
         }
     });
 }
@@ -101,11 +149,6 @@ imageSelector.addEventListener('change', function (e) {
 
 function insertImageDate(file) {
     const reader = new FileReader();
-
-    // reader.addEventListener('load', function (e) {
-    //     focusEditor();
-    //     document.execCommand('insertImage', false, `${reader.result}`);
-    // });
 
     reader.onload = (base64) => {
         const image = new Image();
@@ -173,7 +216,7 @@ function makeQueryUrl() {
     var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
 
-    return "pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return "type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
 }
 
 function imageSizeChange( image ) {
