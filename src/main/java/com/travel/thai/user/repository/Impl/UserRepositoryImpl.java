@@ -60,5 +60,13 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return fetchOne != null; // 1개가 있는지 없는지 판단 (없으면 null이라 null체크)
     }
 
+    @Override
+    public void modifyName(String userId, String name) {
+        queryFactory.update(user).set(user.name, name).where(user.userId.eq(userId)).execute();
+    }
 
+    @Override
+    public void modifyEmail(String userId, String email) {
+        queryFactory.update(user).set(user.email, email).where(user.userId.eq(userId)).execute();
+    }
 }

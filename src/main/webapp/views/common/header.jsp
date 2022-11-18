@@ -28,7 +28,7 @@
     <div class="header-info two">
         <div onclick="goLogout()">로그아웃</div>
         </c:if>
-        <div class="menu">메뉴</div>
+        <div class="menu" onclick="goMenu()">메뉴</div>
     </div>
 </div>
 

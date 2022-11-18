@@ -38,7 +38,7 @@
                 <h4>이메일 입력</h4>
                 <input class="ipt email1" type="text" name="email-addr1">
                 <span>@</span>
-                <input class="ipt email2" type="text" name="email-addr2">
+                <input class="ipt email2" type="text" name="email-addr2" readonly>
                 <select class="domain" id="select-domain" onchange="changeDomain()">
                     <option value="">
                         이메일 입력
@@ -49,14 +49,11 @@
                     <option value="gmai.com">
                         gmail.com
                     </option>
-                    <option value="content">
+                    <option value="kakao.com">
                         kakao.com
                     </option>
                     <option value="daum.net">
                         daum.net
-                    </option>
-                    <option value="">
-                        직접입력
                     </option>
                 </select>
             </div>

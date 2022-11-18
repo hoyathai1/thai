@@ -26,7 +26,7 @@ public class LikesServiceImpl implements LikesService {
         if (StringUtils.isNotEmpty(likesDto.getUserId())) {
             // 회원 좋아요
             if (likesRepository.isLikesByUserId(likesDto.getBoardId(), likesDto.getUserId())) {
-                likesRepository.deleteLikesByUserId(likesDto.getBoardId(), likesDto.getIp());
+                likesRepository.deleteLikesByUserId(likesDto.getBoardId(), likesDto.getUserId());
 
                 result = false;
             } else {

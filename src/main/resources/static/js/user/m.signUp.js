@@ -156,7 +156,6 @@ function checkName() {
     checkDuplicateName();
 }
 
-
 function btnSignUp() {
     if (!isValidId) {
         alert("아이디를 확인해주세요");

@@ -13,6 +13,10 @@
     <div class="container">
         <div class="view">
             <div class="view-header">
+                <c:if test="${not empty principal}">
+                    <c:if test="${isBookMark eq true}"><div class="bookmark-ico on" onclick="setBookMark()"></div></c:if>
+                    <c:if test="${isBookMark eq false}"><div class="bookmark-ico off" onclick="setBookMark()"></div></c:if>
+                </c:if>
                 <div class="title">
                     ${board.title}
                 </div>

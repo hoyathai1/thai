@@ -1,18 +1,18 @@
 package com.travel.thai.bbs.service.impl;
 
-import com.travel.thai.bbs.domain.Board;
-import com.travel.thai.bbs.domain.Comment;
-import com.travel.thai.bbs.domain.CommentDto;
-import com.travel.thai.bbs.domain.Search;
+import com.travel.thai.bbs.domain.*;
+import com.travel.thai.bbs.repository.BoardNotiRepository;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.bbs.repository.CommentRepository;
 import com.travel.thai.bbs.service.CommentService;
 import com.travel.thai.common.util.RSAUtil;
+import com.travel.thai.common.util.StringUtils;
 import com.travel.thai.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -22,6 +22,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private BoardNotiRepository boardNotiRepository;
 
     @Override
     public Comment saveComment(CommentDto commentDto, User user) {
@@ -59,7 +62,50 @@ public class CommentServiceImpl implements CommentService {
         comment.setUpper(commentDto.getBoardId());
         comment.setIp(commentDto.getIp());
 
-        return commentRepository.save(comment);
+        Comment result = commentRepository.save(comment);
+
+
+        Search search = new Search();
+        search.setBoardNum(commentDto.getBoardId());
+        BoardDto boardDto = boardRepository.searchOne(search);
+
+        // NOTIFICATION SETTING
+        if (user != null) {
+            if (!user.getUserId().equals(boardDto.getUserId())) {
+                BoardNoti boardNoti = new BoardNoti();
+                boardNoti.setBoard_id(commentDto.getBoardId());
+                boardNoti.setComment_id(result.getId());
+                boardNoti.setUser_id(boardDto.getUserId());
+                boardNoti.setType("COMMENT");
+                boardNotiRepository.save(boardNoti);
+            }
+        } else {
+            if (StringUtils.isNotEmpty(boardDto.getUserId())) {
+                BoardNoti boardNoti = new BoardNoti();
+                boardNoti.setBoard_id(commentDto.getBoardId());
+                boardNoti.setComment_id(result.getId());
+                boardNoti.setUser_id(boardDto.getUserId());
+                boardNoti.setType("COMMENT");
+                boardNotiRepository.save(boardNoti);
+            }
+        }
+
+        // 대댓글도 NOTIFICATION 추가
+        if (commentDto.getParentId() != null) {
+            String parentCommentId = commentRepository.searchForUserId(commentDto.getParentId());
+
+            if (StringUtils.isNotEmpty(parentCommentId) && !parentCommentId.equals(boardDto.getUserId())) {
+                BoardNoti boardNoti = new BoardNoti();
+                boardNoti.setBoard_id(commentDto.getBoardId());
+                boardNoti.setComment_id(result.getId());
+                boardNoti.setUser_id(parentCommentId);
+                boardNoti.setType("COMMENT");
+                boardNotiRepository.save(boardNoti);
+            }
+        }
+
+
+        return result;
     }
 
     @Override

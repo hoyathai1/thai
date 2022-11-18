@@ -1,10 +1,8 @@
 package com.travel.thai.bbs.repository.Impl;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.travel.thai.bbs.domain.Comment;
-import com.travel.thai.bbs.domain.CommentDto;
-import com.travel.thai.bbs.domain.QComment;
-import com.travel.thai.bbs.domain.Search;
+import com.travel.thai.bbs.domain.*;
 import com.travel.thai.bbs.repository.CommentRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -92,4 +90,5 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                             .fetchOne();
         return userId;
     }
+
 }

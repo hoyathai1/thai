@@ -1,0 +1,594 @@
+.menu-container {
+    overflow: hidden;
+    height: auto;
+    min-height: 100%;
+    padding-bottom: 90px;
+}
+
+.menu-header-top {
+    height: 40px;
+    background-color: var(--gray);
+    display: flex;
+    padding: 5px;
+    align-items:center;
+}
+
+.menu-header-top .header-logo {
+    background: url("/img/thai.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+}
+
+.menu-header-top .header-logo-font {
+    margin-left: 10px;
+    width: 100%;
+}
+
+.menu-header-top .header-logo-font span {
+    font-size: 25px;
+    color: white;
+}
+
+.menu-header-top .header-info {
+    display: flex;
+    width: 420px;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    justify-content: flex-end;
+}
+
+.menu-header-top .header-info.two {
+    display: flex;
+    width: 220px;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+
+.menu-header-top .header-info div {
+    margin-left: 20px;
+}
+
+.menu-header-top .header-info .menu {
+    margin-right: 10px;
+}
+
+.menu-header-top .header-info .close {
+    margin-right: 25px;
+    margin-left: 10px;
+    height: 15px;
+}
+
+.menu-header-top .header-info .close .close-ico {
+    background: url("/img/x-button.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.user-menu {
+    /*margin-top: 40px;*/
+}
+
+.user-menu .area {
+    padding: 10px 10px 10px 20px;
+    border-bottom: 1px solid #bcbcbc;
+    height: 32px;
+    display: flex;
+    align-items: center;
+}
+
+.user-menu .area.signUp-area {
+    border-top: 1px solid #bcbcbc;
+}
+
+.user-menu .area .login-ico {
+    background: url("/img/login.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+
+.user-menu .area .signUp-ico {
+    background: url("/img/add-user.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+
+.user-menu .area .notice-ico {
+    background: url("/img/notice.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+.user-menu .area .mod-user-ico {
+    background: url("/img/account.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+.user-menu .area .notification-ico {
+    background: url("/img/notification.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+.user-menu .area .note-ico {
+    background: url("/img/note.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+.user-menu .area .favorite-ico {
+    background: url("/img/bookmark.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+.user-menu .area .logout-ico {
+    background: url("/img/logout.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+
+.user-menu .area .menu-font {
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+.account {
+    padding: 20px;
+}
+
+.account .title {
+    font-size: 24px;
+}
+
+.account .content {
+    margin-top: 20px;
+}
+
+.account .content .name {
+    height: 60px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.account .content .name h4 {
+    margin: 0px 0px 5px 0px;
+}
+
+.account .content .name input.ipt {
+    width: 100%;
+    height: 60%;
+    border: 1px solid #989898;
+    outline: none;
+    padding: 5px 5px 5px 10px;
+}
+
+.account .content .name input.ipt:focus {
+    border: 2px solid #989898;
+}
+
+.account .content .info {
+    padding: 10px;
+}
+
+.account .content .info span {
+    font-size: 12px;
+    display: block;
+}
+
+.account .content .info span:before {
+    content: " - ";
+}
+
+.account .content .password {
+    margin-top: 20px;
+}
+
+.account .content .password h4 {
+    margin: 0px 0px 0px 0px;
+}
+
+.account .content .password .ipt {
+    width: 100%;
+    height: 36px;
+    border: 1px solid #989898;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    outline: none;
+    padding: 5px 5px 5px 10px;
+}
+
+.account .content .password input.ipt:focus {
+    border: 2px solid #989898;
+}
+
+.account .content .email {
+    margin-top: 20px;
+}
+
+.account .content .email h4 {
+    margin: 0px 0px 5px 0px;
+}
+
+.account .content .email span {
+
+}
+
+.account .content .email input.ipt {
+    height: 36px;
+    border: 1px solid #989898;
+    outline: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px 5px 5px 10px;
+}
+
+.account .content .email input.ipt.email1 {
+    width: 30%;
+}
+
+.account .content .email input.ipt.email2 {
+    width: 30%;
+}
+
+.account .content .email input.ipt:focus {
+    border: 2px solid #989898;
+}
+
+.account .content .email .domain {
+    width: 30%;
+    height: 36px;
+    border: 1px solid #989898;
+    outline: none;
+}
+
+.account .content .email .domain:focus {
+    border: 2px solid #989898;
+}
+
+.notice {
+
+}
+
+.notice .title {
+    padding: 20px;
+    font-size: 24px;
+}
+
+.notice .content {
+}
+
+.notice .content .notice-list {
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+}
+
+.notice .content .notice-list .notice {
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    padding: 10px;
+}
+
+.notice .content .notice-list .notice .notice-type {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.notice .content .notice-list .notice .notice-type.noti-EVENT {
+    color: #c08ce3;
+}
+
+.notice .content .notice-list .notice .notice-type.noti-NOTICE {
+    color: #c58230;
+}
+
+.notice .content .notice-list .notice .notice-title {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.notice .content .notice-list .notice .notice-date {
+    font-size: 12px;
+    color: #7c7874;
+}
+
+.notice .content .notice-list .notice .notice-body {
+    margin-top: 10px;
+    display: none;
+}
+
+.notice .content .notice-list .notice .notice-body div {
+    padding: 2px;
+}
+
+.notice .content .notice-list .notice .notice-body img{
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+
+/*
+    내게시글보기
+*/
+.myList .title {
+    padding: 20px;
+    font-size: 24px;
+}
+
+.myList .content {
+}
+
+.myList .content .board-list {
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+}
+
+.myList .content .board-list .board {
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.myList .content .board-list .board .board-title {
+    font-size: 18px;
+    width: 85%;
+}
+
+.myList .content .board-list .board .moveBtn {
+    width: 15%;
+}
+
+.myList .content .board-list .board .moveBtn button {
+    border: 1px var(--gray) solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--gray);
+}
+
+.myList .content .board-list .board .board-info {
+    font-size: 12px;
+    color: #7c7874;
+    display:flex;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.myList .content .board-list .board .board-info div {
+    margin-right: 3px;
+}
+
+.myList .content .board-list .board .board-info div.view-count:before {
+    margin-left: 5px;
+    content: '조회 ';
+}
+.myList .content .board-list .board .board-info div.view-count:after {
+    margin-left: 5px;
+    content: '|';
+}
+
+.myList .content .board-list .board .board-info div.likes-count:before {
+    margin-left: 5px;
+    content: '추천 ';
+}
+.myList .content .board-list .board .board-info div.likes-count:after {
+    margin-left: 5px;
+    content: '|';
+}
+
+.myList .content .board-list .board .board-info div.comment-count:before {
+    margin-left: 5px;
+    content: '댓글수 ';
+}
+
+.myList .content .board-list .board .board-body {
+    margin-top: 10px;
+    display: none;
+}
+
+.myList .content .board-list .board .board-body div {
+    padding: 2px;
+}
+
+.myList .content .board-list .board .board-body img{
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+
+/*paging*/
+.myList .content .board-paging {
+    height: 32px;
+    border-bottom: 2px solid #bcbcbc;
+}
+
+.myList .content .board-paging .page-prev {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.myList .content .board-paging .page-next {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.myList .content .board-paging .page-move {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.myList .content .board-paging .page-number {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 62.5%;
+    float: left;
+}
+
+.myList .content .board-paging .page-number div {
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    color: #7c7874;
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+}
+
+.myList .content .board-paging .page-number div.on {
+    color: #002875;
+}
+
+
+
+.myNoti .title {
+    padding: 20px;
+    font-size: 24px;
+}
+
+.myNoti .content {
+}
+
+.myNoti .content .noti-list {
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+}
+
+.myNoti .content .noti-list .noti {
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.myNoti .content .noti-list .noti .noti-title {
+    font-size: 18px;
+    width: 85%;
+}
+
+.myNoti .content .noti-list .noti .noti-info {
+    font-size: 12px;
+    color: #7c7874;
+    display:flex;
+    margin-top: 5px;
+    width: 100%;
+}
+.myNoti .content .noti-list .noti .noti-info div {
+    /*margin-right: 5px;*/
+}
+
+.myNoti .content .noti-list .noti .noti-info .author:after {
+    margin-left: 5px;
+    margin-right: 5px;
+    content: "|";
+}
+
+.myNoti .content .noti-list .noti .noti-content {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+
+.myNoti .content .noti-paging {
+    height: 32px;
+    border-bottom: 2px solid #bcbcbc;
+}
+
+.myNoti .content .noti-paging .page-prev {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.myNoti .content .noti-paging .page-next {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.myNoti .content .noti-paging .page-move {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.myNoti .content .noti-paging .page-number {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 62.5%;
+    float: left;
+}
+
+.myNoti .content .noti-paging .page-number div {
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    color: #7c7874;
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+}
+
+.myNoti .content .noti-paging .page-number div.on {
+    color: #002875;
+}

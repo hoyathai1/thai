@@ -8,4 +8,7 @@ public interface UserRepositoryCustom {
     void modifyPassword(String userId, String password);
     boolean isExistUserId(String userId);
     boolean isExistUserName(String name);
+
+    void modifyName(String userId, String name);
+    void modifyEmail(String userId, String email);
 }

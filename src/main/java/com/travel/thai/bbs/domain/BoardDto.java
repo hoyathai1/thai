@@ -15,6 +15,7 @@ public class BoardDto {
     private String contentsTxt;
     private String author;
     private String password;
+    private String category;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private int likes;
@@ -53,6 +54,29 @@ public class BoardDto {
         this.likes = likes;
         this.isUser = isUser;
         this.ip = ip;
+    }
+
+    /**
+     * 내가쓴글에서 사용
+     *
+     * @param id
+     * @param title
+     * @param contents
+     * @param createDate
+     * @param likes
+     * @param view
+     * @param commentCount
+     */
+    @Builder
+    public BoardDto(Long id, String category, String title, String contents, LocalDateTime createDate, int likes, int view, int commentCount) {
+        this.id = id;
+        this.category = category;
+        this.title = title;
+        this.contents = contents;
+        this.createDate = createDate;
+        this.likes = likes;
+        this.view = view;
+        this.commentCount = commentCount;
     }
 
     public String getIp() {

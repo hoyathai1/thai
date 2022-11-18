@@ -184,6 +184,30 @@
     font-size: 15px;
 }
 
+.view .view-header .title .title-text {
+    width: 80%;
+}
+
+.view .view-header .bookmark-ico.off {
+    background: url("/img/bookmark-off.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 0;
+}
+
+.view .view-header .bookmark-ico.on {
+    background: url("/img/bookmark-on.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 0;
+}
+
 .view .view-header .title-sub {
     display: flex;
     font-size: 12px;
@@ -317,6 +341,10 @@
     background: url("/img/like-on.png") no-repeat;
     background-size: contain;
     background-color: transparent;
+    width: 24px;
+    height: 24px;
+    margin: auto;
+    margin-top: 5px;
 }
 
 /**

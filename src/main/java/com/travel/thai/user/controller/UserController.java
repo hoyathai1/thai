@@ -2,6 +2,7 @@ package com.travel.thai.user.controller;
 
 import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.common.service.EmailService;
+import com.travel.thai.user.domain.User;
 import com.travel.thai.user.domain.UserDto;
 import com.travel.thai.user.service.UserDetailService;
 import com.travel.thai.user.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -127,6 +129,69 @@ public class UserController {
             emailService.createTempPwdAndSendEmail(userDto.getEmail(), userDto.getUserId());
 
             entity = new ResponseEntity("true", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = {"/user/modifyName"}, method = RequestMethod.POST)
+    public ResponseEntity<String> modifyName(HttpServletRequest request, HttpServletResponse response, Model model, @RequestBody UserDto userDto, @AuthenticationPrincipal User user) {
+        ResponseEntity<String> entity = null;
+        boolean result = false;
+
+        try {
+            if (user == null) {
+                entity = new ResponseEntity(false, HttpStatus.OK);
+                return entity;
+            }
+
+            userService.modifyName(user.getUserId(), userDto.getName());
+            entity = new ResponseEntity(true, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = {"/user/modifyPwd"}, method = RequestMethod.POST)
+    public ResponseEntity<String> modifyPwd(HttpServletRequest request, HttpServletResponse response, Model model, @RequestBody UserDto userDto, @AuthenticationPrincipal User user) {
+        ResponseEntity<String> entity = null;
+        boolean result = false;
+
+        try {
+            if (user == null) {
+                entity = new ResponseEntity(false, HttpStatus.OK);
+                return entity;
+            }
+
+            userService.modfiyPassword(user.getUserId(), userDto.getPassword());
+            entity = new ResponseEntity(true, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = {"/user/modifyEmail"}, method = RequestMethod.POST)
+    public ResponseEntity<String> modifyEmail(HttpServletRequest request, HttpServletResponse response, Model model, @RequestBody UserDto userDto, @AuthenticationPrincipal User user) {
+        ResponseEntity<String> entity = null;
+        boolean result = false;
+
+        try {
+            if (user == null) {
+                entity = new ResponseEntity(false, HttpStatus.OK);
+                return entity;
+            }
+
+            userService.modifyEmail(user.getUserId(), userDto.getEmail());
+            entity = new ResponseEntity(true, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             entity = new ResponseEntity(HttpStatus.BAD_REQUEST);

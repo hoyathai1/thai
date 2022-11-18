@@ -16,6 +16,8 @@ import java.util.List;
 
 import static com.travel.thai.bbs.domain.QBoard.board;
 import static com.travel.thai.bbs.domain.QComment.comment;
+import static com.travel.thai.bbs.domain.QBookMark.bookMark;
+import static com.travel.thai.user.domain.QUser.user;
 
 @RequiredArgsConstructor
 public class BoardRepositoryImpl implements BoardRepositoryCustom {
@@ -84,6 +86,39 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .selectOne()
                 .from(board)
                 .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
+                .orderBy(board.createDate.desc())
+                .fetch().size();
+
+        return new PageImpl<>(results, pageable, count);
+    }
+
+    @Override
+    public PageImpl<BoardDto> searchById(Search search, Pageable pageable) {
+        List<BoardDto> results = queryFactory
+                .select(Projections.constructor(BoardDto.class,
+                        board.id,
+                        board.category,
+                        board.title,
+                        board.contents,
+                        board.createDate,
+                        board.likes.size(),
+                        board.view,
+                        comment.id.count().intValue()
+                ))
+                .from(board)
+                .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
+                .leftJoin(user).on(board.userId.eq(user.userId))
+                .where(board.isDel.isFalse().and(board.userId.eq(search.getUserId())))
+                .groupBy(board.id)
+                .orderBy(board.createDate.desc())
+                .offset(pageable.getOffset())   // 페이지 번호
+                .limit(pageable.getPageSize())    // 페이지 사이즈
+                .fetch();
+
+        int count = queryFactory
+                .selectOne()
+                .from(board)
+                .where(board.isDel.isFalse().and(board.userId.eq(search.getUserId())))
                 .orderBy(board.createDate.desc())
                 .fetch().size();
 

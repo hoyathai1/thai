@@ -1,10 +1,7 @@
 package com.travel.thai.bbs.controller;
 
 import com.travel.thai.bbs.domain.*;
-import com.travel.thai.bbs.service.BoardCategoryService;
-import com.travel.thai.bbs.service.BoardService;
-import com.travel.thai.bbs.service.CommentService;
-import com.travel.thai.bbs.service.LikesService;
+import com.travel.thai.bbs.service.*;
 import com.travel.thai.common.util.LogUtil;
 import com.travel.thai.common.util.RSAUtil;
 import com.travel.thai.common.util.StringUtils;
@@ -44,6 +41,10 @@ public class BoardController {
 
     @Autowired
     private BoardCategoryService boardCategoryService;
+
+    @Autowired
+    private BookMarkService bookMarkService;
+
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(HttpServletRequest request, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user, Model model) {
@@ -86,9 +87,16 @@ public class BoardController {
         BoardDto board = boardService.searchOne(search);
         int likes = likesService.getLikesCount(search.getBoardNum());
         boolean isLikes = false;
+        boolean isBookMark = false;
 
         if (user != null) {
             isLikes = likesService.isLikesByUserId(search.getBoardNum(), user.getUserId());
+
+            BookMark bookMark = new BookMark();
+            bookMark.setUser_id(user.getUserId());
+            bookMark.setBoard_id(search.getBoardNum());
+            isBookMark = bookMarkService.isBookMark(bookMark);
+            model.addAttribute("isBookMark", isBookMark);
         } else {
             isLikes = likesService.isLikesByIp(search.getBoardNum(), request.getRemoteAddr());
         }
@@ -400,4 +408,39 @@ public class BoardController {
 
         return entity;
     }
+
+    @RequestMapping(value = "/bookmark", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> bookmarkAjax(HttpServletRequest request, HttpServletResponse response
+            , @RequestBody BookMark bookMark, @AuthenticationPrincipal User user) {
+        log.info("[BoardController.bookmarkAjax][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity = null;
+        boolean result = true;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+
+            if (user == null) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+
+            bookMark.setUser_id(user.getUserId());
+
+            if (bookMarkService.isBookMark(bookMark)) {
+                // 북마크 이미 되있는경우 삭제
+                bookMarkService.delete(bookMark);
+            } else {
+                bookMarkService.save(bookMark);
+            }
+
+            map.put("result", result);
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
 }

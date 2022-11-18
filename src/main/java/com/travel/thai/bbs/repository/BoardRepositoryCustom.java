@@ -15,4 +15,5 @@ public interface BoardRepositoryCustom {
     void deleteBoard(long boardNum);
     String getPassword(long boardNum);
     void modifyBoard(Board board);
+    PageImpl<BoardDto> searchById(Search search, Pageable pageable);
 }

@@ -5,5 +5,5 @@ public interface LikesRepositoryCustom {
     boolean isLikesByIp(Long boardId, String ip);
     boolean isLikesByUserId(Long boardId, String userId);
     void deleteLikesByIp(Long boardId, String ip);
-    void deleteLikesByUserId(Long boardId, String ip);
+    void deleteLikesByUserId(Long boardId, String userId);
 }

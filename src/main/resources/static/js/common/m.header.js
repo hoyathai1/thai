@@ -39,3 +39,7 @@ function goLogout() {
 function goMain(category_id) {
     location.href="/board/list?type=all&best=N&category=" + category_id + "&pageNum=0";
 }
+
+function goMenu() {
+    location.href="/menu"
+}

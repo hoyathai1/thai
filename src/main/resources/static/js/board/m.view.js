@@ -9,8 +9,24 @@ $(document).ready(function () {
     $(".createDate").html(getBoardTime($(".createDate").html()));
 
     getCommentList(currentCommentPage);
-
 });
+
+function moveScrollToComment() {
+    var paramCommentId = urlParams.get('commentId');
+    if (!isEmpty(paramCommentId)) {
+        urlParams.delete("commentId")
+        var byId = 'comment_' + paramCommentId;
+        const moveComment = document.getElementById(byId);
+        window.scrollBy({top: moveComment.getBoundingClientRect().top, behavior: 'smooth'});
+
+        var bc = $("#" + byId).css("background-color");
+        $("#" + byId).css("background-color", "#FD8B8B");
+
+        setTimeout(function () {
+            $("#" + byId).css("background-color", bc);
+        }, 3000);
+    }
+}
 
 function goList() {
     location.href = "/board/list?" + makeQueryUrl();
@@ -49,6 +65,7 @@ function getCommentList(page) {
         }),
         success : function (result) {
             setListHtml(result);
+            moveScrollToComment();
         }
     });
 }
@@ -84,7 +101,7 @@ function setListHtml(data) {
         listHtml += "</div>";
 
         $(this.children).each(function (e) {
-            listHtml += "<div class='comment add'>";
+            listHtml += "<div class='comment add' id='comment_" + this.id + "'>";
 
             if (this.user) {
                 if (isLogin === 'true' && this.userId == loginId) {
@@ -548,6 +565,34 @@ function deleteCommentBtnByOwner(commentNum) {
 
             }
         });
+    });
+}
+
+function setBookMark() {
+    var boardNum = $("input[name=boardNum]").val();
+
+    $.ajax({
+        type : 'post',
+        url : '/board/bookmark',
+        headers : {
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "POST"
+        },
+        dataType : 'json',
+        data : JSON.stringify({
+            board_id : boardNum
+        }),
+        success : function (data) {
+            if (data.result) {
+                if ($(".bookmark-ico").hasClass("off")) {
+                    $(".bookmark-ico").removeClass("off");
+                    $(".bookmark-ico").addClass("on");
+                } else {
+                    $(".bookmark-ico").removeClass("on");
+                    $(".bookmark-ico").addClass("off");
+                }
+            }
+        }
     });
 }
 
