@@ -19,6 +19,9 @@
     </sec:authorize>
 
     <div class="menu-header-top">
+        <div class="prev" onclick="goBack()">
+            <div class="prev-ico"></div>
+        </div>
         <div class="header-logo-font"><span>헬타이</span></div>
             <div class="header-info">
                 <div class="close" onclick="goClose()">

@@ -8,4 +8,5 @@ public interface BookMarkService {
     boolean save(BookMark bookMark);
     boolean delete(BookMark bookMark);
     Boolean isBookMark(BookMark bookMark);
+    Page<BookMarkDto> searchBoard(Search search);
 }

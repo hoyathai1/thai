@@ -2,9 +2,11 @@ package com.travel.thai.common.controller;
 
 import com.travel.thai.bbs.domain.*;
 import com.travel.thai.bbs.service.BoardNotiService;
+import com.travel.thai.bbs.service.BookMarkService;
 import com.travel.thai.common.domain.Notice;
 import com.travel.thai.common.service.NoticeService;
 import com.travel.thai.common.util.LogUtil;
+import com.travel.thai.common.util.StringUtils;
 import com.travel.thai.user.domain.User;
 import com.travel.thai.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class CommonController {
     @Autowired
     private BoardNotiService boardNotiService;
 
+    @Autowired
+    private BookMarkService bookMarkService;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String main(HttpServletRequest request, HttpServletResponse response, Model model) {
 
@@ -45,12 +50,33 @@ public class CommonController {
     @RequestMapping(value = "/menu", method = RequestMethod.GET)
     public String menu(HttpServletRequest request, HttpServletResponse response, Model model, @AuthenticationPrincipal User user) {
         String uri = request.getHeader("Referer");
-//        if (uri != null && !uri.contains("/login")) {
-//            request.getSession().setAttribute("prevPage", uri);
-//        }
-        model.addAttribute("prevPage", uri);
+
+        if (StringUtils.isNotEmpty(uri)) {
+            if (!uri.contains("login") && !uri.contains("logout") && !uri.contains("signUp") && !uri.contains("menu")) {
+                request.getSession().setAttribute("mainPage", uri);
+            }
+        }
 
         return "/common/menu";
+    }
+
+    @RequestMapping(value = "/menu/back", method = RequestMethod.GET)
+    public String back(HttpServletRequest request, HttpServletResponse response, Model model, @AuthenticationPrincipal User user) {
+
+        return "/common/menu";
+    }
+
+    @RequestMapping(value = "/close", method = RequestMethod.GET)
+    public String close(HttpServletRequest request, HttpServletResponse response, Model model, @AuthenticationPrincipal User user) {
+        String uri = (String) request.getSession().getAttribute("mainPage");
+
+        if (StringUtils.isEmpty(uri)) {
+            return "redirect:/board/list?type=all&best=&category=thai&pageNum=0";
+        }
+
+        request.getSession().setAttribute("mainPage", "");
+
+        return "redirect:" + uri;
     }
 
     @RequestMapping(value = "/menu/account", method = RequestMethod.GET)
@@ -59,6 +85,7 @@ public class CommonController {
         if (user == null) {
             return "/common/warning";
         }
+
 
         user.setPassword(null);
         model.addAttribute("user", user);
@@ -123,11 +150,29 @@ public class CommonController {
         return "/common/myNoti";
     }
 
+    @RequestMapping(value = "/menu/bookmark", method = RequestMethod.GET)
+    public String bookmark(HttpServletRequest request, HttpServletResponse response, Model model, @ModelAttribute("search") Search search
+            , @AuthenticationPrincipal User user) {
+
+        if (user == null) {
+            return "redirect:/warning";
+        }
+
+        search.setUserId(user.getUserId());
+        Page<BookMarkDto> list = bookMarkService.searchBoard(search);
+
+        user.setPassword(null);
+        model.addAttribute("user", user);
+        model.addAttribute("list", list);
+        model.addAttribute("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+        model.addAttribute("search", search);
+
+        return "/common/bookmark";
+    }
 
     @RequestMapping(value = "/warning", method = RequestMethod.GET)
     public String checkAjax(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         return "/common/warning";
     }
-
 }

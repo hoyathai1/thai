@@ -16,8 +16,6 @@
 </sec:authorize>
 
 <div class="header-top">
-    <%--<div class="header-logo">--%>
-    <%--</div>--%>
     <div class="header-logo-font"><span>헬타이</span></div>
     <c:if test="${empty principal}">
     <div class="header-info">

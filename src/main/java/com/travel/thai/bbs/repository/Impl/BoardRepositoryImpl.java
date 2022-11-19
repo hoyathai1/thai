@@ -65,7 +65,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .select(Projections.constructor(BoardDto.class,
                         board.id,
                         board.title,
-                        board.author,
+                        user.name,
                         board.createDate,
                         board.view,
                         comment.id.count().intValue(),
@@ -75,6 +75,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 ))
                 .from(board)
                 .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
+                .leftJoin(user).on(board.userId.eq(user.userId))
                 .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
                 .groupBy(board.id)
                 .orderBy(board.createDate.desc())

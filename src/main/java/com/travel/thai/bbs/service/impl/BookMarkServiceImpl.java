@@ -1,9 +1,6 @@
 package com.travel.thai.bbs.service.impl;
 
-import com.travel.thai.bbs.domain.Board;
-import com.travel.thai.bbs.domain.BoardDto;
-import com.travel.thai.bbs.domain.BookMark;
-import com.travel.thai.bbs.domain.Search;
+import com.travel.thai.bbs.domain.*;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.bbs.repository.BookMarkRepository;
 import com.travel.thai.bbs.service.BoardService;
@@ -38,5 +35,15 @@ public class BookMarkServiceImpl implements BookMarkService {
     public boolean delete(BookMark bookMark) {
         bookMarkRepository.deleteBookMark(bookMark);
         return true;
+    }
+
+    @Override
+    public Page<BookMarkDto> searchBoard(Search search) {
+
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), search.getPageSize()
+        );
+
+        return bookMarkRepository.searchBookmark(search, pageable);
     }
 }

@@ -201,7 +201,7 @@ function btnSignUp() {
             password: password,
             email : email
         }),
-        success : function () {
+        success : function (data) {
             if (window.location.search == null || window.location.search == '') {
                 location.href="/board/list?type=all&best=&category=thai&pageNum=0"
             } else {

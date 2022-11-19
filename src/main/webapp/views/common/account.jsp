@@ -18,6 +18,9 @@
     </sec:authorize>
 
     <div class="menu-header-top">
+        <div class="prev" onclick="goBack()">
+            <div class="prev-ico"></div>
+        </div>
         <div class="header-logo-font"><span>헬타이</span></div>
             <div class="header-info">
                 <div class="close" onclick="goClose()">
@@ -96,5 +99,6 @@
 <script type="text/javascript" src="/js/jquery-3.6.1.min.js"></script>
 <script type="text/javascript" src="/js/m.base.js"></script>
 <script type="text/javascript" src="/js/common/m.menu.js"></script>
+<script type="text/javascript" src="/js/common/m.account.js"></script>
 
 <jsp:include page="/views/common/footer.jsp"></jsp:include>

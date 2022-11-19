@@ -20,7 +20,7 @@
     <div class="menu-header-top">
         <div class="header-logo-font"><span>헬타이</span></div>
             <div class="header-info">
-                <div class="close" onclick="goMenuClose()">
+                <div class="close" onclick="goClose()">
                     <div class="close-ico"></div>
                 </div>
             </div>
@@ -30,11 +30,11 @@
     <c:if test="${empty principal}">
     <div class="menu-container">
         <div class="user-menu">
-            <div class="area signUp-area">
+            <div class="area signUp-area" onclick="goSignUp()">
                 <div class="signUP-ico"></div>
                 <div class="menu-font">회원가입</div>
             </div>
-            <div class="area">
+            <div class="area" onclick="goLogin()">
                 <div class="login-ico"></div>
                 <div class="menu-font">로그인</div>
             </div>
@@ -62,11 +62,11 @@
                 <div class="note-ico"></div>
                 <div class="menu-font">내가쓴글</div>
             </div>
-            <div class="area">
+            <div class="area" onclick="goBookMark()">
                 <div class="favorite-ico"></div>
                 <div class="menu-font">저장글</div>
             </div>
-            <div class="area">
+            <div class="area" onclick="goLogout()">
                 <div class="logout-ico"></div>
                 <div class="menu-font">로그아웃</div>
             </div>
@@ -77,6 +77,10 @@
 </body>
 <script type="text/javascript" src="/js/jquery-3.6.1.min.js"></script>
 <script type="text/javascript" src="/js/common/m.menu.js"></script>
-<script type="text/javascript" src="/js/common/m.account.js"></script>
 
-<jsp:include page="/views/common/footer.jsp"></jsp:include>
+<footer class="footer">
+    <span>Copyright 2022 hellowthai. All rights reserved.</span>
+</footer>
+
+</body>
+</html>

@@ -330,7 +330,7 @@ public class BoardController {
                     boardService.deleteBoard(search);
 
                     result = true;
-                    url = "/board/list";
+                    url = "/board/list?type=all&best=&category=thai&pageNum=0";
                 }
             }
 

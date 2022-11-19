@@ -54,7 +54,11 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/signUp"}, method = RequestMethod.GET)
-    public String signUp(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search) {
+    public String signUp(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user) {
+
+        if (user != null) {
+            return "redirect:/board/list?type=all&best=&category=thai&pageNum=0";
+        }
 
         return "user/signUp";
     }

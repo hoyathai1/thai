@@ -2,12 +2,12 @@ $(document).ready(function () {
 
 });
 
-function goMenuClose() {
-    history.back();
+function goClose() {
+    location.href="/close";
 }
 
-function goClose() {
-    history.back();
+function goBack() {
+    location.href="/menu/back"
 }
 
 function goAccount() {
@@ -24,4 +24,20 @@ function goMyList() {
 
 function goMyNoti() {
     location.href="/menu/myNoti?page=0&pageSize=15";
+}
+
+function goBookMark() {
+    location.href="/menu/bookmark?page=0&pageSize=15";
+}
+
+function goLogin() {
+    location.href="/login";
+}
+
+function goLogout() {
+    location.href="/logout";
+}
+
+function goSignUp() {
+    location.href="/signUp";
 }
