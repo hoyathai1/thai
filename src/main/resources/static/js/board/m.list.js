@@ -7,6 +7,7 @@ $(document).ready(function () {
     var pageNum = $("input[name=pageNum]").val();
     var keyword = $(".search-select").val();
     var content = $(".search-input").val();
+    getInformList();
     getList(keyword, content, pageNum,15);
 
     if(best == 'Y') {
@@ -15,6 +16,33 @@ $(document).ready(function () {
         $("#bestBtn").html("인기글보기");
     }
 });
+
+
+function getInformList() {
+    $.ajax({
+        type : 'post',
+        url : '/board/inform',
+        headers : {
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "POST"
+        },
+        async: false,
+        dataType : 'json',
+        data : JSON.stringify({
+            type : bType,
+            category : category
+        }),
+        success : function (result) {
+            setInformList(result);
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+        }
+    });
+}
 
 function getList(keyword, content, page, pageSize) {
     $("input[name=pageNum]").val(page);
@@ -38,8 +66,33 @@ function getList(keyword, content, page, pageSize) {
         }),
         success : function (result) {
             setListHtml(result);
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
         }
     });
+}
+
+function setInformList(data) {
+    var listHtml = "";
+
+    $(data.list).each(function () {
+        listHtml += "<div class='board inform' data-id='" + this.id + "' onclick='goinform(" + this.id + ")'>";
+        listHtml += "   <div class='content'>";
+        listHtml += "       <div class='title'>" + this.title + "</div>";
+        listHtml += "       <div class='info'>";
+        listHtml += "           <div><b>" + this.username + "</b></div>";
+        listHtml += "           <div>" + getBoardTime(this.createDate) + "</div>";
+        listHtml += "       </div>";
+        listHtml += "   </div>";
+        listHtml += "</div>";
+
+    });
+
+    $(".board-list").append(listHtml);
 }
 
 function setListHtml(data) {
@@ -52,7 +105,7 @@ function setListHtml(data) {
         listHtml += "       <div class='info'>";
 
         if (this.user) {
-            listHtml += "           <div><b>" + this.author + "</b></div>";
+            listHtml += "           <div><b>" + this.username + "</b></div>";
         } else {
             listHtml += "           <div>" + this.author + "(" + this.ip + ")</div>";
         }
@@ -129,7 +182,7 @@ function setPagingBtn(data) {
     if (data.pageDto.endPage == 0) {
         pageHtml += "<div class='page-next' onclick='movePage(\"next\", " + Number(data.pageDto.endPage) + ")'>";
     } else {
-        pageHtml += "<div class='page-next' onclick='movePage(\"next\", " + Number(data.pageDto.endPage + 1) + ")'>";
+        pageHtml += "<div class='page-next' onclick='movePage(\"next\", " + Number(data.pageDto.endPage) + ")'>";
     }
     pageHtml += ">";
     pageHtml += "</div>";
@@ -173,6 +226,10 @@ function goView(id) {
     location.href = "/board/view?boardNum=" + id + "&" + makeQueryUrl();
 }
 
+function goinform(id) {
+    location.href = "/board/inform?boardNum=" + id + "&" + makeQueryUrl();
+}
+
 function goRegister() {
     location.href = "/board/register?" + makeQueryUrl();
 }
@@ -199,12 +256,12 @@ function getBoardTime(timeValue) {
     var today = new Date();
 
     var tYear = today.getFullYear();
-    var tMonth = today.getMonth();
+    var tMonth = today.getMonth()+1;
     var tDate = today.getDate();
     var todayDate = tYear+tMonth+tDate;
 
     var year = dateObj.getFullYear();
-    var month = dateObj.getMonth();
+    var month = dateObj.getMonth()+1;
     var date = dateObj.getDate();
     var hours = ('0' + dateObj.getHours()).slice(-2);
     var minutes = ('0' + dateObj.getMinutes()).slice(-2);

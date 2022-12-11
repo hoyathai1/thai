@@ -11,11 +11,17 @@ const btnStrike = document.getElementById('btn-strike');
 const btnImage = document.getElementById('btn-img');
 const imageSelector = document.getElementById('img-selector');
 
+var isAjax = false;
+
 $(document).ready(function () {
 
 });
 
 function btnRegister() {
+    if (isAjax == true) {
+        return;
+    }
+
     var title = $("input[name=title]").val();
     var name = $("input[name=name]").val();
     var password = $("input[name=password]").val();
@@ -40,6 +46,7 @@ function btnRegister() {
 
     if (lengthCheckUnder(password, 4)) {
         alert("비밀번호를 최소 4자리 이상 입력하셔야 합니다. 쉬운 비밀번호는 타인이 수정 또는 삭제하기 쉬우니, 어려운 비밀번호를 입력해 주세요.");
+        return;
     }
 
     if (isEmpty(contents) || lengthCheckUnder(title, 1)) {
@@ -47,7 +54,16 @@ function btnRegister() {
         return;
     }
 
+    if ($("#editor img").length > 10) {
+        alert("이미지는 최대 10개까지 등록 가능합니다.")
+        return;
+    }
+
     contentsTxt = $("#editor").text();
+
+    isAjax = true;
+    imgToFile();
+    contents = $("#editor").html();
 
     $.ajax({
         type : 'post',
@@ -57,6 +73,7 @@ function btnRegister() {
             "X-HTTP-Method-Override" : "POST"
         },
         dataType : 'text',
+        async: false,
         data : JSON.stringify({
             title: title,
             author: name,
@@ -66,13 +83,23 @@ function btnRegister() {
             category: category,
             type: sType
         }),
-        success : function () {
+        success : function (data) {
             location.href="/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
+        },
+        error : function () {
+
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
         }
     });
 }
 
 function btnRegisterLogin() {
+    if (isAjax == true) {
+        return;
+    }
+
     var title = $("input[name=title]").val();
     var contents = $("#editor").html();
     var sType = $(".register-select").val();
@@ -88,7 +115,16 @@ function btnRegisterLogin() {
         return;
     }
 
+    if ($("#editor img").length > 10) {
+        alert("이미지는 최대 10개까지 등록 가능합니다.")
+        return;
+    }
+
     contentsTxt = $("#editor").text();
+
+    isAjax = true;
+    imgToFile();
+    contents = $("#editor").html();
 
     $.ajax({
         type : 'post',
@@ -98,6 +134,7 @@ function btnRegisterLogin() {
             "X-HTTP-Method-Override" : "POST"
         },
         dataType : 'text',
+        async: false,
         data : JSON.stringify({
             title: title,
             contents : contents,
@@ -106,9 +143,14 @@ function btnRegisterLogin() {
             type: sType,
             best: best
         }),
-        success : function () {
+        success : function (data) {
             location.href="/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
-        }, error : function () {
+        },
+        error : function () {
+
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
         }
     });
 }
@@ -150,27 +192,37 @@ imageSelector.addEventListener('change', function (e) {
 function insertImageDate(file) {
     const reader = new FileReader();
 
-    reader.onload = (base64) => {
-        const image = new Image();
-
-        image.src = base64.target.result;
-
-        image.onload = (e) => {
-            const $canvas = document.createElement(`canvas`);
-            const ctx = $canvas.getContext(`2d`);
-
-            $canvas.width = e.target.width;
-            $canvas.height = e.target.height;
-
-            ctx.drawImage(e.target, 0, 0);
-
-            // 용량이 줄어든 base64 이미지
+    if (file.size < 200000) {
+        reader.addEventListener('load', function (e) {
             focusEditor();
-            document.execCommand('insertImage', false, $canvas.toDataURL(`image/jpeg`, 0.5));
-        }
-    }
+            document.execCommand('insertImage', false, `${reader.result}`);
+        });
 
-    reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+    } else {
+        reader.onload = (base64) => {
+            const image = new Image();
+
+            image.src = base64.target.result;
+
+            image.onload = (e) => {
+                const $canvas = document.createElement('canvas');
+                const ctx = $canvas.getContext('2d');
+
+                $canvas.width = e.target.width;
+                $canvas.height = e.target.height;
+
+                ctx.drawImage(e.target, 0, 0);
+
+                // 용량이 줄어든 base64 이미지
+                focusEditor();
+                document.execCommand('insertImage', false, $canvas.toDataURL('image/jpeg', 0.2));
+            }
+
+        };
+
+        reader.readAsDataURL(file);
+    }
 }
 
 function setStyle(style) {
@@ -243,4 +295,66 @@ function imageSizeChange( image ) {
     canvas.height = height;
     canvas.getContext("2d").drawImage(image, 0, 0, width, height);
     this.imgUrl = canvas.toDataURL("image/jpeg", 0.5);
+}
+
+function imgToFile() {
+    var formData = new FormData();
+    var img = $("#editor img");
+
+    // 업로드 이미지 없으면
+    if (img.length == 0) {
+        return;
+    }
+
+    $(".div_load_image").css("display", "block");
+
+    for (var i = 0; i < img.length; i++) {
+        var bstr = atob(img[i].src.split(",")[1]);
+        var n = bstr.length;
+        var u8arr = new Uint8Array(n);
+
+        while(n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        var fileName = getFileNameDate() + ".jpg"
+        var file = new File([u8arr], fileName, {type:"image/jpeg"});
+
+        formData.append("uploadFile", file);
+
+        $("#editor img")[i].src = fileName;
+    }
+
+    $("#editor img").addClass("uploaded");
+
+    $.ajax({
+        type : 'post',
+        url : '/board/upload',
+        async: false,
+        processData: false,
+        contentType: false,
+        dataType : 'text',
+        data : formData,
+        success : function () {
+
+        },
+        beforeSend : function () {
+
+        }
+    });
+}
+
+function getFileNameDate() {
+    var today = new Date();
+
+    var tYear = today.getFullYear().toString();
+    var tMonth = today.getMonth().toString();
+    var tDate = today.getHours().toString()
+    var tHour = today.getDay().toString();
+    var tMin = today.getMinutes().toString();
+    var tSec = today.getSeconds().toString();
+    var tMil = today.getMilliseconds().toString()
+    var todayDate = tYear + tMonth + tDate + tHour + tMin + tSec + tMil;
+
+    return todayDate;
 }

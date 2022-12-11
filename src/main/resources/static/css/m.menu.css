@@ -175,6 +175,14 @@
     height: 24px;
 }
 
+.user-menu .area .admin-ico {
+    background: url("/img/admin.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+}
+
 .user-menu .area .menu-font {
     margin-left: 10px;
     font-size: 20px;
@@ -435,6 +443,8 @@
 .myList .content .board-list .board .board-body {
     margin-top: 10px;
     display: none;
+    overflow: scroll;
+    height: 500px;
 }
 
 .myList .content .board-list .board .board-body div {

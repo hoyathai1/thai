@@ -1,0 +1,639 @@
+:root{
+    --black_gray: #464646;
+    --gray: #646464;
+    --light_gray: #e2e2e2;
+    --blue: #2828CD;
+    --border: #bcbcbc;
+}
+
+.div_load_image {
+    display: none;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+}
+
+body {
+    margin: 0 auto;
+}
+
+.top-gnb {
+    display: flex;
+    height: 24px;
+    background-color: var(--light_gray);
+    align-items: center;
+    justify-content: space-around;
+}
+
+.top-gnb .description {
+
+}
+
+.top-gnb .description h6 {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0;
+}
+
+.top-gnb .menu {
+}
+.top-gnb .menu nav ul {
+    margin: 0;
+    list-style:none;
+}
+
+.top-gnb .menu nav ul li {
+    float: left;
+    font-size: 12px;
+    color: black;
+    cursor:pointer;
+}
+
+.top-gnb .menu nav ul li:after {
+    content : "|";
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.top-gnb .menu nav ul li:last-child:after {
+    content : "";
+}
+
+.container {
+    min-width: 528px;
+    margin: 0 auto;
+    width: 50%;
+}
+
+.category {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    background-color: var(--gray);
+    box-shadow: 1px 1px 1px 1px var(--light_gray);
+}
+
+.category .list {
+    display: flex;
+    margin-left: 25px;
+}
+
+.category .list .name {
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.category .list .name:after {
+    content: '|';
+    color: #7d7576;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.category .list .name:last-child:after {
+    content: '';
+    margin-left: 15px;
+}
+
+.subject {
+    margin-top: 5px;
+    height: 40px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between
+}
+
+.subject .subject-area {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+}
+
+.subject .subject-area .ico-thai {
+    background: url("/img/thai.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 46px;
+    height: 100%;
+}
+
+.subject .search-area {
+
+}
+
+.subject .search-area .search-input {
+    font-size: 12px;
+    padding: 3px;
+    border: 3px solid var(--light_gray);
+    height: 24px;
+}
+
+.subject .search-area .search-input:focus {
+    border: 3px solid var(--light_gray);
+    outline: none;
+
+}
+
+.subject .search-area .search-btn {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    box-shadow: 0 1px 1px #aaa;
+    height: 24px;
+    cursor: pointer;
+    background-color:transparent;
+    font-size: 12px;
+}
+
+.subject .subject-area h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.types {
+    margin-top: 5px;
+    border: 1px solid #e2e1d5;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px #aaa;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.types .list {
+    display: flex;
+    margin-left: 20px;
+}
+
+.types .list .type {
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.types .list .type.on {
+    color: var(--blue);
+}
+
+.types .list .type:after {
+    content: "";
+    margin-right: 20px;
+}
+
+.content .view {
+    border-top: 2px solid var(--gray);
+    margin-top: 20px;
+}
+
+.content .view .title {
+    padding: 10px 5px 0px 5px;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+}
+
+.bookmark-ico.off {
+    background: url("/img/bookmark-off.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.bookmark-ico.on {
+    background: url("/img/bookmark-on.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.content .view .info {
+    padding: 0px 0px 15px 5px;
+    margin: 5px 0px 0px 0px;
+    font-size: 12px;
+    display: flex;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.content .view .info .left {
+    display: flex;
+    width: 30%;
+}
+
+.content .view .info .left .author {
+
+}
+
+.content .view .info .left .author:after {
+    content: '|';
+    margin-right: 5px;
+    margin-left: 5px;
+    color: var(--light_gray);
+}
+
+.content .view .info .left .createDate {
+
+}
+
+.content .view .info .right {
+    width: 70%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.content .view .info .right .views {
+
+}
+
+.content .view .info .right .views:before {
+    content: "조회";
+    margin-right: 2px;
+}
+
+.content .view .info .right .views:after {
+    content: "|";
+    color: var(--light_gray);
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.content .view .info .right .likes {
+
+}
+
+.content .view .info .right .likes:before {
+    content: '추천';
+    margin-right: 2px;
+}
+
+.content .view .info .right .likes:after {
+    content: "|";
+    color: var(--light_gray);
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.content .view .info .right .comment-count {
+
+}
+
+.content .view .info .right .comment-count:before {
+    content: "댓글";
+    margin-right: 2px;
+}
+
+.content .view .info .right .comment-count:after {
+
+}
+
+.content .view .contents {
+    padding-top: 30px;
+    margin-bottom: 50px;
+}
+
+.content .view .contents div {
+    padding: 2px;
+}
+
+.content .view .contents img {
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+
+.view .likes {
+    display: flex;
+    justify-content: center;
+}
+
+.view .likes .likes-btn {
+    width: 80px;
+    height: 80px;
+    background-color: #E6E6E6;
+    border: none;
+    margin: 20px;
+    border-radius: 50%;
+}
+
+.view .likes .likes-btn .likes-cnt {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.view .likes .likes-btn .like-ico {
+    background: url("/img/like-off.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+    margin: auto;
+    margin-top: 5px;
+}
+
+.view .likes .likes-btn .like-ico.on {
+    background: url("/img/like-on.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+    margin: auto;
+    margin-top: 5px;
+}
+
+.btn-area {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.btn-area button {
+    border: 1px var(--gray) solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--gray);
+    height: 32px;
+    width: 15%;
+}
+
+.btn-area button.on {
+    background-color: var(--gray);
+    color: white;
+}
+
+.comment-area {
+
+}
+
+.comment-area .comment-title {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--gray);
+    padding-bottom: 5px;
+    padding-left: 5px;
+    margin-bottom: 5px;
+}
+
+.comment-area .comment-title .left {
+    display: flex;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.comment-area .comment-title .left .comment-cnt {
+    color: red;
+    font-weight: bold;
+    margin-left: 3px;
+}
+
+.comment-area .comment-title .right {
+    display: flex;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.comment-area .comment-title .right div.bookmark {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.comment-area .comment-title .right div.share {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.comment-area .comment-list {
+}
+
+.comment-area .comment-list .comment {
+    /*padding-top: 5px;*/
+    /*padding-bottom: 5px;*/
+    padding: 5px 10px 5px 5px;
+    border-bottom: 1px solid var(--border);
+}
+
+.comment-area .comment-list .comment-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.comment-area .comment-list .comment-info .author {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--gray);
+    margin-right: 20px;
+}
+
+.comment-area .comment-list .comment-info .right-area .createDate {
+    font-size: 12px;
+    /*font-weight: bold;*/
+    color: var(--gray);
+}
+
+.comment-area .comment-list .content {
+    color: #000;
+    font-size: 13px;
+    overflow-wrap: break-word;
+}
+
+.comment-area .comment-list .comment-info .right-area {
+    display: flex;
+}
+
+.comment-area .comment-list .comment-info .right-area .x-btn {
+    background: url(/img/x-button.png) no-repeat;
+    background-size: contain;
+    width: 10px;
+    height: 10px;
+    z-index: 1;
+    margin-top: 1px;
+    margin-left: 3px;
+    cursor: pointer;
+}
+
+.comment-area .comment-list .comment.add {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
+    background-color: #FFFAF0;
+    padding-left: 15px;
+}
+
+.comment-area .comment-list .comment-info.add {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.comment-area .comment-list .comment-info.add .left-area .author.add {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--gray);
+    margin-right: 20px;
+}
+
+.comment-ico {
+    background: url(/img/next.png) no-repeat;
+    background-size: contain;
+    transform: scaleX(-1) rotate( 180deg );
+    width: 10px;
+    height: 10px;
+    z-index: 1;
+    margin-top: 1px;
+    margin-left: 3px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.comment-area .comment-list .comment-info.add .left-area {
+    display: flex;
+}
+
+.comment-form {
+    border-top: 2px solid var(--gray);
+    background-color: #e2e2e2;
+    border-bottom: 2px solid var(--gray);
+    height: 150px;
+}
+
+.comment-form .ipt {
+    padding: 5px 15px 0px 10px;
+}
+
+.comment-form .ipt input {
+    height: 22px;
+    border: 1px solid var(--border);
+}
+
+.comment-form .ipt input.comment-user {
+    background-color: #f2f2f2;
+}
+
+.comment-form .comment-textarea {
+    padding: 5px 15px 5px 10px;
+}
+
+.comment-form .comment-textarea textarea {
+    border: 1px solid var(--border);;
+    resize: none;
+    width: 100%;
+    height: 80px;
+    font-size: 12px;
+}
+
+.comment-paging {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.comment-paging div {
+    font-size: 13px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.comment-paging div.on {
+    color: #002875;
+    font-weight: bold;
+}
+
+div.btn.register {
+    padding-right: 15px;
+}
+
+.register-btn {
+    float: right;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    box-shadow: 0 1px 1px #aaa;
+    height: 28px;
+    width: 60px;
+    cursor: pointer;
+    background-color: white;
+    font-size: 12px;
+}
+
+/**
+    대댓글 세팅
+ */
+.add-comment-form {
+    border-top: 1px solid var(--border);
+    background-color: #e2e2e2;
+    border-bottom: 1px solid var(--border);
+    height: 150px;
+}
+
+.add-comment-form .ipt {
+    padding: 5px 15px 0px 50px;
+}
+
+.add-comment-form .ipt input {
+    height: 22px;
+    border: 1px solid var(--border);
+    padding: 5px;
+}
+
+.add-comment-form .ipt input.comment-user {
+    background-color: #f2f2f2;
+    padding: 5px;
+}
+
+.add-comment-form .comment-textarea {
+    padding: 5px 15px 5px 50px;
+}
+
+.add-comment-form .comment-textarea textarea {
+    border: 1px solid var(--border);
+    resize: none;
+    width: 100%;
+    height: 80px;
+    font-size: 12px;
+}
+
+/*
+    게시글 버튼
+*/
+.view-btn {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left {
+
+}
+
+.right {
+
+}
+
+.view-btn div button {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    box-shadow: 0 1px 1px #aaa;
+    height: 28px;
+    width: 60px;
+    cursor: pointer;
+    background-color: white;
+    font-size: 12px;
+}
+
+.view-btn div button.delete {
+    background-color: var(--gray);
+    box-shadow: 0 1px 1px var(--light_gray);
+    color: white;
+}

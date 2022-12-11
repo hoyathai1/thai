@@ -81,7 +81,7 @@ function checkNum(str) {
  * @returns {boolean}
  */
 function checkSpecial(str) {
-    const regExp = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+    const regExp = /[`~!@#$%_=+^&*|\\\'\";:\/?]/gi;
     if(regExp.test(str)) {
         return true;
     }else{

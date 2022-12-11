@@ -11,6 +11,23 @@ function showDetail(id) {
     } else {
         $(".board-body").css("display", "none");
         $(body_id).css("display", "block");
+
+        // 상세가져오기
+        $.ajax({
+            type : 'post',
+            url : '/menu/myList/detail',
+            headers : {
+                "Content-Type" : "application/json",
+                "X-HTTP-Method-Override" : "POST"
+            },
+            dataType : 'json',
+            data : JSON.stringify({
+                boardNum : id
+            }),
+            success : function (result) {
+                $(body_id).html(result.contents);
+            }
+        });
     }
 }
 

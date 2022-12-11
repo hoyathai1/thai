@@ -2,29 +2,10 @@ var isValidId = false;
 var isValidPassword1 = false;
 var isValidPassword2 = false;
 var isValidName = false;
+var isValidEmail = true;
 
 $(document).ready(function () {
 
-});
-
-document.getElementById("id-ipt").addEventListener("focusout", checkDuplicateId);
-document.getElementById("name-ipt").addEventListener("focusout", checkDuplicateName);
-
-$("input[name=id]").on("keyup", function () {
-    checkUserId();
-});
-
-$("input[name=password1]").on("keyup", function () {
-    checkPassword1();
-});
-
-$("input[name=password2]").on("keyup", function () {
-    checkPassword2();
-});
-
-$("input[name=name]").on("keyup", function () {
-    checkName();
-    checkDuplicateName();
 });
 
 function changeDomain() {
@@ -46,7 +27,6 @@ function checkUserId() {
 
     $("#id-info").removeClass("fnt-red");
     $("#id-info").addClass("fnt-gray");
-    isValidId = true;
 
     checkDuplicateId();
 }
@@ -61,12 +41,20 @@ function checkDuplicateId() {
             "Content-Type" : "application/json",
             "X-HTTP-Method-Override" : "POST"
         },
+        async: false,
         dataType : 'json',
         data : JSON.stringify({
             userId: id
         }),
         success : function (data) {
-
+            if (data) {
+                // 중복있음
+                isValidId = false;
+                $("#id-duplicate").css("display", "block");
+            } else {
+                $("#id-duplicate").css("display", "none");
+                isValidId = true;
+            }
         }
     });
 }
@@ -82,6 +70,7 @@ function checkDuplicateName() {
             "X-HTTP-Method-Override" : "POST"
         },
         dataType : 'json',
+        async: false,
         data : JSON.stringify({
             name: name
         }),
@@ -151,33 +140,57 @@ function checkName() {
 
     $("#name-info").removeClass("fnt-red");
     $("#name-info").addClass("fnt-gray");
-    isValidName = true;
 
     checkDuplicateName();
 }
 
+function checkEmail() {
+    var email1 = $("input[name=email-addr1]").val();
+    var email2 = $("input[name=email-addr2]").val();
+
+    if (isEmpty(email1) || lengthCheckOver(email1, 20)
+        || checkKor(email1) || checkSpecial(email1)) {
+        isValidEmail = false;
+        return;
+    }
+
+    if (isEmpty(email2) || lengthCheckOver(email2, 20)
+        || checkKor(email2)) {
+        isValidEmail = false;
+        return;
+    }
+
+    isValidEmail = true;
+}
+
 function btnSignUp() {
+    checkUserId();
+
     if (!isValidId) {
         alert("아이디를 확인해주세요");
         return;
     }
+
+    checkPassword1();
 
     if (!isValidPassword1) {
         alert("비밀번호를 확인해주세요");
         return;
     }
 
+    checkPassword2();
+
     if (!isValidPassword2) {
         alert("비밀번호를 확인해주세요");
         return;
     }
 
+    checkName();
+
     if (!isValidName) {
         alert("닉네임을 확인해주세요");
         return;
     }
-
-    checkDuplicateId();
 
     var id = $("input[name=id]").val();
     var password = $("input[name=password1]").val();
@@ -185,6 +198,16 @@ function btnSignUp() {
     var email = "";
     var email1 = $("input[name=email-addr1]").val();
     var email2 = $("input[name=email-addr2]").val();
+
+    if (!isEmpty(email1)) {
+        checkEmail();
+    }
+
+    if (!isValidEmail) {
+        alert("이메일을 확인해주세요");
+        return;
+    }
+
     email = email1 + "@" + email2;
 
     $.ajax({

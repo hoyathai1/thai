@@ -5,6 +5,13 @@ $(document).ready(function () {
     var hType = hUrlParams.get('type');
     var hBest = hUrlParams.get('best');
 
+    if(!detectMobileDevice(window.navigator.userAgent)) {
+
+
+        var hUrl = new URL(location.href);
+        location.href="/pc" + hUrl.pathname + hUrl.search;
+    }
+
     if (path != '/board/list') {
         $(".header-gnb").css("display", "none");
         $(".header-category").addClass("bottom-on");
@@ -23,6 +30,19 @@ $(document).ready(function () {
     $(".category-log").css("background-color", "transparent");
 
 });
+
+function detectMobileDevice(agent) {
+    const mobileRegex = [
+        /Android/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i
+    ]
+
+    return mobileRegex.some(mobile => agent.match(mobile))
+}
 
 function goSignUp() {
     location.href="/signUp?" + makeQueryUrl();

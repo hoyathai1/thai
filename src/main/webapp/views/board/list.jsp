@@ -37,5 +37,6 @@
 
 <script type="text/javascript" src="/js/jquery-3.6.1.min.js"></script>
 <script type="text/javascript" src="/js/board/m.list.js"></script>
+<script type="text/javascript" src="/js/m.base.js"></script>
 
 <jsp:include page="/views/common/footer.jsp"></jsp:include>

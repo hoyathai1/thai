@@ -46,6 +46,12 @@
     <c:if test="${not empty principal}">
     <div class="container">
         <div class="user-menu">
+            <c:if test="${principal.userAuth eq 'ROLE_ADMIN'}">
+                <div class="area" onclick="javascript:location.href='/admin/main'">
+                    <div class="admin-ico"></div>
+                    <div class="menu-font">관리자</div>
+                </div>
+            </c:if>
             <div class="area" onclick="goNotice()">
                 <div class="notice-ico"></div>
                 <div class="menu-font">공지사항</div>

@@ -11,9 +11,15 @@
     <link rel="stylesheet" type="text/css" href="/css/m.common.css">
 
 </header>
+
+<body>
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="principal"/>
 </sec:authorize>
+
+<div class="div_load_image">
+    <img src="/img/loading.gif" style="width:100px; height:100px;">
+</div>
 
 <div class="header-top">
     <div class="header-logo-font"><span>헬타이</span></div>

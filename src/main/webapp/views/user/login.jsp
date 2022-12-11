@@ -30,7 +30,7 @@
                     <button class=" btn one on" onclick="btnLogin()">로그인</button>
                 </div>
                 <div class="remember">
-                    <input type="checkbox" id="remember-me" name="remember-me">
+                    <input type="checkbox" id="remember-me" name="remember-me" checked>
                     <label for="remember-me">로그인유지</label>
                 </div>
             </form>

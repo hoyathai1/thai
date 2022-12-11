@@ -1,0 +1,194 @@
+:root{
+    --black_gray: #464646;
+    --gray: #646464;
+    --light_gray: #e2e2e2;
+    --blue: #2828CD;
+    --border: #bcbcbc;
+}
+
+body {
+    /*margin: 0 auto;*/
+    margin: 0px;
+    padding: 0px;
+}
+
+.header {
+    width: 100%;
+    height: 62px;
+    background-color: var(--gray);
+    display: flex;
+    align-items: flex-end;
+    padding: 5px;
+}
+
+.header .logo-font {
+    color: white;
+    font-size: 26px;
+}
+
+.header .login-font {
+    color: white;
+    font-size: 18px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+
+.container {
+    margin: 80px auto 10px;
+    width: 600px;
+}
+
+.container .signUp {
+    padding: 20px 40px 50px 40px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+}
+
+span.fnt-red {
+    color: #b60005;
+}
+
+span.fnt-gray {
+    color: #555;
+}
+
+.container .signUp .id {
+    display: flex;
+    align-items: center;
+}
+
+.container .signUp .id h4 {
+    text-align: center;
+    width: 30%;
+}
+
+.container .signUp .id .ipt {
+    width: 70%;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+}
+.container .signUp .id .ipt input{
+    border: 1px solid var(--border);
+    padding-left: 5px;
+    width: 70%;
+}
+
+div.info {
+    float: right;
+    width: 70%;
+    margin-bottom: 10px;
+}
+
+div.info span {
+    display: block;
+    font-size: 10px;
+
+    padding-left: 15%;
+}
+
+.container .signUp .password {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    height: 80px;
+    margin-bottom: 25px;
+}
+
+.container .signUp .password h4 {
+    text-align: center;
+    width: 30%;
+}
+
+.container .signUp .password .ipt {
+    width: 70%;
+    height: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.container .signUp .password .ipt input {
+    border: 1px solid var(--border);
+    padding-left: 5px;
+    width: 70%;
+}
+
+.container .signUp .password .ipt input:last-child {
+    margin-top: 5px;
+}
+
+.container .signUp .name {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.container .signUp .name h4 {
+    text-align: center;
+    width: 30%;
+}
+
+.container .signUp .name .ipt {
+    width: 70%;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.container .signUp .name .ipt input {
+    border: 1px solid var(--border);
+    padding-left: 5px;
+    width: 70%;
+}
+
+.container .signUp .email {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.container .signUp .email h4 {
+    text-align: center;
+    width: 30%;
+}
+
+.container .signUp .email .ipt {
+    width: 70%;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signUp .email .ipt input.ipt.email1 {
+    width: 24%;
+    height: 30px;
+    border: 1px solid var(--border);
+}
+
+.signUp .email .ipt input.ipt.email2 {
+    width: 23%;
+    height: 30px;
+    border: 1px solid var(--border);
+}
+
+.signUp .email .ipt .domain {
+    width: 20%;
+    height: 30px;
+    border: 1px solid var(--border);
+    outline: none;
+}
+
+.container .btn-area {
+    margin-top: 10px;
+}
+
+.container .btn-area button {
+    float: right;
+    height: 41px;
+    border: 1px var(--gray) solid;
+    background-color: var(--gray);
+    font-weight: bold;
+    color: white;
+    width: 20%;
+}

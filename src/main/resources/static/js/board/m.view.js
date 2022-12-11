@@ -5,6 +5,8 @@ const bType = urlParams.get('type');
 
 var currentCommentPage = 0;
 
+var isRunning = false;
+
 $(document).ready(function () {
     $(".createDate").html(getBoardTime($(".createDate").html()));
 
@@ -66,6 +68,13 @@ function getCommentList(page) {
         success : function (result) {
             setListHtml(result);
             moveScrollToComment();
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
         }
     });
 }
@@ -176,6 +185,10 @@ function setCommentChidrenForm(id) {
 }
 
 function registerComment () {
+    if (isRunning == true) {
+        return;
+    }
+
     var boardId = $("input[name=boardNum]").val();
     var nickname = $("input[name=nickname]").val();
     var commentPassword = $("input[name=commentPassword]").val();
@@ -221,12 +234,23 @@ function registerComment () {
             $("input[name=nickname]").val("");
             $("input[name=commentPassword]").val("");
             $("textarea[name=commentContent]").val("");
-
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+            isRunning = true;
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+            isRunning = false;
         }
     });
 }
 
 function registerCommentByOwner () {
+    if (isRunning == true) {
+        return;
+    }
+
     var boardId = $("input[name=boardNum]").val();
     var commentContent = $("textarea[name=commentContent]").val();
 
@@ -251,11 +275,23 @@ function registerCommentByOwner () {
             getCommentList(currentCommentPage);
 
             $("textarea[name=commentContent]").val("");
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+            isRunning = true;
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+            isRunning = false;
         }
     });
 }
 
 function registerCommentToComment (parent_id) {
+    if (isRunning == true) {
+        return;
+    }
+
     var boardId = $("input[name=boardNum]").val();
     var nickname = $("input[name=add-nickname]").val();
     var commentPassword = $("input[name=add-password]").val();
@@ -300,20 +336,32 @@ function registerCommentToComment (parent_id) {
             getCommentList(currentCommentPage);
 
             $(".add-comment-form").remove();
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+            isRunning = true;
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+            isRunning = false;
         }
     });
 }
 
 function registerCommentToCommentByUser (parent_id) {
+    if (isRunning == true) {
+        return;
+    }
+
     var boardId = $("input[name=boardNum]").val();
     var commentContent = $("textarea[name=add-commentContent]").val();
     var isLogin = $("input[name=isLogin]").val();
-    
+
     if (isLogin === 'false') {
         alert("잘못된접근입니다.")
         return;
     }
-    
+
     if (isEmpty(commentContent) || lengthCheckUnder(commentContent, 1)) {
         alert("내을 입력해주세요.")
         return;
@@ -336,12 +384,24 @@ function registerCommentToCommentByUser (parent_id) {
             getCommentList(currentCommentPage);
 
             $(".add-comment-form").remove();
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+            isRunning = true;
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+            isRunning = false;
         }
     });
 }
 
 function modifyBtn() {
     openModal('비밀번호를 입력하세요.', 'type1', function () {
+        if (isRunning == true) {
+            return;
+        }
+
         var boardNum = $("input[name=boardNum]").val();
         var password = $("input[name=modal-password]").val();
 
@@ -372,13 +432,24 @@ function modifyBtn() {
                     modalClose();
                     alert ("비밀번호가 틀렸습니다.");
                 }
-
+            },
+            beforeSend : function () {
+                $(".div_load_image").css("display", "block");
+                isRunning = true;
+            },
+            complete : function () {
+                $(".div_load_image").css("display", "none");
+                isRunning = false;
             }
         });
     });
 }
 
 function likesBtn() {
+    if (isRunning == true) {
+        return;
+    }
+
     var boardNum = $("input[name=boardNum]").val();
 
     $.ajax({
@@ -401,12 +472,24 @@ function likesBtn() {
             } else {
                 $(".like-ico").removeClass("on")
             }
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+            isRunning = true;
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+            isRunning = false;
         }
     });
 }
 
 function deleteBtn() {
     openModal('비밀번호를 입력하세요.', 'type1', function () {
+        if (isRunning == true) {
+            return;
+        }
+
         var boardNum = $("input[name=boardNum]").val();
         var password = $("input[name=modal-password]").val();
 
@@ -432,19 +515,31 @@ function deleteBtn() {
             }),
             success : function (data) {
                 if (data.result) {
-                    location.href=data.redirect;
+                    goList();
                 } else {
                     modalClose();
                     alert ("비밀번호가 틀렸습니다.");
                 }
-
+            },
+            beforeSend : function () {
+                $(".div_load_image").css("display", "block");
+                isRunning = true;
+            },
+            complete : function () {
+                $(".div_load_image").css("display", "none");
+                isRunning = false;
             }
+
         });
     });
 }
 
 function deleteBtnByOwner() {
     openModal('삭제를 하시겠습니까?', 'type2', function () {
+        if (isRunning == true) {
+            return;
+        }
+
         var boardNum = $("input[name=boardNum]").val();
 
         $.ajax({
@@ -461,12 +556,19 @@ function deleteBtnByOwner() {
             }),
             success : function (data) {
                 if (data.result) {
-                    location.href=data.redirect;
+                    goList();
                 } else {
                     modalClose();
                     alert ("비밀번호가 틀렸습니다.");
                 }
-
+            },
+            beforeSend : function () {
+                $(".div_load_image").css("display", "block");
+                isRunning = true;
+            },
+            complete : function () {
+                $(".div_load_image").css("display", "none");
+                isRunning = false;
             }
         });
     });
@@ -474,6 +576,10 @@ function deleteBtnByOwner() {
 
 function modifyBtnByOwner() {
     openModal('수정 하시겠습니까?', 'type2', function () {
+        if (isRunning == true) {
+            return;
+        }
+
         var boardNum = $("input[name=boardNum]").val();
 
         $.ajax({
@@ -484,6 +590,7 @@ function modifyBtnByOwner() {
                 "X-HTTP-Method-Override" : "POST"
             },
             dataType : 'json',
+            async: false,
             data : JSON.stringify({
                 boardNum : boardNum,
                 type: "delete"
@@ -495,8 +602,16 @@ function modifyBtnByOwner() {
                     modalClose();
                     alert ("비밀번호가 틀렸습니다.");
                 }
-
+            },
+            beforeSend : function () {
+                $(".div_load_image").css("display", "block");
+                isRunning = true;
+            },
+            complete : function () {
+                $(".div_load_image").css("display", "none");
+                isRunning = false;
             }
+
         });
     });
 }
@@ -505,6 +620,10 @@ function deleteCommentBtn(commentNum) {
     event.stopPropagation();
 
     openModal('비밀번호를 입력하세요.', 'type1', function () {
+        if (isRunning == true) {
+            return;
+        }
+
         var password = $("input[name=modal-password]").val();
 
         if (isEmpty(password)) {
@@ -522,6 +641,7 @@ function deleteCommentBtn(commentNum) {
                 "X-HTTP-Method-Override": "POST"
             },
             dataType: 'json',
+            async: false,
             data: JSON.stringify({
                 commentNum: commentNum,
                 password: password
@@ -535,7 +655,14 @@ function deleteCommentBtn(commentNum) {
 
                     alert("비밀번호가 틀립니다.");
                 }
-
+            },
+            beforeSend : function () {
+                $(".div_load_image").css("display", "block");
+                isRunning = true;
+            },
+            complete : function () {
+                $(".div_load_image").css("display", "none");
+                isRunning = false;
             }
         });
     });
@@ -545,6 +672,10 @@ function deleteCommentBtnByOwner(commentNum) {
     event.stopPropagation();
 
     openModal('댓글을 삭제하시겠습니까?', 'type2', function () {
+        if (isRunning == true) {
+            return;
+        }
+
         $.ajax({
             type : 'post',
             url : '/board/delete/comment',
@@ -553,6 +684,7 @@ function deleteCommentBtnByOwner(commentNum) {
                 "X-HTTP-Method-Override" : "POST"
             },
             dataType : 'json',
+            async: false,
             data : JSON.stringify({
                 commentNum : commentNum
             }),
@@ -560,9 +692,15 @@ function deleteCommentBtnByOwner(commentNum) {
                 if (data) {
                     getCommentList(currentCommentPage);
                 }
-
+            },
+            beforeSend : function () {
+                $(".div_load_image").css("display", "block");
+                isRunning = true;
+            },
+            complete : function () {
+                $(".div_load_image").css("display", "none");
+                isRunning = false;
                 modalClose();
-
             }
         });
     });
@@ -570,6 +708,10 @@ function deleteCommentBtnByOwner(commentNum) {
 
 function setBookMark() {
     var boardNum = $("input[name=boardNum]").val();
+
+    if (isRunning == true) {
+        return;
+    }
 
     $.ajax({
         type : 'post',
@@ -579,6 +721,7 @@ function setBookMark() {
             "X-HTTP-Method-Override" : "POST"
         },
         dataType : 'json',
+        async: false,
         data : JSON.stringify({
             board_id : boardNum
         }),
@@ -592,6 +735,14 @@ function setBookMark() {
                     $(".bookmark-ico").addClass("off");
                 }
             }
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+            isRunning = true;
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+            isRunning = false;
         }
     });
 }
@@ -600,7 +751,7 @@ function getBoardTime(timeValue) {
     var dateObj = new Date(timeValue);
 
     var year = dateObj.getFullYear();
-    var month = dateObj.getMonth();
+    var month = dateObj.getMonth() + 1;
     var date = dateObj.getDate();
     var hours = ('0' + dateObj.getHours()).slice(-2);
     var minutes = ('0' + dateObj.getMinutes()).slice(-2);
@@ -614,12 +765,12 @@ function getReplyTime(timeValue) {
     var today = new Date();
 
     var tYear = today.getFullYear();
-    var tMonth = today.getMonth();
+    var tMonth = today.getMonth() + 1;
     var tDate = today.getDate();
     var todayDate = tYear+tMonth+tDate;
 
     var year = dateObj.getFullYear();
-    var month = dateObj.getMonth();
+    var month = dateObj.getMonth() + 1;
     var date = dateObj.getDate();
     var hours = ('0' + dateObj.getHours()).slice(-2);
     var minutes = ('0' + dateObj.getMinutes()).slice(-2);

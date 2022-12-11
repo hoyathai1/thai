@@ -1,0 +1,268 @@
+/* register */
+.notice-content {
+    font-size: 14px;
+}
+
+.notice-content div {
+    padding: 2px;
+}
+
+.notice-content img{
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+
+.modal-body .subject {
+    padding: 12px 12px 10px;
+    display: flex;  /* 자식노드 정렬 */
+    align-items: center;
+}
+
+.modal-body .subject h4 {
+    margin: 0;
+}
+
+.modal-body .subject button {
+    width: 75px;
+    border: 1px var(--gray) solid;
+    color: var(--gray);
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: auto; /* 우측 정렬 */
+    background-color: transparent;
+}
+
+.modal-body .category {
+    border-top: 1px solid #bcbcbc;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.modal-body .category select {
+    width: 20%;
+    border: 0;
+    text-align: center;
+    height: 32px;
+}
+
+.modal-body .category label {
+    margin: 0;
+    padding-left: 10px;
+}
+
+.modal-body .title {
+    border-top: 1px solid #bcbcbc;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.modal-body .title .board-type-name {
+    width: 15%;
+    border: 0;
+    text-align: center;
+}
+
+.modal-body .title select {
+    width: 15%;
+    border: 0;
+    text-align: center;
+}
+
+.modal-body .title input.ipt {
+    width: 85%;
+    border: 0;
+    padding: 12px 12px 10px;
+    /*라인박스 높이*/
+    line-height: 1.5;
+    outline: none;
+}
+
+.modal-body .title input.ipt.register {
+    width: 100%;
+    border: 0;
+    padding: 12px 12px 10px;
+    /*라인박스 높이*/
+    line-height: 1.5;
+    outline: none;
+}
+
+.modal-body .title input.ipt:focus {
+    border: 2px solid #989898;
+}
+
+.modal-body .editor-menu {
+    border-top: 1px solid #bcbcbc;
+    width: 100%;
+    padding: 8px 12px;
+    display: flex;  /* 버튼 정렬 */
+}
+
+.modal-body .editor-menu button.btn {
+    padding: 8px 12px;
+    border:none;
+    background-color:transparent;
+}
+
+.modal-body .editor-menu button.btn.active {
+    color: #FF0000;
+}
+
+.modal-body .editor-menu input#img-selector {
+    display: none;
+}
+
+.modal-body .content {
+    border-top: 1px solid #bcbcbc;
+    width: 100%;
+    border-bottom: 1px solid #bcbcbc;
+}
+
+.modal-body .content .text-box {
+    width: 100%;
+    overflow: scroll;
+    height: 400px;
+    min-height: 200px;
+    box-sizing: border-box;
+    padding: 12px;
+    font-size: 20px;
+    outline: none;
+}
+
+.modal-body .content .text-box.comment-box {
+    width: 100%;
+    overflow: scroll;
+    height: 200px;
+    min-height: 200px;
+    box-sizing: border-box;
+    padding: 12px;
+    font-size: 20px;
+    outline: none;
+}
+
+.modal-body .content .text-box:focus {
+    border: 2px solid #989898;
+}
+
+/* editor */
+.modal-body .content div#editor img {
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+.modal-body .content div#view-editor img {
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+
+.modal-body .info {
+    font-size: 12px;
+    height: 120px;
+    background-color: #F4FFFF;
+    padding-top: 20px;
+}
+
+.modal-body .info ul {
+    padding-left:20px;
+    margin: 0px;
+
+}
+
+.modal-body .info ul li{
+    margin-bottom: 10px;
+    padding-right: 10px;
+    color: var(--gray)
+}
+
+
+
+.modal-body .comment {
+
+}
+
+.modal-body .comment .comment-list {
+    overflow: scroll;
+    height: 200px;
+}
+
+.modal-body .comment .comment-list .comment {
+    /*border-top: 1px solid #bcbcbc;*/
+    padding: 12px 12px 10px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.modal-body .comment .comment-list .add {
+    background-color: #F7F5FF;
+    padding: 12px 10px 10px 8px;
+}
+
+.modal-body .comment .comment-list .comment:active {
+    background-color: #F7F5FF;
+    transition: color 0.5s ease-in-out;
+}
+
+.modal-body .comment .comment-list .comment div {
+    padding-bottom: 4px;
+}
+
+.modal-body .comment .comment-list .comment div.add{
+    padding-top: 2px;
+    padding-left: 0px;
+}
+
+.modal-body .comment .comment-list .comment .author {
+    font-size: 13px;
+    font-weight: bold;
+    width: 50%;
+}
+
+.modal-body .comment .comment-list .comment .content {
+    font-size: 13px;
+    word-break: break-all;
+}
+
+.modal-body .comment .comment-list .comment .createDate {
+    font-size: 12px;
+    color: #7c7874;
+    width: 38%;
+}
+.modal-body .comment .comment-list .comment .createDate.add {
+    font-size: 12px;
+    color: #7c7874;
+    width: 30%;
+}
+
+.modal-body .comment .comment-list .comment .delete-comment {
+    font-size: 8px;
+    color: #FF0000;
+    width: 12%;
+}
+
+.modal-body .comment .comment-list .comment .restore-comment {
+    font-size: 8px;
+    color: #0f401b;
+    width: 10%;
+}
+
+.add-ico {
+    background: url(/img/arrow-down.png) no-repeat;
+    background-size: contain;
+    width: 18px;
+    height: 18px;
+    transform: rotate(45deg);
+    /*position: absolute;*/
+}
+.modal-body .comment .comment-list .comment .x-btn {
+    position: absolute;
+    right: 15px;
+    background: url(/img/x-button.png) no-repeat;
+    background-size: contain;
+    width: 15px;
+    height: 15px;
+    z-index: 1;
+}
+

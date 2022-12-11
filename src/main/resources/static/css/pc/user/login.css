@@ -1,0 +1,124 @@
+:root{
+    --black_gray: #464646;
+    --gray: #646464;
+    --light_gray: #e2e2e2;
+    --blue: #2828CD;
+    --border: #bcbcbc;
+}
+
+body {
+    /*margin: 0 auto;*/
+    margin: 0px;
+    padding: 0px;
+}
+
+.header {
+    width: 100%;
+    height: 62px;
+    background-color: var(--gray);
+    display: flex;
+    align-items: flex-end;
+    padding: 5px;
+}
+
+.header .logo-font {
+    color: white;
+    font-size: 26px;
+}
+
+.header .login-font {
+    color: white;
+    font-size: 18px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+
+.container {
+    margin: 205px auto 233px;
+    width: 290px;
+}
+
+.container .login {
+
+}
+
+#username.ipt {
+    height: 41px;
+    width: 100%;
+    background-color: var(--light_gray);
+    border: 0;
+    margin-top: 5px;
+    padding: 0px 10px 0px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+#password.ipt {
+    height: 41px;
+    width: 100%;
+    background-color: var(--light_gray);
+    border: 0;
+    margin-top: 5px;
+    padding: 0px 10px 0px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+button.btn {
+    height: 41px;
+    width: 100%;
+    background-color: var(--gray);
+    color: white;
+    border: 0;
+    margin-top: 5px;
+}
+
+.remember {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.remember label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.remember input {
+    background: url("/img/check.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 14px;
+    height: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.remember input:checked {
+    background: url("/img/checked.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+}
+
+.info {
+    padding: 5px;
+}
+
+.info .fnt-red {
+    font-size: 12px;
+    color: red;
+}
+
+.user-btn {
+    border-top: 2px solid #989898;
+    display: flex;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.user-btn .signUp-btn {
+    margin-right: 10px;
+}

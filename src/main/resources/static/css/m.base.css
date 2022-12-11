@@ -38,6 +38,18 @@ body {
     height: 100%;
 }
 
+/*
+    loading
+*/
+.div_load_image {
+    display: none;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+}
+
 .container {
     padding-left: 2px;
     overflow: hidden;
@@ -74,13 +86,13 @@ body {
 /**
     버튼 스타일
  */
+
 .btn-area button.btn {
     border: 1px var(--gray) solid;
     background-color: transparent;
     font-weight: bold;
     color: var(--gray);
 }
-
 .btn-area button.small {
     width: 20%;
 }

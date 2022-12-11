@@ -65,7 +65,7 @@
                                     <div class="likes-count">${board.likes}</div>
                                     <div class="comment-count">${board.commentCount}</div>
                                 </div>
-                                <div class="board-body" id="body-${board.id}">${board.contents}</div>
+                                <div class="board-body" id="body-${board.id}"></div>
                             </div>
                         </c:forEach>
                     </c:if>
