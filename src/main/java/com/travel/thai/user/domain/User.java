@@ -11,8 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Data
@@ -47,6 +49,9 @@ public class User implements UserDetails {
     @ColumnDefault(value = "false")
     private boolean isDel;
 
+//    @Transient
+//    private List<GrantedAuthority> authorities;
+
     @PrePersist // 데이터 생성이 이루어질때 사전 작업
     public void prePersist() {
         this.createDate = LocalDateTime.now();
@@ -74,9 +79,14 @@ public class User implements UserDetails {
         return this.userId;
     }
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return Collections.singletonList(new SimpleGrantedAuthority(this.userAuth));
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(this.userAuth));
+        return Arrays.asList(new SimpleGrantedAuthority(this.getUserAuth()));
     }
 
     @Override

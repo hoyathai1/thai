@@ -53,6 +53,23 @@ public class UserController {
         return "user/login";
     }
 
+    @RequestMapping(value = {"/pc/login"}, method = RequestMethod.GET)
+    public String pcList(HttpServletRequest request, HttpServletResponse response,
+                       @RequestParam(value = "error", required = false)String error,
+                       @RequestParam(value = "errorType", required = false)String errorType,
+                       Model model) {
+
+        model.addAttribute("error", error);
+        model.addAttribute("errorType", errorType);
+
+        String uri = request.getHeader("Referer");
+        if (uri != null && !uri.contains("/login")) {
+            request.getSession().setAttribute("prevPage", uri);
+        }
+
+        return "pc/user/login";
+    }
+
     @RequestMapping(value = {"/signUp"}, method = RequestMethod.GET)
     public String signUp(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user) {
 
@@ -61,6 +78,16 @@ public class UserController {
         }
 
         return "user/signUp";
+    }
+
+    @RequestMapping(value = {"/pc/signUp"}, method = RequestMethod.GET)
+    public String pcSignUp(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user) {
+
+        if (user != null) {
+            return "redirect:/board/list?type=all&best=&category=thai&pageNum=0";
+        }
+
+        return "pc/user/signUp";
     }
 
     @RequestMapping(value = {"/signUp"}, method = RequestMethod.POST)

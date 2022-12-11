@@ -1,5 +1,6 @@
 package com.travel.thai.common.handler;
 
+import com.travel.thai.user.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -55,6 +56,13 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
                 uri = prevPage;
             }
         }
+
+
+        User user = (User) authentication.getPrincipal();
+        if ("ROLE_ADMIN".equals(user.getUserAuth())) {
+            uri = "/admin/main/";
+        }
+
 
         redirectStrategy.sendRedirect(request, response, uri);
     }

@@ -13,7 +13,11 @@ public interface BoardRepositoryCustom {
     boolean isExistBoard(long boardNum);
     Board existBoard(long boardNum);
     void deleteBoard(long boardNum);
+    void restoreBoard(long boardNum);
     String getPassword(long boardNum);
     void modifyBoard(Board board);
     PageImpl<BoardDto> searchById(Search search, Pageable pageable);
+    BoardDto searchBoardContent(Search search);
+    BoardDto searchBoardDetailForAdmin(Search search);
+    PageImpl<BoardDto> searchForAdmin(Search search, Pageable pageable);
 }

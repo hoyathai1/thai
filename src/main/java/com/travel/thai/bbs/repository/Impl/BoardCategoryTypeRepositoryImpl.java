@@ -18,7 +18,7 @@ public class BoardCategoryTypeRepositoryImpl implements BoardCategoryTypeReposit
         List<BoardType> result = queryFactory
                 .select(boardType)
                 .from(boardType)
-                .where(boardType.categoryId.eq(categoryId))
+                .where(boardType.boardCategory.id.eq(categoryId).and(boardType.isUse.isTrue()))
                 .orderBy(boardType.orderBy.asc())
                 .fetch();
 
@@ -26,8 +26,56 @@ public class BoardCategoryTypeRepositoryImpl implements BoardCategoryTypeReposit
     }
 
     @Override
-    public String getBoardTypeName(String typeId) {
-        String result = queryFactory.select(boardType.name).from(boardType).where(boardType.type.eq(typeId)).fetchOne();
+    public List<BoardType> getListForAdmin(String categoryId) {
+        List<BoardType> result = queryFactory
+                .select(boardType)
+                .from(boardType)
+                .where(boardType.boardCategory.id.eq(categoryId))
+                .orderBy(boardType.orderBy.asc())
+                .fetch();
+
+        return result;
+    }
+
+    @Override
+    public String getBoardTypeName(String typeId, String categoryId) {
+        String result = queryFactory.select(boardType.name).from(boardType).where(boardType.type.eq(typeId).and(boardType.boardCategory.id.eq(categoryId))).fetchOne();
+        return result;
+    }
+
+    @Override
+    public void unuseType(Long typeId) {
+        queryFactory
+                .update(boardType)
+                .set(boardType.isUse, false)
+                .where(boardType.id.eq(typeId))
+                .execute();
+    }
+
+    @Override
+    public void useType(Long typeId) {
+        queryFactory
+                .update(boardType)
+                .set(boardType.isUse, true)
+                .where(boardType.id.eq(typeId))
+                .execute();
+    }
+
+    @Override
+    public void modifyType(BoardType param) {
+        queryFactory
+                .update(boardType)
+                .set(boardType.name, param.getName())
+                .set(boardType.type, param.getType())
+                .set(boardType.orderBy, param.getOrderBy())
+                .where(boardType.id.eq(param.getId()))
+                .execute();
+    }
+
+    @Override
+    public BoardType getType(Long typeId) {
+        BoardType result = queryFactory.select(boardType).from(boardType).where(boardType.id.eq(typeId)).fetchOne();
+
         return result;
     }
 }

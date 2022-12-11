@@ -1,5 +1,6 @@
 package com.travel.thai.bbs.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,12 @@ public class BoardType {
 
     private String name;
 
-    private String categoryId;
+//    private String categoryId;
+
+    @JsonIgnore
+    @JoinColumn(name="category_id", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private BoardCategory boardCategory;
 
     private int orderBy;
 

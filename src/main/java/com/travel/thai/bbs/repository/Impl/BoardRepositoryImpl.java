@@ -16,8 +16,10 @@ import java.util.List;
 
 import static com.travel.thai.bbs.domain.QBoard.board;
 import static com.travel.thai.bbs.domain.QComment.comment;
-import static com.travel.thai.bbs.domain.QBookMark.bookMark;
+import static com.travel.thai.bbs.domain.QBoardFile.boardFile;
 import static com.travel.thai.user.domain.QUser.user;
+import static com.travel.thai.bbs.domain.QBoardCategory.boardCategory;
+import static com.travel.thai.bbs.domain.QBoardType.boardType;
 
 @RequiredArgsConstructor
 public class BoardRepositoryImpl implements BoardRepositoryCustom {
@@ -66,16 +68,21 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         board.id,
                         board.title,
                         user.name,
+                        board.author,
                         board.createDate,
                         board.view,
                         comment.id.count().intValue(),
                         board.likes.size(),
                         board.isUser,
-                        board.ip
+                        board.ip,
+                        boardCategory.id,
+                        boardCategory.name,
+                        board.type
                 ))
                 .from(board)
                 .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
                 .leftJoin(user).on(board.userId.eq(user.userId))
+                .leftJoin(boardCategory).on(boardCategory.id.eq(board.category))
                 .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
                 .groupBy(board.id)
                 .orderBy(board.createDate.desc())
@@ -95,6 +102,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     @Override
     public PageImpl<BoardDto> searchById(Search search, Pageable pageable) {
+
         List<BoardDto> results = queryFactory
                 .select(Projections.constructor(BoardDto.class,
                         board.id,
@@ -132,6 +140,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .select(Projections.constructor(BoardDto.class,
                         board.id,
                         board.title,
+                        user.name,
                         board.author,
                         board.contents,
                         board.createDate,
@@ -140,14 +149,41 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         board.isUser,
                         board.userId,
                         board.ip,
-                        board.type
+                        board.type,
+                        board.category
                 ))
                 .from(board)
+                .leftJoin(user).on(board.userId.eq(user.userId))
                 .where(board.id.eq(search.getBoardNum()).and(board.isDel.isFalse()))
                 .fetchOne();
 
         return result;
     }
+
+    @Override
+    public BoardDto searchBoardContent(Search search) {
+        BoardDto result = queryFactory
+                .select(Projections.constructor(BoardDto.class, board.contents))
+                .from(board)
+                .leftJoin(user).on(board.userId.eq(user.userId))
+                .where(board.id.eq(search.getBoardNum()).and(board.isDel.isFalse()))
+                .fetchOne();
+
+        return result;
+    }
+
+    @Override
+    public BoardDto searchBoardDetailForAdmin(Search search) {
+        BoardDto result = queryFactory
+                .select(Projections.constructor(BoardDto.class, board.title, board.contents))
+                .from(board)
+                .leftJoin(user).on(board.userId.eq(user.userId))
+                .where(board.id.eq(search.getBoardNum()))
+                .fetchOne();
+
+        return result;
+    }
+
 
     @Override
     public void increseViewCount(Search search) {
@@ -188,6 +224,15 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
+    public void restoreBoard(long boardNum) {
+        queryFactory
+                .update(board)
+                .set(board.isDel, false)
+                .where(board.id.eq(boardNum))
+                .execute();
+    }
+
+    @Override
     public String getPassword(long boardNum) {
         String result = queryFactory.select(board.password)
                 .from(board)
@@ -206,5 +251,53 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .set(board.type, param.getType())
                 .where(board.id.eq(param.getId()))
                 .execute();
+    }
+
+    @Override
+    public PageImpl<BoardDto> searchForAdmin(Search search, Pageable pageable) {
+        BooleanBuilder whereBuilder = new BooleanBuilder();
+
+        // 검색어 있을때
+        if (StringUtils.isNotEmpty(search.getContent())) {
+            whereBuilder.and(board.title.contains(search.getContent()))
+                    .or(board.contentsTxt.contains(search.getContent()));
+        }
+
+        List<BoardDto> results = queryFactory
+                .select(Projections.constructor(BoardDto.class,
+                        board.id,
+                        board.type,
+                        board.title,
+                        user.name,
+                        board.author,
+                        boardCategory.id,
+                        boardCategory.name,
+                        board.createDate,
+                        board.likes.size(),
+                        board.isUser,
+                        board.ip,
+                        board.view,
+                        comment.id.count().intValue(),
+                        board.isDel
+                ))
+                .from(board)
+                .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
+                .leftJoin(user).on(board.userId.eq(user.userId))
+                .leftJoin(boardCategory).on(boardCategory.id.eq(board.category))
+                .where(whereBuilder)
+                .groupBy(board.id)
+                .orderBy(board.createDate.desc())
+                .offset(pageable.getOffset())   // 페이지 번호
+                .limit(pageable.getPageSize())    // 페이지 사이즈
+                .fetch();
+
+        int count = queryFactory
+                .selectOne()
+                .from(board)
+                .where(whereBuilder)
+                .orderBy(board.createDate.desc())
+                .fetch().size();
+
+        return new PageImpl<>(results, pageable, count);
     }
 }

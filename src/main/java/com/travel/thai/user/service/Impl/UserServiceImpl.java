@@ -1,8 +1,10 @@
 package com.travel.thai.user.service.Impl;
 
 import com.travel.thai.bbs.domain.BoardDto;
+import com.travel.thai.bbs.domain.BoardFileDto;
 import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.bbs.repository.BoardRepository;
+import com.travel.thai.common.util.StringUtils;
 import com.travel.thai.user.domain.User;
 import com.travel.thai.user.domain.UserDto;
 import com.travel.thai.user.repository.UserRepository;
@@ -42,7 +44,12 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setName(userDto.getName());
         user.setIp(userDto.getIp());
-        user.setUserAuth("USER");
+
+        if (StringUtils.isNotEmpty(userDto.getAuth())) {
+            user.setUserAuth(userDto.getAuth());
+        } else {
+            user.setUserAuth("ROLE_USER");
+        }
 
         return userRepository.save(user);
     }
@@ -76,9 +83,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public void modfiyPasswordForAdmin(String userId, String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encPassword = passwordEncoder.encode(password);
+        userRepository.modifyPassword(userId, encPassword);
+
+    }
+
+    @Override
+    @Transactional
     public void modifyEmail(String userId, String email) {
         userRepository.modifyEmail(userId, email);
         refreshLoginAuthInfo();
+    }
+
+    @Override
+    @Transactional
+    public void modifyEmailForAdmin(String userId, String email) {
+        userRepository.modifyEmail(userId, email);
     }
 
 
@@ -113,5 +135,26 @@ public class UserServiceImpl implements UserService {
         );
 
         return boardRepository.searchById(search, pageable);
+    }
+
+    @Override
+    public Page<UserDto> search(Search search) {
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), 10
+        );
+
+        return userRepository.search(search, pageable);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Search search) {
+        userRepository.deleteUser(search);
+    }
+
+    @Override
+    @Transactional
+    public void restoreUser(Search search) {
+        userRepository.restoreUser(search);
     }
 }

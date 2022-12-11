@@ -1,6 +1,10 @@
 package com.travel.thai.user.repository;
 
+import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.user.domain.User;
+import com.travel.thai.user.domain.UserDto;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 public interface UserRepositoryCustom {
     User searchOne(String userId);
@@ -11,4 +15,9 @@ public interface UserRepositoryCustom {
 
     void modifyName(String userId, String name);
     void modifyEmail(String userId, String email);
+
+    PageImpl<UserDto> search(Search search, Pageable pageable);
+    void deleteUser(Search search);
+
+    void restoreUser(Search search);
 }

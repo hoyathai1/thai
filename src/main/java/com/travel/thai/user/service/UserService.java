@@ -12,6 +12,11 @@ public interface UserService {
     boolean isExistUserName(String name);
     void modifyName(String userId, String name);
     void modfiyPassword(String userId, String password);
+    void modfiyPasswordForAdmin(String userId, String password);
     void modifyEmail(String userId, String email);
+    void modifyEmailForAdmin(String userId, String email);
     Page<BoardDto> searchBoardById(Search search);
+    Page<UserDto> search(Search search);
+    void deleteUser(Search search);
+    void restoreUser(Search search);
 }

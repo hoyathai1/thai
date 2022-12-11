@@ -13,9 +13,11 @@ public class BoardDto {
     private String title;
     private String contents;
     private String contentsTxt;
+    private String username;
     private String author;
     private String password;
     private String category;
+    private String categoryName;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private int likes;
@@ -28,11 +30,20 @@ public class BoardDto {
     //private List<Comment> comments;
     private int commentCount;
 
+    private boolean isDel;
+
     @Builder
-    public BoardDto(Long id, String title, String author, String contents, LocalDateTime createDate, int view, int likes, boolean isUser, String userId, String ip, String type) {
+    public BoardDto(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
+
+    @Builder
+    public BoardDto(Long id, String title, String username, String author, String contents, LocalDateTime createDate, int view, int likes, boolean isUser, String userId, String ip, String type, String category) {
         this.id = id;
         this.title = title;
         this.contents = contents;
+        this.username = username;
         this.author = author;
         this.createDate = createDate;
         this.likes = likes;
@@ -41,12 +52,14 @@ public class BoardDto {
         this.userId = userId;
         this.ip = ip;
         this.type = type;
+        this.category = category;
     }
 
     @Builder
-    public BoardDto(Long id, String title, String author, LocalDateTime createDate, int view, int commentCount, int likes, boolean isUser, String ip) {
+    public BoardDto(Long id, String title, String username, String author, LocalDateTime createDate, int view, int commentCount, int likes, boolean isUser, String ip, String category, String categoryName, String type) {
         this.id = id;
         this.title = title;
+        this.username = username;
         this.author = author;
         this.createDate = createDate;
         this.view = view;
@@ -54,6 +67,10 @@ public class BoardDto {
         this.likes = likes;
         this.isUser = isUser;
         this.ip = ip;
+        this.category = category;
+        this.categoryName = categoryName;
+        this.type = type;
+
     }
 
     /**
@@ -79,6 +96,25 @@ public class BoardDto {
         this.commentCount = commentCount;
     }
 
+    @Builder
+    public BoardDto(Long id, String type, String title, String username, String author, String category, String categoryName, LocalDateTime createDate, int likes, boolean isUser, String ip, int view, int commentCount, boolean isDel) {
+        this.id = id;
+        this.type = type;
+        this.title = title;
+        this.username = username;
+        this.author = author;
+        this.category = category;
+        this.categoryName = categoryName;
+        this.createDate = createDate;
+        this.likes = likes;
+        this.isUser = isUser;
+        this.ip = ip;
+        this.view = view;
+        this.commentCount = commentCount;
+        this.isDel = isDel;
+    }
+
+
     public String getIp() {
         if (isUser) {
             return "";
@@ -89,3 +125,4 @@ public class BoardDto {
         }
     }
 }
+

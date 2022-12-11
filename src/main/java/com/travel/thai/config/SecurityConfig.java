@@ -1,8 +1,6 @@
 package com.travel.thai.config;
 
-import com.travel.thai.common.handler.CustomAuthFailureHandler;
 import com.travel.thai.user.service.UserDetailService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,14 +41,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
-
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/board/**").permitAll()
-            .antMatchers("/**").permitAll();
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/board/**").permitAll()
+                .antMatchers("/pc/**").permitAll()
+                .antMatchers("/**").permitAll();
 
         http.formLogin()
                 .loginPage("/login")

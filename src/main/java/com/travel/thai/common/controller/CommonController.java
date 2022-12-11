@@ -1,9 +1,12 @@
 package com.travel.thai.common.controller;
 
 import com.travel.thai.bbs.domain.*;
+import com.travel.thai.bbs.service.BoardCategoryService;
 import com.travel.thai.bbs.service.BoardNotiService;
+import com.travel.thai.bbs.service.BoardService;
 import com.travel.thai.bbs.service.BookMarkService;
 import com.travel.thai.common.domain.Notice;
+import com.travel.thai.common.domain.NoticeDto;
 import com.travel.thai.common.service.NoticeService;
 import com.travel.thai.common.util.LogUtil;
 import com.travel.thai.common.util.StringUtils;
@@ -40,6 +43,12 @@ public class CommonController {
 
     @Autowired
     private BookMarkService bookMarkService;
+
+    @Autowired
+    private BoardService boardService;
+
+    @Autowired
+    private BoardCategoryService boardCategoryService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String main(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -100,7 +109,7 @@ public class CommonController {
             return "/common/warning";
         }
 
-        List<Notice> list = noticeService.search();
+        List<NoticeDto> list = noticeService.search();
 
         user.setPassword(null);
         model.addAttribute("user", user);
@@ -128,6 +137,25 @@ public class CommonController {
         model.addAttribute("search", search);
 
         return "/common/myList";
+    }
+
+    @RequestMapping(value = "/menu/myList/detail", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> listAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        ResponseEntity<Map<String, Object>> entity;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+            BoardDto result = boardService.searchBoardContents(search);
+            map.put("contents", result.getContents());
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
     }
 
     @RequestMapping(value = "/menu/myNoti", method = RequestMethod.GET)
@@ -174,5 +202,42 @@ public class CommonController {
     public String checkAjax(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         return "/common/warning";
+    }
+
+    @RequestMapping(value = "/category/type", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> typeAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        ResponseEntity<Map<String, Object>> entity;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+            List<BoardType> result = boardCategoryService.getBoardTypeList(search.getCategory());
+            map.put("list", result);
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/category/list", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> categoryListAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        ResponseEntity<Map<String, Object>> entity;
+        boolean result = false;
+        try {
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", boardCategoryService.getBoardCategoryAllList());
+
+            entity = new ResponseEntity(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
     }
 }

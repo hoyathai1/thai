@@ -7,23 +7,27 @@ import com.travel.thai.common.util.RSAUtil;
 import com.travel.thai.common.util.StringUtils;
 import com.travel.thai.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -32,6 +36,9 @@ import java.util.Map;
 public class BoardController {
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private BoardInformService boardInformService;
 
     @Autowired
     private CommentService commentService;
@@ -45,6 +52,8 @@ public class BoardController {
     @Autowired
     private BookMarkService bookMarkService;
 
+    @Value("${board.img.temp.dir}")
+    private String TEMP_DIR;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(HttpServletRequest request, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user, Model model) {
@@ -77,6 +86,27 @@ public class BoardController {
         return entity;
     }
 
+    @RequestMapping(value = "/inform", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> informListAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.informListAjax][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+            List<BoardInformDto> list = boardInformService.search(search);
+
+            map.put("list", list);
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
     @RequestMapping(value = "/view", method = RequestMethod.GET)
     public String view(HttpServletRequest request, @ModelAttribute("search") Search search, Model model
                         , @AuthenticationPrincipal User user) {
@@ -98,7 +128,7 @@ public class BoardController {
             isBookMark = bookMarkService.isBookMark(bookMark);
             model.addAttribute("isBookMark", isBookMark);
         } else {
-            isLikes = likesService.isLikesByIp(search.getBoardNum(), request.getRemoteAddr());
+            isLikes = likesService.isLikesByIp(search.getBoardNum(), LogUtil.etRemoteAddr(request));
         }
         boardService.increseViewCount(search);
 
@@ -109,13 +139,25 @@ public class BoardController {
         return "board/view";
     }
 
+    @RequestMapping(value = "/inform", method = RequestMethod.GET)
+    public String viewInform(HttpServletRequest request, @ModelAttribute("search") Search search, Model model
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.viewInform][GET]" + LogUtil.setUserInfo(request, user));
+
+        BoardInformDto boardInform = boardInformService.searchOne(search);
+
+        model.addAttribute("board", boardInform);
+
+        return "board/inform";
+    }
+
     @RequestMapping(value = "/save/comment", method = RequestMethod.POST)
     public ResponseEntity<String> saveComment(HttpServletRequest request, @RequestBody CommentDto commentDto, @AuthenticationPrincipal User user)  {
         log.info("[BoardController.saveComment][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<String> entity = null;
 
         try {
-            commentDto.setIp(request.getRemoteAddr());
+            commentDto.setIp(LogUtil.etRemoteAddr(request));
             Comment result = commentService.saveComment(commentDto, user);
 
             entity = new ResponseEntity(result, HttpStatus.OK);
@@ -169,9 +211,16 @@ public class BoardController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(HttpServletRequest request, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user, Model model) {
-        log.info("[BoardController.deleteComment][GET]" + LogUtil.setUserInfo(request, user));
+        log.info("[BoardController.register][GET]" + LogUtil.setUserInfo(request, user));
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+
+        HttpSession session = request.getSession();
+        String[] fileList = (String[]) session.getAttribute("fileNameList");
+
+        if (fileList!= null && fileList.length > 0) {
+            session.removeAttribute("fileNameList");
+        }
 
         return "board/register";
     }
@@ -180,6 +229,7 @@ public class BoardController {
     public ResponseEntity<String> registerAjax(HttpServletRequest request, @RequestBody Board board, @AuthenticationPrincipal User user) {
         log.info("[BoardController.registerAjax][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<String> entity = null;
+        HttpSession session = request.getSession();
 
         try {
             if (user != null) {
@@ -190,10 +240,55 @@ public class BoardController {
             } else {
                 // 비로그인 글쓰기
                 board.setUser(false);
-                board.setIp(request.getRemoteAddr());
+                board.setIp(LogUtil.etRemoteAddr(request));
             }
 
             Board result = boardService.saveBoard(board);
+            String[] fileNameList = (String[]) session.getAttribute("fileNameList");
+
+            boardService.moveImage(fileNameList, board);
+
+            entity = new ResponseEntity(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        session.removeAttribute("fileNameList");
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> uploadAjax(HttpServletRequest request, @RequestParam(value = "uploadFile", required = false) MultipartFile[] uploadfile, @AuthenticationPrincipal User user) {
+        log.info("[BoardController.uploadAjax][POST]");
+        ResponseEntity<String> entity = null;
+        boolean result = false;
+
+        try {
+            List<String> fileNameList = new ArrayList<>();
+            String[] fileName = new String[uploadfile.length];
+            int index = 0;
+            for (MultipartFile file : uploadfile) {
+                String filename = file.getOriginalFilename();
+                String directory = TEMP_DIR;
+                String filepath = Paths.get(directory, filename).toString();
+
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+
+                stream.write(file.getBytes());
+                stream.close();
+
+                fileNameList.add(filename);
+                fileName[index] = filename;
+                index ++;
+            }
+
+            HttpSession session = request.getSession();
+            session.setAttribute("fileNameList", fileName);
+
             entity = new ResponseEntity(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,11 +306,18 @@ public class BoardController {
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
 
         try {
+            HttpSession session = request.getSession();
+            String[] fileList = (String[]) session.getAttribute("fileNameList");
+
+            if (fileList!= null && fileList.length > 0) {
+                session.removeAttribute("fileNameList");
+            }
+
             if (user != null) {
                 BoardDto board = boardService.searchOne(search);
 
                 if (user.getUserId().equals(board.getUserId())) {
-                    board.setTypeName(boardCategoryService.getBoardTypeName(board.getType()));
+                    board.setTypeName(boardCategoryService.getBoardTypeName(board.getType(),board.getCategory()));
                     model.addAttribute("board", board);
                     model.addAttribute("search", search);
                 } else {
@@ -234,7 +336,7 @@ public class BoardController {
                 }
 
                 BoardDto board = boardService.searchOne(search);
-                board.setTypeName(boardCategoryService.getBoardTypeName(board.getType()));
+                board.setTypeName(boardCategoryService.getBoardTypeName(board.getType(),board.getCategory()));
                 model.addAttribute("board", board);
                 model.addAttribute("search", search);
             }
@@ -250,15 +352,21 @@ public class BoardController {
             , @RequestBody Board board, @AuthenticationPrincipal User user) {
         log.info("[BoardController.modifyAjax][POST]" + LogUtil.setUserInfo(request, user));
         ResponseEntity<String> entity = null;
+        HttpSession session = request.getSession();
 
         try {
             boolean result = boardService.modifyBoard(board, user);
+
+            String[] fileNameList = (String[]) session.getAttribute("fileNameList");
+            boardService.moveImage(fileNameList, board);
 
             entity = new ResponseEntity(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+
+        session.removeAttribute("fileNameList");
 
         return entity;
     }
@@ -280,7 +388,7 @@ public class BoardController {
         try {
             Map<String, Object> map = new HashMap<>();
 
-            if ("modify".equals(search.getCategory())) {
+            if ("modify".equals(search.getType())) {
                 boolean result = boardService.isCheckPassword(search);
 
                 if (result) {
@@ -291,7 +399,7 @@ public class BoardController {
                 }
 
                 map.put("result", result);
-            } else if ("delete".equals(search.getCategory())) {
+            } else if ("delete".equals(search.getType())) {
                 boolean result = boardService.isCheckPassword(search);
                 BoardDto baordDto = boardService.searchOne(search);
                 if (result && baordDto.isUser()) {
@@ -392,7 +500,7 @@ public class BoardController {
                 likesDto.setUserId(user.getUserId());
                 result = likesService.likeThePost(likesDto);
             } else {
-                likesDto.setIp(request.getRemoteAddr());
+                likesDto.setIp(LogUtil.etRemoteAddr(request));
                 result = likesService.likeThePost(likesDto);
             }
 

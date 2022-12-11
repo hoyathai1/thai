@@ -1,6 +1,8 @@
 package com.travel.thai.bbs.service.impl;
 
 import com.travel.thai.bbs.domain.*;
+import com.travel.thai.user.domain.User;
+import org.springframework.data.domain.Page;
 import com.travel.thai.bbs.repository.BoardNotiRepository;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.bbs.repository.CommentRepository;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -58,7 +62,9 @@ public class CommentServiceImpl implements CommentService {
             comment.setBoard(board);
         }
 
-        comment.setContent(commentDto.getContent());
+        String content = commentDto.getContent();
+        content = content.replaceAll("\n", "</br>");
+        comment.setContent(content);
         comment.setUpper(commentDto.getBoardId());
         comment.setIp(commentDto.getIp());
 
@@ -145,5 +151,42 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return result;
+    }
+
+    @Override
+    public Page<CommentDto> searchForAdmin(Search search) {
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), 15
+        );
+
+        return commentRepository.searchForAdmin(search, pageable);
+    }
+
+    @Override
+    @Transactional
+    public void deleteComment(Search search) {
+        commentRepository.deleteComment(search);
+    }
+
+    @Override
+    @Transactional
+    public void restoreComment(Search search) {
+        commentRepository.restoreComment(search);
+    }
+
+    @Override
+    @Transactional
+    public void modifyContent(CommentDto dto) {
+        commentRepository.modifyContent(dto);
+    }
+
+
+    @Override
+    public CommentDto searchListForAdmin(Search search) {
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), 100
+        );
+
+        return commentRepository.searchListForAdmin(search, pageable);
     }
 }

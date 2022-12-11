@@ -31,9 +31,6 @@ public class Notice {
     private String author;
 
     @ColumnDefault(value = "false")
-    private boolean isUser;
-
-    @ColumnDefault(value = "false")
     private boolean isDel;
 
     private String title;

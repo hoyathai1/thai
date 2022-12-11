@@ -13,5 +13,11 @@ public interface BoardService {
     void increseViewCount(Search search);
     boolean isCheckPassword (Search search);
     void deleteBoard(Search search);
+    void restoreBoard(Search search);
     boolean modifyBoard(Board board, User user);
+    boolean modifyBoardForAdmin(Board board);
+    void moveImage(String[] fileNames, Board board);
+    BoardDto searchBoardContents(Search search);
+    BoardDto searchBoardDetailForAdmin(Search search);
+    Page<BoardDto> searchBoardForAdmin(Search search);
 }

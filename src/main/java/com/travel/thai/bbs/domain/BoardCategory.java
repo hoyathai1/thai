@@ -7,9 +7,8 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,4 +25,9 @@ public class BoardCategory {
 
     @ColumnDefault(value = "false")
     private boolean isUse;
+
+    private int orderBy;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "boardCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardType> boardTypes;
 }

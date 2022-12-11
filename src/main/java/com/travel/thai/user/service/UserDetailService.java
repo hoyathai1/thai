@@ -4,10 +4,15 @@ import com.travel.thai.user.domain.User;
 import com.travel.thai.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,11 @@ public class UserDetailService implements UserDetailsService {
         if(user == null) {
             throw new UsernameNotFoundException("No User found with id " + userId);
         }
+
+//        List<GrantedAuthority> authorities = new ArrayList<>();
+//        authorities.add(new SimpleGrantedAuthority(user.getUserAuth()));
+//
+//        user.setAuthorities(authorities);
 
         return user;
     }
