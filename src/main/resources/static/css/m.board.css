@@ -193,7 +193,7 @@
     width: 80%;
 }
 
-.view .view-header .bookmark-ico.off {
+.bookmark-ico.off {
     background: url("/img/bookmark-off.png") no-repeat;
     background-size: contain;
     background-color: transparent;
@@ -203,7 +203,7 @@
     right: 0;
 }
 
-.view .view-header .bookmark-ico.on {
+.bookmark-ico.on {
     background: url("/img/bookmark-on.png") no-repeat;
     background-size: contain;
     background-color: transparent;
@@ -724,7 +724,10 @@
     color: var(--gray)
 }
 
-
+.div-border {
+    border-top: 1px solid #bcbcbc;
+    margin-top: 20px;
+}
 
 
 

@@ -122,4 +122,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     public void restoreUser(Search search) {
         queryFactory.update(user).set(user.isDel, false).where(user.userId.eq(search.getUserId())).execute();
     }
+
+    @Override
+    public void modifyUserInfo(UserDto userDto) {
+        queryFactory.update(user).set(user.name, userDto.getName()).set(user.email, userDto.getEmail())
+                .where(user.userId.eq(userDto.getUserId())).execute();
+    }
 }

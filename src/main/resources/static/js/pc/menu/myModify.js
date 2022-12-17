@@ -14,43 +14,20 @@ const imageSelector = document.getElementById('img-selector');
 var isAjax = false;
 
 $(document).ready(function () {
-
-    if (best == 'Y') {
-        $("#best").addClass("on");
-    } else {
-        $("#" + type).addClass("on");
-    }
 });
 
-function btnRegister() {
+function btnModify() {
     if (isAjax == true) {
         return;
     }
 
+    var id = $("input[name=boardNum]").val();
     var title = $("input[name=title]").val();
-    var name = $("input[name=name]").val();
-    var password = $("input[name=password]").val();
     var contents = $("#editor").html();
-    var contentsTxt = "";
     var sType = $(".register-select").val();
 
     if (isEmpty(title) || lengthCheckUnder(title, 1)) {
         alert("제목을 입력해주세요.")
-        return;
-    }
-
-    if (isEmpty(name) || lengthCheckUnder(name, 1)) {
-        alert("닉네임을 입력해주세요.")
-        return;
-    }
-
-    if (isEmpty(password)) {
-        alert("비밀번호를 입력해주세요.")
-        return;
-    }
-
-    if (lengthCheckUnder(password, 4)) {
-        alert("비밀번호를 최소 4자리 이상 입력하셔야 합니다. 쉬운 비밀번호는 타인이 수정 또는 삭제하기 쉬우니, 어려운 비밀번호를 입력해 주세요.");
         return;
     }
 
@@ -72,93 +49,30 @@ function btnRegister() {
 
     $.ajax({
         type : 'post',
-        url : '/board/register',
+        url : '/pc/menu/modify',
         headers : {
             "Content-Type" : "application/json",
             "X-HTTP-Method-Override" : "POST"
         },
-        dataType : 'text',
         async: false,
+        dataType : 'text',
         data : JSON.stringify({
+            id: id,
             title: title,
-            author: name,
-            password: password,
             contents : contents,
             contentsTxt : contentsTxt,
-            category: category,
             type: sType
         }),
         success : function (data) {
-            location.href="/pc/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
-        },
-        error : function () {
-
+            goBack();
         },
         complete : function () {
             $(".div_load_image").css("display", "none");
+            isAjax = false;
         }
     });
 }
 
-function btnRegisterLogin() {
-    if (isAjax == true) {
-        return;
-    }
-
-    var title = $("input[name=title]").val();
-    var contents = $("#editor").html();
-    var sType = $(".register-select").val();
-    var contentsTxt = "";
-
-    if (isEmpty(title) || lengthCheckUnder(title, 1)) {
-        alert("제목을 입력해주세요.")
-        return;
-    }
-
-    if (isEmpty(contents) || lengthCheckUnder(title, 1)) {
-        alert("내을 입력해주세요.")
-        return;
-    }
-
-    if ($("#editor img").length > 10) {
-        alert("이미지는 최대 10개까지 등록 가능합니다.")
-        return;
-    }
-
-    contentsTxt = $("#editor").text();
-
-    isAjax = true;
-    imgToFile();
-    contents = $("#editor").html();
-
-    $.ajax({
-        type : 'post',
-        url : '/board/register',
-        headers : {
-            "Content-Type" : "application/json",
-            "X-HTTP-Method-Override" : "POST"
-        },
-        dataType : 'text',
-        async: false,
-        data : JSON.stringify({
-            title: title,
-            contents : contents,
-            contentsTxt : contentsTxt,
-            category: category,
-            type: sType,
-            best: best
-        }),
-        success : function (data) {
-            location.href="/pc/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
-        },
-        error : function () {
-
-        },
-        complete : function () {
-            $(".div_load_image").css("display", "none");
-        }
-    });
-}
 
 function focusEditor() {
     editor.focus({preventScroll: true});
@@ -274,42 +188,51 @@ function imgToFile() {
 
     $(".div_load_image").css("display", "block");
 
+    var modifyImgCount = 0;
     for (var i = 0; i < img.length; i++) {
-        sleep(10);
+        if ('uploaded' == $("#editor img")[i].className) {
+            var imgArr = $("#editor img")[i].src.split("/");
+            var imgName = imgArr[imgArr.length-1];
+            $("#editor img")[i].src = imgName;
+        } else {
+            sleep(10);
 
-        var bstr = atob(img[i].src.split(",")[1]);
-        var n = bstr.length;
-        var u8arr = new Uint8Array(n);
+            var bstr = atob(img[i].src.split(",")[1]);
+            var n = bstr.length;
+            var u8arr = new Uint8Array(n);
 
-        while(n--) {
-            u8arr[n] = bstr.charCodeAt(n);
+            while(n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            var fileName = getFileNameDate() + ".jpg"
+            var file = new File([u8arr], fileName, {type:"image/jpeg"});
+
+            formData.append("uploadFile", file);
+
+            $("#editor img")[i].src = fileName;
+            $("#editor img")[i].className="uploaded";
+            modifyImgCount += 1;
         }
-
-        var fileName = getFileNameDate() + ".jpg"
-        var file = new File([u8arr], fileName, {type:"image/jpeg"});
-
-        formData.append("uploadFile", file);
-
-        $("#editor img")[i].src = fileName;
     }
 
-    $("#editor img").addClass("uploaded");
+    if (modifyImgCount > 0) {
+        $.ajax({
+            type : 'post',
+            url : '/pc/board/upload',
+            async: false,
+            processData: false,
+            contentType: false,
+            dataType : 'text',
+            data : formData,
+            success : function () {
 
-    $.ajax({
-        type : 'post',
-        url : '/pc/board/upload',
-        async: false,
-        processData: false,
-        contentType: false,
-        dataType : 'text',
-        data : formData,
-        success : function () {
+            },
+            beforeSend : function () {
 
-        },
-        beforeSend : function () {
-
-        }
-    });
+            }
+        });
+    }
 }
 
 function getFileNameDate() {
@@ -327,17 +250,21 @@ function getFileNameDate() {
     return todayDate;
 }
 
-function goList() {
-    location.href="/pc/board/list?" + makeQueryUrl();
+function goBack() {
+    var boardNum = $("input[name=boardNum]").val();
+    location.href="/pc/menu/myView?boardNum=" + boardNum + "&" + makeQueryUrl();
 }
 
 function makeQueryUrl() {
     var pageNum = $("input[name=pageNum]").val();
-    var pageSize = $("input[name=pageSize]").val();
-    var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
+    var keyword = $("input[name=keyword]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    var category = $("input[name=category]").val();
+    var likes = $("input[name=likes]").val();
+    var comment = $("input[name=comment]").val();
+
+    return "pageNum=" + pageNum + "&category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content;
 }
 
 function goSignUp() {
@@ -358,21 +285,4 @@ function goCategory(pCategory) {
     location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
 }
 
-function goType(pType) {
-    var pageSize = $("input[name=pageSize]").val();
 
-    location.href="/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
-}
-
-function goBest() {
-    var pageNum = $("input[name=pageNum]").val();
-    var pageSize = $("input[name=pageSize]").val();
-
-    location.href="/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=all&content=";
-}
-
-function search() {
-    var content = $(".search-input").val();
-
-    location.href = "/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=all&content=" + content;
-}

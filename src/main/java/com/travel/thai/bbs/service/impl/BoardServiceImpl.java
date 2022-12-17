@@ -53,6 +53,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Page<BoardDto> searchBoardForDetail(Search search) {
+        search.setPageSize(10);
+
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), search.getPageSize()
+        );
+
+        return boardRepository.searchForDetail(search, pageable);
+    }
+
+    @Override
     public BoardDto searchOne(Search search) {
         BoardDto result = boardRepository.searchOne(search);
 
@@ -268,5 +279,18 @@ public class BoardServiceImpl implements BoardService {
         );
 
         return boardRepository.searchForAdmin(search, pageable);
+    }
+
+    @Override
+    public Page<BoardDto> searchByIdForPc(Search search) {
+        if (search.getPageSize() == 0) {
+            search.setPageSize(30);
+        }
+
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), search.getPageSize()
+        );
+
+        return boardRepository.searchByIdForPc(search, pageable);
     }
 }

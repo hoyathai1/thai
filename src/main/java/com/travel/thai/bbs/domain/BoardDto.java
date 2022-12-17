@@ -33,6 +33,11 @@ public class BoardDto {
     private boolean isDel;
 
     @Builder
+    public BoardDto(String contents) {
+        this.contents = contents;
+    }
+
+    @Builder
     public BoardDto(String title, String contents) {
         this.title = title;
         this.contents = contents;
@@ -114,6 +119,23 @@ public class BoardDto {
         this.isDel = isDel;
     }
 
+    /**
+     * Pc MyList
+     * Repo - searchByIdForPc
+     * @return
+     */
+    @Builder
+    public BoardDto(Long id, String type, String category, String title, String author, LocalDateTime createDate, int likes, int view, int commentCount) {
+        this.id = id;
+        this.type = type;
+        this.category = category;
+        this.title = title;
+        this.author = author;
+        this.createDate = createDate;
+        this.likes = likes;
+        this.view = view;
+        this.commentCount = commentCount;
+    }
 
     public String getIp() {
         if (isUser) {

@@ -63,23 +63,23 @@
 
                 <div class="email">
                     <h4>이메일 입력</h4>
-                    <input class="ipt email1" type="text" name="email-addr1">
+                    <input class="ipt email1" type="text" name="email-addr1" value="${email1}">
                     <span>@</span>
-                    <input class="ipt email2" type="text" name="email-addr2" readonly>
+                    <input class="ipt email2" type="text" name="email-addr2" readonly value="${email2}">
                     <select class="domain" id="select-domain" onchange="changeDomain()">
                         <option value="">
-                            이메일 입력
+                            이메일 선택
                         </option>
-                        <option value="naver.com">
+                        <option value="naver.com" <c:if test="${email2 eq 'naver.com'}">selected</c:if>>
                             naver.com
                         </option>
-                        <option value="gmai.com">
+                        <option value="gmai.com" <c:if test="${email2 eq 'gmai.com'}">selected</c:if>>
                             gmail.com
                         </option>
-                        <option value="content">
+                        <option value="kakao.com" <c:if test="${email2 eq 'kakao.com'}">selected</c:if>>
                             kakao.com
                         </option>
-                        <option value="daum.net">
+                        <option value="daum.net" <c:if test="${email2 eq 'daum.net'}">selected</c:if>>
                             daum.net
                         </option>
                     </select>

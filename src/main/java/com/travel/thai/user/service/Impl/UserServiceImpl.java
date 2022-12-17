@@ -157,4 +157,12 @@ public class UserServiceImpl implements UserService {
     public void restoreUser(Search search) {
         userRepository.restoreUser(search);
     }
+
+    @Override
+    @Transactional
+    public void modifyUserInfo(UserDto userDto) {
+        userRepository.modifyUserInfo(userDto);
+
+        refreshLoginAuthInfo();
+    }
 }

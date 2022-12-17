@@ -99,6 +99,9 @@ public class CommonController {
         user.setPassword(null);
         model.addAttribute("user", user);
 
+        model.addAttribute("email1", getEmail1(user.getEmail()));
+        model.addAttribute("email2", getEmail2(user.getEmail()));
+
         return "/common/account";
     }
 
@@ -239,5 +242,21 @@ public class CommonController {
         }
 
         return entity;
+    }
+
+    private String getEmail1(String email) {
+        if (StringUtils.isEmpty(email) || "@".equals(email)) {
+            return "";
+        }
+
+        return email.substring(0, email.indexOf("@"));
+    }
+
+    private String getEmail2(String email) {
+        if (StringUtils.isEmpty(email) || "@".equals(email)) {
+            return "";
+        }
+
+        return email.substring(email.indexOf("@")+1);
     }
 }

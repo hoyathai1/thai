@@ -1,6 +1,5 @@
 package com.travel.thai.bbs.repository;
 
-import com.travel.thai.bbs.domain.BoardCategory;
 import com.travel.thai.bbs.domain.BoardType;
 
 import java.util.List;

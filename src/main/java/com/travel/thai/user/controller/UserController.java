@@ -2,6 +2,7 @@ package com.travel.thai.user.controller;
 
 import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.common.service.EmailService;
+import com.travel.thai.common.util.StringUtils;
 import com.travel.thai.user.domain.User;
 import com.travel.thai.user.domain.UserDto;
 import com.travel.thai.user.service.UserDetailService;
@@ -225,6 +226,55 @@ public class UserController {
             entity = new ResponseEntity(true, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = {"/pc/user/modify"}, method = RequestMethod.POST)
+    public ResponseEntity<String> modifyUserInfo(HttpServletRequest request, HttpServletResponse response, Model model, @RequestBody UserDto userDto, @AuthenticationPrincipal User user) {
+        ResponseEntity<String> entity = null;
+        boolean result = false;
+
+        try {
+            if (user == null) {
+                entity = new ResponseEntity(false, HttpStatus.OK);
+                return entity;
+            }
+
+            if(user.getName().equals(userDto.getName())) {
+                userService.modifyEmail(user.getUserId(), userDto.getEmail());
+            } else {
+                userDto.setUserId(user.getUserId());
+                userService.modifyUserInfo(userDto);
+                entity = new ResponseEntity(true, HttpStatus.OK);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = {"/pc/checkUserName"}, method = RequestMethod.POST)
+    public ResponseEntity<String> pcCheckUserName(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDto userDto, @AuthenticationPrincipal User user) {
+        ResponseEntity<String> entity = null;
+
+        try {
+            if (StringUtils.isEmpty(userDto.getName())) {
+                return new ResponseEntity(true, HttpStatus.OK);
+            }
+
+            if (userDto.getName().equals(user.getName())) {
+                entity = new ResponseEntity(false, HttpStatus.OK);
+            } else {
+                boolean resutl = userService.isExistUserName(userDto.getName());
+                entity = new ResponseEntity(resutl, HttpStatus.OK);
+            }
+        } catch (Exception e) {
             entity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 

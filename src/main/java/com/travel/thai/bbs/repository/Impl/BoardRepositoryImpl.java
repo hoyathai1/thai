@@ -101,6 +101,67 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
+    public PageImpl<BoardDto> searchForDetail(Search search, Pageable pageable) {
+        BooleanBuilder whereBuilder = new BooleanBuilder();
+
+        // 검색어 있을때
+        if (StringUtils.isNotEmpty(search.getContent())) {
+            if (ALL.equals(search.getKeyword()) & StringUtils.isNotEmpty(search.getContent())) {
+                whereBuilder.and(board.title.contains(search.getContent()))
+                        .or(board.contentsTxt.contains(search.getContent()));
+            } else if (TITLE.equals(search.getKeyword())) {
+                whereBuilder.and(board.title.contains(search.getContent()));
+            } else if (CONTENT.equals(search.getKeyword())) {
+                whereBuilder.and(board.contentsTxt.contains(search.getContent()));
+            }
+        }
+
+        if (BEST.equals(search.getBest())) {
+            whereBuilder.and(board.likes.size().gt(BEST_SIZE));
+        } else {
+            if (!ALL.equals(search.getType())) {
+                whereBuilder.and(board.type.eq(search.getType()));
+            }
+        }
+
+        List<BoardDto> results = queryFactory
+                .select(Projections.constructor(BoardDto.class,
+                        board.id,
+                        board.title,
+                        user.name,
+                        board.author,
+                        board.createDate,
+                        board.view,
+                        comment.id.count().intValue(),
+                        board.likes.size(),
+                        board.isUser,
+                        board.ip,
+                        boardCategory.id,
+                        boardCategory.name,
+                        board.type
+                ))
+                .from(board)
+                .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
+                .leftJoin(user).on(board.userId.eq(user.userId))
+                .leftJoin(boardCategory).on(boardCategory.id.eq(board.category))
+                .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()).and(board.id.lt(search.getBoardNum())))
+                .groupBy(board.id)
+                .orderBy(board.createDate.desc())
+                .offset(pageable.getOffset())   // 페이지 번호
+                .limit(pageable.getPageSize())    // 페이지 사이즈
+                .fetch();
+
+        int count = queryFactory
+                .selectOne()
+                .from(board)
+                .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
+                .orderBy(board.createDate.desc())
+                .fetch().size();
+
+        return new PageImpl<>(results, pageable, count);
+    }
+
+    @Override
     public PageImpl<BoardDto> searchById(Search search, Pageable pageable) {
 
         List<BoardDto> results = queryFactory
@@ -128,6 +189,65 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .selectOne()
                 .from(board)
                 .where(board.isDel.isFalse().and(board.userId.eq(search.getUserId())))
+                .orderBy(board.createDate.desc())
+                .fetch().size();
+
+        return new PageImpl<>(results, pageable, count);
+    }
+
+    @Override
+    public PageImpl<BoardDto> searchByIdForPc(Search search, Pageable pageable) {
+        BooleanBuilder whereBuilder = new BooleanBuilder();
+
+        // 검색어 있을때
+        if (StringUtils.isNotEmpty(search.getContent())) {
+            if (ALL.equals(search.getKeyword()) & StringUtils.isNotEmpty(search.getContent())) {
+                whereBuilder.and(board.title.contains(search.getContent()))
+                        .or(board.contentsTxt.contains(search.getContent()));
+            } else if (TITLE.equals(search.getKeyword())) {
+                whereBuilder.and(board.title.contains(search.getContent()));
+            } else if (CONTENT.equals(search.getKeyword())) {
+                whereBuilder.and(board.contentsTxt.contains(search.getContent()));
+            }
+        }
+
+        if (StringUtils.isNotEmpty(search.getCategory())) {
+            whereBuilder.and(board.category.eq(search.getCategory()));
+        }
+
+        if (search.getLikes() != 0) {
+            whereBuilder.and(board.likes.size().gt(search.getLikes()));
+        }
+
+        if (search.getComment() != 0) {
+            whereBuilder.and(board.comments.size().gt(search.getComment()));
+        }
+
+        List<BoardDto> results = queryFactory
+                .select(Projections.constructor(BoardDto.class,
+                        board.id,
+                        board.type,
+                        board.category,
+                        board.title,
+                        board.author,
+                        board.createDate,
+                        board.likes.size(),
+                        board.view,
+                        comment.id.count().intValue()
+                ))
+                .from(board)
+                .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
+                .where(whereBuilder.and(board.isDel.isFalse()).and(board.userId.eq(search.getUserId())))
+                .groupBy(board.id)
+                .orderBy(board.createDate.desc())
+                .offset(pageable.getOffset())   // 페이지 번호
+                .limit(pageable.getPageSize())    // 페이지 사이즈
+                .fetch();
+
+        int count = queryFactory
+                .selectOne()
+                .from(board)
+                .where(whereBuilder.and(board.isDel.isFalse()).and(board.userId.eq(search.getUserId())))
                 .orderBy(board.createDate.desc())
                 .fetch().size();
 

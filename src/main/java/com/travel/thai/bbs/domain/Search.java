@@ -26,4 +26,11 @@ public class Search {
     private String best;
 
     private String password;
+
+    private int index;
+
+    private int likes;
+    private int comment;
+
+
 }

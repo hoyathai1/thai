@@ -232,6 +232,8 @@ function imgToFile() {
             var imgName = imgArr[imgArr.length-1];
             $("#editor img")[i].src = imgName;
         } else {
+            sleep(10);
+
             var bstr = atob(img[i].src.split(",")[1]);
             var n = bstr.length;
             var u8arr = new Uint8Array(n);

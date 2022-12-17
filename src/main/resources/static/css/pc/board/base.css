@@ -44,8 +44,22 @@
     width: 70%;
     margin-bottom: 0px;
     margin-top: 50px;
+
+    display: flex;
+    justify-content: center;
 }
 
 .modal .modal-content .modal-btn-area button {
-    width: 45%
+    width: 45%;
+
+    border: 1px var(--gray) solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--gray);
+    height: 32px;
+}
+
+.modal .modal-content .modal-btn-area button.on {
+    background-color: var(--gray);
+    color: white;
 }

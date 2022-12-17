@@ -11,6 +11,8 @@ $(document).ready(function () {
     $(".createDate").html(getBoardTime($(".createDate").html()));
 
     getCommentList(currentCommentPage);
+
+    getList(0);
 });
 
 function moveScrollToComment() {
@@ -195,12 +197,12 @@ function registerComment () {
     var commentContent = $("textarea[name=commentContent]").val();
 
     if (isEmpty(nickname) || lengthCheckUnder(nickname, 1)) {
-        alert("닉네임을 입력해주세요.")
+        alert("닉네임을 입력해주세요.");
         return;
     }
 
     if (isEmpty(commentPassword)) {
-        alert("비밀번호를 입력해주세요.")
+        alert("비밀번호를 입력해주세요.");
         return;
     }
 
@@ -210,7 +212,7 @@ function registerComment () {
     }
 
     if (isEmpty(commentContent) || lengthCheckUnder(commentContent, 1)) {
-        alert("내을 입력해주세요.")
+        alert("내을 입력해주세요.");
         return;
     }
 
@@ -730,9 +732,13 @@ function setBookMark() {
                 if ($(".bookmark-ico").hasClass("off")) {
                     $(".bookmark-ico").removeClass("off");
                     $(".bookmark-ico").addClass("on");
+
+                    openModal('해당 게시글을 <br>즐겨찾기에 저장했습니다.', 'type3', null);
                 } else {
                     $(".bookmark-ico").removeClass("on");
                     $(".bookmark-ico").addClass("off");
+
+                    openModal("해당 게시글을 <br>즐겨찾기에서 삭제했습니다.", "type3", null);
                 }
             }
         },
@@ -779,4 +785,87 @@ function getReplyTime(timeValue) {
 
 
     return month + '.' + date + " " + hours + ':' + minutes;
+}
+
+function getList(page) {
+    var content = $("input[name=content]").val();
+    var keyword = $("input[name=keyword]").val();
+    var boardNum = $("input[name=boardNum]").val();
+
+    $.ajax({
+        type : 'post',
+        url : '/board/detailList',
+        headers : {
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "POST"
+        },
+        dataType : 'json',
+        data : JSON.stringify({
+            best : best,
+            type : bType,
+            category : category,
+            keyword: keyword,
+            content: content,
+            pageNum : page,
+            boardNum : boardNum
+        }),
+        success : function (result) {
+            setListHtmlForBoard(result);
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+        }
+    });
+}
+
+function setListHtmlForBoard(data) {
+    var listHtml = "";
+
+    $(data.list.content).each(function () {
+        listHtml += "<div class='board' data-id='" + this.id + "' onclick='goView(" + this.id + ")'>";
+        listHtml += "   <div class='content'>";
+        listHtml += "       <div class='title'>" + this.title + "</div>";
+        listHtml += "       <div class='info'>";
+
+        if (this.user) {
+            listHtml += "           <div><b>" + this.username + "</b></div>";
+        } else {
+            listHtml += "           <div>" + this.author + "(" + this.ip + ")</div>";
+        }
+
+        listHtml += "           <div>" + getBoardTime(this.createDate) + "</div>";
+        listHtml += "           <div class='view-count'>" + this.view + "</div>";
+        listHtml += "           <div class='likes-count'>" + this.likes + "</div>";
+        listHtml += "       </div>";
+        listHtml += "   </div>";
+        listHtml += "   <div class='reply'>" + this.commentCount + "</div>";
+        listHtml += "</div>";
+
+    });
+
+    $(".board-list").append(listHtml);
+
+    //  더보기 버튼
+    if (data.list.last != true) {
+        $(".more-btn").remove();
+
+        var page = Number(data.list.pageable.pageNumber) + 1;
+        var pageSize = Number(15);
+
+        var moreBtnHtml = "";
+        moreBtnHtml += "<div class='more-btn' onclick='getList(" + page + ")'>";
+        moreBtnHtml += "<div class='btn_img'></div>";
+        moreBtnHtml += "</div>";
+
+        $(".board-list").append(moreBtnHtml);
+    } else {
+        $(".more-btn").remove();
+    }
+}
+
+function goView(id) {
+    location.href = "/board/view?boardNum=" + id + "&" + makeQueryUrl();
 }

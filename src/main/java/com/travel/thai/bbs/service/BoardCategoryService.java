@@ -123,4 +123,5 @@ public class BoardCategoryService {
         boardType.setUse(false);
         bctRepo.save(boardType);
     }
+
 }

@@ -19,4 +19,5 @@ public interface UserService {
     Page<UserDto> search(Search search);
     void deleteUser(Search search);
     void restoreUser(Search search);
+    void modifyUserInfo(UserDto search);
 }

@@ -196,40 +196,51 @@ function imgToFile() {
 
     $(".div_load_image").css("display", "block");
 
+    var modifyImgCount = 0;
     for (var i = 0; i < img.length; i++) {
-        var bstr = atob(img[i].src.split(",")[1]);
-        var n = bstr.length;
-        var u8arr = new Uint8Array(n);
+        if ('uploaded' == $("#editor img")[i].className) {
+            var imgArr = $("#editor img")[i].src.split("/");
+            var imgName = imgArr[imgArr.length-1];
+            $("#editor img")[i].src = imgName;
+        } else {
+            sleep(10);
 
-        while(n--) {
-            u8arr[n] = bstr.charCodeAt(n);
+            var bstr = atob(img[i].src.split(",")[1]);
+            var n = bstr.length;
+            var u8arr = new Uint8Array(n);
+
+            while(n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            var fileName = getFileNameDate() + ".jpg"
+            var file = new File([u8arr], fileName, {type:"image/jpeg"});
+
+            formData.append("uploadFile", file);
+
+            $("#editor img")[i].src = fileName;
+            $("#editor img")[i].className="uploaded";
+            modifyImgCount += 1;
         }
-
-        var fileName = getFileNameDate() + ".jpg"
-        var file = new File([u8arr], fileName, {type:"image/jpeg"});
-
-        formData.append("uploadFile", file);
-
-        $("#editor img")[i].src = fileName;
     }
 
-    $("#editor img").addClass("uploaded");
+    if (modifyImgCount > 0) {
+        $.ajax({
+            type : 'post',
+            url : '/pc/board/upload',
+            async: false,
+            processData: false,
+            contentType: false,
+            dataType : 'text',
+            data : formData,
+            success : function () {
 
-    $.ajax({
-        type : 'post',
-        url : '/board/upload',
-        async: false,
-        processData: false,
-        contentType: false,
-        dataType : 'text',
-        data : formData,
-        success : function () {
+            },
+            beforeSend : function () {
 
-        },
-        beforeSend : function () {
-
-        }
-    });
+            }
+        });
+    }
 }
 
 function getFileNameDate() {

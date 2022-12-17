@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 
 public interface BoardService {
     Page<BoardDto> searchBoard(Search search);
+    Page<BoardDto> searchBoardForDetail(Search search);
     BoardDto searchOne(Search search);
     Board saveBoard(Board board);
     void increseViewCount(Search search);
@@ -20,4 +21,5 @@ public interface BoardService {
     BoardDto searchBoardContents(Search search);
     BoardDto searchBoardDetailForAdmin(Search search);
     Page<BoardDto> searchBoardForAdmin(Search search);
+    Page<BoardDto> searchByIdForPc(Search search);
 }

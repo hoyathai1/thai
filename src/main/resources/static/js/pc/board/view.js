@@ -17,6 +17,9 @@ $(document).ready(function () {
     $(".createDate").html(getBoardTime($(".createDate").html()));
 
     getCommentList(currentCommentPage);
+
+    var pageNum = $("input[name=pageNum]").val();
+    getList(pageNum);
 });
 
 function makeQueryUrl() {
@@ -351,8 +354,7 @@ function modifyBtnByOwner() {
             dataType : 'json',
             async: false,
             data : JSON.stringify({
-                boardNum : boardNum,
-                type: "delete"
+                boardNum : boardNum
             }),
             success : function (data) {
                 if (data.result) {
@@ -408,7 +410,7 @@ function setBookMark() {
                     $(".bookmark-ico").removeClass("on");
                     $(".bookmark-ico").addClass("off");
 
-                    openModal("해당 게시글을 즐겨찾기에 삭제했습니다.", "type1", null);
+                    openModal("해당 게시글을 즐겨찾기에서 삭제했습니다.", "type1", null);
                 }
             }
         },
@@ -919,3 +921,200 @@ function getReplyTime(timeValue) {
     return month + '.' + date + " " + hours + ':' + minutes;
 }
 
+function getList() {
+    var content = $("input[name=content]").val();
+    var keyword = $("input[name=keyword]").val();
+    var pageSize = $("input[name=pageSize]").val();
+    var pageNum = $("input[name=pageNum]").val();
+
+    var index = $("input[name=pageIndex]").val();
+    var total = Number(pageNum) * Number(pageSize) + Number(index);
+
+    var pPage = parseInt(total/20);
+    var board_index = total%20;
+
+    $.ajax({
+        type : 'post',
+        url : '/pc/board/list',
+        headers : {
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "POST"
+        },
+        dataType : 'json',
+        data : JSON.stringify({
+            best : best,
+            type : type,
+            category : category,
+            keyword: keyword,
+            content: content,
+            pageNum : pPage,
+            pageSize : 20
+        }),
+        success : function (result) {
+            setListHtmlIndex(result, board_index);
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+        }
+    });
+}
+
+function setListHtmlIndex(data, index) {
+    var listHtml = "";
+
+    var loopCnt = 0;
+    $(data.list.content).each(function () {
+        if (loopCnt == index) {
+            listHtml += "<tr class='on'>";
+        } else {
+            listHtml += "<tr>";
+        }
+
+        listHtml += "   <td class='type'>" + this.typeName + "</td>";
+        listHtml += "   <td class='title' onclick='goView(" + this.id + "," + loopCnt + ")'>";
+        listHtml += "       " + this.title + "<div class='comment-cnt'>" + this.commentCount + "</div>"
+        listHtml += "   </td>";
+
+        if (this.user) {
+            listHtml += "   <td class='author'>" + this.username + "</td>";
+        } else {
+            listHtml += "   <td class='author'>" + this.author + "(" + this.ip + ")</td>";
+        }
+
+        listHtml += "   <td class='boardDate'>" + getBoardTime(this.createDate) + "</td>";
+        listHtml += "   <td class='board-view'>" + this.view + "</td>";
+        listHtml += "   <td class='likes'>" + this.likes + "</td>";
+
+        listHtml += "</tr>";
+
+        loopCnt++;
+    });
+
+    $(".board-list").html(listHtml);
+
+    setPagingBtn(data);
+}
+
+function setListHtmlPage(data) {
+    var listHtml = "";
+
+    var loopCnt = 0;
+    $(data.list.content).each(function () {
+        listHtml += "<tr>";
+        listHtml += "   <td class='type'>" + this.typeName + "</td>";
+        listHtml += "   <td class='title' onclick='goView(" + this.id + "," + loopCnt + ")'>";
+        listHtml += "       " + this.title + "<div class='comment-cnt'>" + this.commentCount + "</div>"
+        listHtml += "   </td>";
+
+        if (this.user) {
+            listHtml += "   <td class='author'>" + this.username + "</td>";
+        } else {
+            listHtml += "   <td class='author'>" + this.author + "(" + this.ip + ")</td>";
+        }
+
+        listHtml += "   <td class='boardDate'>" + getBoardTime(this.createDate) + "</td>";
+        listHtml += "   <td class='board-view'>" + this.view + "</td>";
+        listHtml += "   <td class='likes'>" + this.likes + "</td>";
+
+        listHtml += "</tr>";
+
+        loopCnt++;
+    });
+
+    $(".board-list").html(listHtml);
+
+    setPagingBtn(data);
+}
+
+function setPagingBtn(data) {
+    var pageHtml = "";
+    pageHtml += "<ul>";
+
+    // prev
+    if (data.pageDto.startPage == 0) {
+        pageHtml += "<li class='page-prev' onclick='movePage(" + data.pageDto.startPage + ")'>&laquo;</li>"
+    } else {
+        pageHtml += "<li class='page-prev' onclick='movePage(" + Number(data.pageDto.startPage) - 1 + ")'>&laquo;</li>"
+    }
+
+    // page
+    for(var i = data.pageDto.startPage ; i < data.pageDto.endPage+1 ; i++) {
+        if (data.pageDto.curPage == i) {
+            pageHtml += "<li class='page active'>" + (i+1) + "</li>";
+            $("input[name=subPageNum]").val(i);
+        } else {
+            pageHtml += "<li class='page' onclick='movePage(" + i + ")'>"+ (i+1) + "</li>";
+        }
+    }
+
+    // next
+    if (data.pageDto.endPage == 0) {
+        pageHtml += "<li class='page-next' onclick='movePage(" + data.pageDto.endPage + ")'>&raquo;</li>";
+    } else {
+        pageHtml += "<li class='page-next' onclick='movePage(" + Number(data.pageDto.endPage) + ")'>&raquo;</li>";
+    }
+
+    pageHtml += "</ul>";
+
+    $(".paging").html(pageHtml);
+}
+
+function movePage(page) {
+    var content = $("input[name=content]").val();
+    var keyword = $("input[name=keyword]").val();
+
+    $.ajax({
+        type : 'post',
+        url : '/pc/board/list',
+        headers : {
+            "Content-Type" : "application/json",
+            "X-HTTP-Method-Override" : "POST"
+        },
+        dataType : 'json',
+        data : JSON.stringify({
+            best : best,
+            type : type,
+            category : category,
+            keyword: keyword,
+            content: content,
+            pageNum : page,
+            pageSize : 20
+        }),
+        success : function (result) {
+            setListHtmlPage(result);
+        },
+        beforeSend : function () {
+            $(".div_load_image").css("display", "block");
+        },
+        complete : function () {
+            $(".div_load_image").css("display", "none");
+        }
+    });
+}
+
+function goView(id, pindex) {
+    var pageSize = $("input[name=pageSize]").val();
+    var subPageNum = $("input[name=subPageNum]").val();
+
+    // var index = $("input[name=pageIndex]").val();
+    var total = (Number(subPageNum)) * 20 + Number(pindex);
+
+    // 페이징 세팅 (목록갈떄 사용)
+    var listPage = 0;
+    var index = 0;
+    if (total >= pageSize) {
+        listPage = total / pageSize;
+        index = total % pageSize;
+    } else {
+        listPage = 0;
+        index = total;
+    }
+
+    $("input[name=pageNum]").val(parseInt(listPage));
+
+
+    location.href = "/pc/board/view?boardNum=" + id + "&index=" + index + "&" + makeQueryUrl();
+}

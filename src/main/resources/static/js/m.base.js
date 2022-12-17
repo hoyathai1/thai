@@ -137,6 +137,17 @@ function openModal(msg, type, callback) {
             "</div>";
 
         $(document).on("click", "#modal-btn", callback);
+    } else if (type == 'type3') {
+        modalHtml = "<div class='modal'>" +
+            "    <div class='modal-display'>" +
+            "        <div class='modal-content'>" +
+            "            <b>" + msg + "</b>" +
+            "            <div class='modal-btn-area btn-area'>" +
+            "                <button class='btn two' onclick='modalClose()'>확인</button>" +
+            "            </div>" +
+            "        </div>" +
+            "    </div>" +
+            "</div>";
     }
 
     $(".container").append(modalHtml);
@@ -159,4 +170,9 @@ function setModal() {
             $(".modal").css("display","none");
         }
     });
+}
+
+function sleep (delay) {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
 }

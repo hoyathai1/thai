@@ -86,6 +86,28 @@ public class BoardController {
         return entity;
     }
 
+    @RequestMapping(value = "/detailList", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> detailListAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.detailListAjax][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+            Page<BoardDto> list = boardService.searchBoardForDetail(search);
+            map.put("list", list);
+            map.put("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+            map.put("search", search);
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
     @RequestMapping(value = "/inform", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> informListAjax(HttpServletRequest request, @RequestBody Search search
             , @AuthenticationPrincipal User user) {

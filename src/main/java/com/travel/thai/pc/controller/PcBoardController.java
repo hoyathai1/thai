@@ -93,6 +93,11 @@ public class PcBoardController {
         try {
             Map<String, Object> map = new HashMap<>();
             Page<BoardDto> list = boardService.searchBoard(search);
+
+            list.stream().forEach(x->{
+                x.setTypeName(categoryService.getBoardTypeName(x.getType(), x.getCategory()));
+            });
+
             map.put("list", list);
             map.put("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
             map.put("search", search);
@@ -166,12 +171,15 @@ public class PcBoardController {
     public String viewInform(HttpServletRequest request, @ModelAttribute("search") Search search, Model model
             , @AuthenticationPrincipal User user) {
         log.info("[PcBoardController.viewInform][GET]" + LogUtil.setUserInfo(request, user));
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
 
         BoardInformDto boardInform = boardInformService.searchOne(search);
 
         model.addAttribute("board", boardInform);
 
-        return "board/inform";
+        return "pc/board/inform";
     }
 
     @RequestMapping(value = "/save/comment", method = RequestMethod.POST)

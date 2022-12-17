@@ -74,8 +74,8 @@ function goLogout() {
     location.href="/logout";
 }
 
-function goView(id) {
-    location.href = "/pc/board/view?boardNum=" + id + "&" + makeQueryUrl();
+function goView(id, count) {
+    location.href = "/pc/board/view?boardNum=" + id + "&index=" + count + "&" + makeQueryUrl();
 }
 
 function goinform(id) {
@@ -84,4 +84,12 @@ function goinform(id) {
 
 function goRegister() {
     location.href = "/pc/board/register?" + makeQueryUrl();
+}
+
+function goMyAccount() {
+    location.href = "/pc/menu/account?" + makeQueryUrl();
+}
+
+function goMyList() {
+    location.href = "/pc/menu/myList";
 }

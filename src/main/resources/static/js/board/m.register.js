@@ -309,6 +309,8 @@ function imgToFile() {
     $(".div_load_image").css("display", "block");
 
     for (var i = 0; i < img.length; i++) {
+        sleep(10);
+
         var bstr = atob(img[i].src.split(",")[1]);
         var n = bstr.length;
         var u8arr = new Uint8Array(n);

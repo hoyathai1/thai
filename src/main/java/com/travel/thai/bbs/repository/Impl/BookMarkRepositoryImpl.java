@@ -53,4 +53,5 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom {
     }
 
 
+
 }

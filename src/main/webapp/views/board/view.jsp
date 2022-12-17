@@ -11,10 +11,10 @@
 <div class="container">
     <div class="view">
         <div class="view-header">
-            <c:if test="${not empty principal}">
-                <c:if test="${isBookMark eq true}"><div class="bookmark-ico on" onclick="setBookMark()"></div></c:if>
-                <c:if test="${isBookMark eq false}"><div class="bookmark-ico off" onclick="setBookMark()"></div></c:if>
-            </c:if>
+            <%--<c:if test="${not empty principal}">--%>
+                <%--<c:if test="${isBookMark eq true}"><div class="bookmark-ico on" onclick="setBookMark()"></div></c:if>--%>
+                <%--<c:if test="${isBookMark eq false}"><div class="bookmark-ico off" onclick="setBookMark()"></div></c:if>--%>
+            <%--</c:if>--%>
             <div class="title">
                 ${board.title}
             </div>
@@ -38,6 +38,11 @@
                 <div class="view-count">${board.view}</div>
                 <div class="view-recom"><c:out value="${likesCnt}" /></div>
                 <div class="view-replay-cnt">0</div>
+
+                <c:if test="${not empty principal}">
+                    <c:if test="${isBookMark eq true}"><div class="bookmark-ico on" onclick="setBookMark()"></div></c:if>
+                    <c:if test="${isBookMark eq false}"><div class="bookmark-ico off" onclick="setBookMark()"></div></c:if>
+                </c:if>
             </div>
             <div class="board-content">
                 ${board.contents}
@@ -114,6 +119,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="div-border"></div>
+    <div class="board-list">
     </div>
 </div>
 

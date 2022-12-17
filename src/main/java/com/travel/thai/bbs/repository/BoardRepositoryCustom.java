@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface BoardRepositoryCustom {
     PageImpl<BoardDto> search(Search search, Pageable pageable);
+    PageImpl<BoardDto> searchForDetail(Search search, Pageable pageable);
     BoardDto searchOne(Search search);
     void increseViewCount(Search search);
     boolean isExistBoard(long boardNum);
@@ -17,6 +18,7 @@ public interface BoardRepositoryCustom {
     String getPassword(long boardNum);
     void modifyBoard(Board board);
     PageImpl<BoardDto> searchById(Search search, Pageable pageable);
+    PageImpl<BoardDto> searchByIdForPc(Search search, Pageable pageable);
     BoardDto searchBoardContent(Search search);
     BoardDto searchBoardDetailForAdmin(Search search);
     PageImpl<BoardDto> searchForAdmin(Search search, Pageable pageable);

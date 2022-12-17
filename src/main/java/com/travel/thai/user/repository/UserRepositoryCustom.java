@@ -20,4 +20,5 @@ public interface UserRepositoryCustom {
     void deleteUser(Search search);
 
     void restoreUser(Search search);
+    void modifyUserInfo(UserDto userDto);
 }

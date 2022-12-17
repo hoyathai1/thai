@@ -78,4 +78,5 @@ public class BoardCategoryTypeRepositoryImpl implements BoardCategoryTypeReposit
 
         return result;
     }
+
 }

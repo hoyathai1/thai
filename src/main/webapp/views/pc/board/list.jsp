@@ -23,14 +23,14 @@
         <div class="menu">
             <nav>
                 <ul>
-                    <li>프로필</li>
-                    <li>내가쓴글</li>
-                    <li>저장글</li>
                     <c:if test="${empty principal}">
                         <li onclick="goSignUp()">회원가입</li>
                         <li onclick="goLogin()">로그인</li>
                     </c:if>
                     <c:if test="${not empty principal}">
+                        <li onclick="goMyAccount()">프로필</li>
+                        <li onclick="goMyList()">내가쓴글</li>
+                        <li>저장글</li>
                         <li onclick="goLogout()">로그아웃</li>
                     </c:if>
                 </ul>
@@ -94,12 +94,12 @@
                     </tr>
                 </c:forEach>
 
-                <c:forEach items="${list.content}" var="board">
+                <c:forEach items="${list.content}" var="board" varStatus="status">
                     <fmt:parseDate value="${board.createDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                     <fmt:formatDate pattern="yyyy.MM.dd" value="${ parsedDateTime }" var="boardDate"/>
                     <tr>
                         <td class="type">${board.typeName}</td>
-                        <td class="title" onclick="goView('${board.id}')">${board.title} <div class="comment-cnt">${board.commentCount}</div></td>
+                        <td class="title" onclick="goView('${board.id}', '${status.index}')">${board.title} <div class="comment-cnt">${board.commentCount}</div></td>
 
                         <c:if test="${board.user eq true}">
                             <td class="author">${board.username}</td>
@@ -127,9 +127,9 @@
                     <option value="content" <c:if test ="${search.keyword eq 'content'}">selected="selected"</c:if>>
                         내용
                     </option>
-                    <input class="search-input" placeholder="검색어를 입력하세요." id="bottomSearch" value="${search.content}">
-                    <button class="search-btn" onclick="searchForKeyword()">검색</button>
                 </select>
+                <input class="search-input" placeholder="검색어를 입력하세요." id="bottomSearch" value="${search.content}">
+                <button class="search-btn" onclick="searchForKeyword()">검색</button>
             </div>
             <div class="btn-area">
                 <button onclick="goRegister()">글쓰기</button>
