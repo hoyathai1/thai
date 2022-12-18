@@ -189,4 +189,14 @@ public class CommentServiceImpl implements CommentService {
 
         return commentRepository.searchListForAdmin(search, pageable);
     }
+
+    @Override
+    public Page<CommentDto> searchListForPc(Search search) {
+
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), 50
+        );
+
+        return commentRepository.searchListForPc(search, pageable);
+    }
 }

@@ -141,7 +141,7 @@ public class AdminCategoryController {
 
     @RequestMapping(value = {"/type"}, method = RequestMethod.GET)
     public String type(HttpServletRequest request, HttpServletResponse response, Model model, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user) {
-        List<BoardType> list = boardCategoryService.getBoardTypeList(search.getCategory());
+        List<BoardType> list = boardCategoryService.getBoardTypeListForAdmin(search.getCategory());
 
         model.addAttribute("list", list);
 
@@ -246,4 +246,37 @@ public class AdminCategoryController {
         return entity;
     }
 
+    @RequestMapping(value = "/category/init", method = RequestMethod.POST)
+    public ResponseEntity<String> categoryInit(HttpServletRequest request, @RequestBody BoardType boardType
+            , @AuthenticationPrincipal User user) {
+        ResponseEntity<String> entity;
+        boolean result = false;
+        try {
+            boardCategoryService.categoryCacheInit();
+
+            entity = new ResponseEntity(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/type/init", method = RequestMethod.POST)
+    public ResponseEntity<String> typeInit(HttpServletRequest request, @RequestBody BoardType boardType
+            , @AuthenticationPrincipal User user) {
+        ResponseEntity<String> entity;
+        boolean result = false;
+        try {
+            boardCategoryService.typeCacheInit();
+
+            entity = new ResponseEntity(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
 }

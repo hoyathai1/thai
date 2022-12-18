@@ -46,4 +46,13 @@ public class BookMarkServiceImpl implements BookMarkService {
 
         return bookMarkRepository.searchBookmark(search, pageable);
     }
+
+    @Override
+    public Page<BookMarkDto> searchBoardForPc(Search search) {
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), 30
+        );
+
+        return bookMarkRepository.searchBookmarkForPc(search, pageable);
+    }
 }

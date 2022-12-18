@@ -279,10 +279,20 @@ function goLogout() {
     location.href="/logout";
 }
 
-function goCategory(pCategory) {
-    var pageSize = $("input[name=pageSize]").val();
+function goMyAccount() {
+    location.href = "/pc/menu/account";
+}
 
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
+function goMyList() {
+    location.href = "/pc/menu/myList?pageNum=0";
+}
+
+function goBookmark() {
+    location.href = "/pc/menu/myBookmark?pageNum=0";
+}
+
+function goMyComment() {
+    location.href = "/pc/menu/myComment?pageNum=0";
 }
 
 

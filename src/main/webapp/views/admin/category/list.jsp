@@ -107,6 +107,12 @@
                         <button type="button" class="btn btn btn-info float-right" onclick="goCategory()">
                             카테고리
                         </button>
+                        <button type="button" class="btn btn btn-info float-right" onclick="categorySessionInit()" style="margin-right: 5px">
+                            카테고리 세션 초기화
+                        </button>
+                        <button type="button" class="btn btn btn-info float-right" onclick="typeSessionInit()" style="margin-right: 5px;">
+                            타입 세션 초기화
+                        </button>
                     </div>
                 </div>
             </div>

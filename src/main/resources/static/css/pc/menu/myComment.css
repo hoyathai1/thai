@@ -3,6 +3,7 @@
     --gray: #646464;
     --light_gray: #e2e2e2;
     --blue: #2828CD;
+    --dark_blue: #5aaccd;
     --border: #bcbcbc;
 }
 
@@ -163,7 +164,6 @@ body {
     margin-left: 5px;
 }
 
-
 .filter {
     margin-top: 5px;
     border: 1px solid #e2e1d5;
@@ -174,21 +174,8 @@ body {
     justify-content: center;
 }
 
-.filter .category-filter {
-    margin: 10px 0px 10px 20px;
-}
-
-.filter .category-filter label {
-    font-size: 12px;
-}
-
-.filter .category-filter select {
-    border: 1px solid var(--border);
-    font-size: 12px;
-}
-
 .filter .search-filter {
-    margin: 0px 0px 10px 20px;
+    margin: 10px 0px 10px 20px;
 }
 
 .filter .search-filter label {
@@ -201,7 +188,6 @@ body {
     font-size: 12px;
     vertical-align: middle;
 }
-
 
 .filter .search-area {
     margin: 0px 0px 10px 20px;
@@ -223,95 +209,64 @@ body {
     outline: none;
 }
 
-table.list {
-    margin-top: 5px;
-    table-layout: fixed;
-    border-top: 1px solid var(--border);
+div.myComment {
+    border-top: 2px solid var(--gray);
+    border-bottom: 2px solid var(--gray);
+    padding: 5px 0px 5px 0px;
+}
+
+div.myComment .comment {
+    padding: 10px 0px 10px 0px;
     border-bottom: 1px solid var(--border);
-    border-collapse: collapse;
-    width: 100%;
 }
 
-table thead tr th {
-    font-size: 12px;
-    text-align: center;
-    padding-top: 5px;
-    padding-bottom: 5px;
+div.myComment .comment:first-child {
+    /*border-top: 1px solid var(--border);*/
 }
 
-table thead tr th.type {
-    width: 10%;
-}
-table thead tr th.title {
-    width: 50%;
-}
-table thead tr th.createDate {
-    width: 10%;
-}
-table thead tr th.view {
-    width: 10%;
-}
-table thead tr th.likes {
-    width: 10%;
-}
-table thead tr th.comment {
-    width: 10%;
-}
-table thead tr th.bookmark {
-    width: 10%;
+div.myComment .comment:last-child {
+    border-bottom: 0px;
 }
 
-table tbody tr {
-    border-top: 1px solid var(--border);
-}
-
-table tbody tr.inform {
-    background-color: #FFFFCC;
-}
-
-table tbody tr td {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 12px;
-    font-weight: normal;
-}
-
-table tbody tr td.type {
-    text-align: center;
-}
-
-table tbody tr td.title {
-    cursor: pointer;
-}
-
-table tbody tr td.createDate {
-    text-align: center;
-}
-
-table tbody tr td.view {
-    text-align: center;
-}
-
-table tbody tr td.likes {
-    text-align: center;
+div.myComment .comment .title {
+    font-size: 13px;
     font-weight: bold;
-    color: var(--blue);
+    margin-bottom: 5px;
+    display: flex;
 }
 
-table tbody tr td.comment {
-    text-align: center;
+div.myComment .comment .title span {
+    font-weight: bold;
+    margin-right: 5px;
 }
 
-table tbody tr td.bookmark {
-    text-align: center;
-}
-
-table tbody tr td.bookmark button {
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    box-shadow: 0 1px 1px #aaa;
-    background-color: transparent;
+div.myComment .comment .title div {
+    word-break: break-all;
     cursor: pointer;
+}
+
+div.myComment .comment .title div:hover {
+    text-decoration: underline;
+}
+
+div.myComment .comment .content {
+    font-size: 12px;
+    margin-bottom: 5px;
+    display: flex;
+}
+
+div.myComment .comment .content span {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+div.myComment .comment .content div {
+    background-color: var(--light_gray);
+    word-break: break-all;
+}
+
+div.myComment .comment .createDate {
+    font-size: 10px;
 }
 
 div.paging {

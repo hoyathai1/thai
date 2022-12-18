@@ -1,5 +1,6 @@
 package com.travel.thai.bbs.domain;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
@@ -26,14 +27,19 @@ public class CommentDto {
 
     private LocalDateTime createDate;
 
+    private String title;
+    private String category;
+
     public CommentDto() {
     }
 
+    @Builder
     public CommentDto(Page<Comment> list, int commentTotalCount) {
         this.list = list;
         this.commentTotalCount = commentTotalCount;
     }
 
+    @Builder
     public CommentDto(Long id, String author, String content, Long boardId, Long parentId, String ip, String username, boolean isUser, boolean isDel, int commentTotalCount, LocalDateTime createDate) {
         this.id = id;
         this.author = author;
@@ -46,5 +52,15 @@ public class CommentDto {
         this.isDel = isDel;
         this.commentTotalCount = commentTotalCount;
         this.createDate = createDate;
+    }
+
+    @Builder
+    public CommentDto(Long id, String content, Long boardId, LocalDateTime createDate, String title, String category) {
+        this.id = id;
+        this.content = content;
+        this.boardId = boardId;
+        this.createDate = createDate;
+        this.title = title;
+        this.category = category;
     }
 }

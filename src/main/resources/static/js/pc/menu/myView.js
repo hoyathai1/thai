@@ -37,9 +37,7 @@ function goLogout() {
 }
 
 function goCategory(pCategory) {
-    var pageSize = $("input[name=pageSize]").val();
-
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
+    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
 }
 
 function goList() {
@@ -47,11 +45,19 @@ function goList() {
 }
 
 function goMyAccount() {
-    location.href = "/pc/menu/account?" + makeQueryUrl();
+    location.href = "/pc/menu/account";
 }
 
 function goMyList() {
-    location.href = "/pc/menu/myList";
+    location.href = "/pc/menu/myList?pageNum=0";
+}
+
+function goBookmark() {
+    location.href = "/pc/menu/myBookmark?pageNum=0";
+}
+
+function goMyComment() {
+    location.href = "/pc/menu/myComment?pageNum=0";
 }
 
 function moveScrollToComment() {

@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet"  type="text/css" href="/css/pc/menu/myList.css">
+<link rel="stylesheet"  type="text/css" href="/css/pc/menu/myBookmark.css">
 <link rel="stylesheet"  type="text/css" href="/css/pc/board/base.css">
 <html>
 <head>
@@ -53,7 +53,7 @@
 
     <div class="subject">
         <div class="subject-area">
-            <h1>내가쓴글</h1>
+            <h1>저장글</h1>
         </div>
     </div>
 
@@ -70,18 +70,6 @@
                     </c:if>
                 </c:forEach>
             </select>
-        </div>
-        <div class="likes-filter">
-            <label>추천 수:</label>
-            <button id="likes10" class="likes <c:if test="${search.likes eq 10}">on</c:if>" onclick="onLikes(10)">10</button>
-            <button id="likes20" class="likes <c:if test="${search.likes eq 20}">on</c:if>" onclick="onLikes(20)">20</button>
-            <button id="likes30" class="likes <c:if test="${search.likes eq 30}">on</c:if>" onclick="onLikes(30)">30</button>
-        </div>
-        <div class="comment-filter">
-            <label>댓글 수:</label>
-            <button id="comment10" class="comment <c:if test="${search.comment eq 10}">on</c:if>" onclick="onComment(10)">10</button>
-            <button id="comment20" class="comment <c:if test="${search.comment eq 20}">on</c:if>" onclick="onComment(20)">20</button>
-            <button id="comment30" class="comment <c:if test="${search.comment eq 30}">on</c:if>" onclick="onComment(30)">30</button>
         </div>
         <div class="search-filter">
             <label>검색조건:</label>
@@ -116,7 +104,7 @@
             <th class="view">조회</th>
             <th class="likes">추천</th>
             <th class="comment">댓글</th>
-            <th class="move">원글이동</th>
+            <th class="bookmark">즐겨찾기</th>
         </tr>
         </thead>
         <tbody>
@@ -125,12 +113,12 @@
             <fmt:formatDate pattern="yyyy.MM.dd" value="${ parsedDateTime }" var="boardDate"/>
             <tr>
                 <td class="type">${board.typeName}</td>
-                <td class="title" onclick="goView('${board.id}')">${board.title}</td>
+                <td class="title" onclick="goView('${board.boardId}', '${board.category}')">${board.title}</td>
                 <td class="createDate">${boardDate}</td>
                 <td class="view">${board.view}</td>
                 <td class="likes">${board.likes}</td>
-                <td class="comment">${board.commentCount}</td>
-                <td class="move"><button onclick="goOriginal('${board.id}', '${board.category}')">이동</button></td>
+                <td class="comment">${board.comment}</td>
+                <td class="bookmark"><button onclick="goDelete('${board.boardId}')">삭제</button></td>
             </tr>
         </c:forEach>
         <c:if test="${empty list.content}">
@@ -180,6 +168,6 @@
 
 <script type="text/javascript" src="/js/jquery-3.6.1.min.js"></script>
 <script type="text/javascript" src="/js/pc/base.js"></script>
-<script type="text/javascript" src="/js/pc/menu/myList.js"></script>
+<script type="text/javascript" src="/js/pc/menu/myBookmark.js"></script>
 </body>
 </html>

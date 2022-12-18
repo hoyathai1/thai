@@ -10,4 +10,5 @@ public interface BookMarkRepositoryCustom {
     Boolean isBookMark(BookMark param);
     void deleteBookMark(BookMark param);
     PageImpl<BookMarkDto> searchBookmark(Search search, Pageable pageable);
+    PageImpl<BookMarkDto> searchBookmarkForPc(Search search, Pageable pageable);
 }

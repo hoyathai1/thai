@@ -21,4 +21,5 @@ public interface CommentRepositoryCustom {
     void modifyContent(CommentDto dto);
 
     CommentDto searchListForAdmin(Search search, Pageable pageable);
+    PageImpl<CommentDto> searchListForPc(Search search, Pageable pageable);
 }

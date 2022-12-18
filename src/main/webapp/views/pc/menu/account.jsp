@@ -21,14 +21,20 @@
     <div class="menu">
         <nav>
             <ul>
-                <li onclick="goMyAccount()">프로필</li>
-                <li>내가쓴글</li>
-                <li>저장글</li>
                 <c:if test="${empty principal}">
                     <li onclick="goSignUp()">회원가입</li>
                     <li onclick="goLogin()">로그인</li>
                 </c:if>
                 <c:if test="${not empty principal}">
+                    <c:if test="${principal.userAuth eq 'ROLE_ADMIN'}">
+                        <li onclick="javascript:location.href='/admin/main'">
+                            관리자
+                        </li>
+                    </c:if>
+                    <li onclick="goMyAccount()">프로필</li>
+                    <li onclick="goMyList()">내가쓴글</li>
+                    <li onclick="goMyComment()">내 댓글</li>
+                    <li onclick="goBookmark()">저장글</li>
                     <li onclick="goLogout()">로그아웃</li>
                 </c:if>
             </ul>
@@ -41,28 +47,6 @@
         <div class="list">
             <c:forEach items="${allCategory}" var="category">
                 <div class="name" onclick="goCategory('${category.id}')">${category.name}</div>
-            </c:forEach>
-        </div>
-    </div>
-
-    <div class="subject">
-        <div class="subject-area" onclick="goCategory('${boardCategory.id}')">
-            <div class="ico-thai"></div>
-            <h1>${boardCategory.name}</h1>
-        </div>
-
-        <div class="search-area">
-            <input class="search-input" placeholder="검색어를 입력하세요." value="${search.content}">
-            <button class="search-btn" onclick="search()">검색</button>
-        </div>
-    </div>
-
-    <div class="types">
-        <div class="list">
-            <div class="type" id="all" onclick="goType('all')">전체</div>
-            <div class="type" id="best" onclick="goBest()">인기</div>
-            <c:forEach items="${boardType}" var="type">
-                <div class="type" id="${type.type}" onclick="goType('${type.type}')">${type.name}</div>
             </c:forEach>
         </div>
     </div>

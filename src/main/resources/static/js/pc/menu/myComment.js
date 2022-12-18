@@ -71,7 +71,6 @@ function onComment(val) {
         $(".comment").removeClass("on");
         $("#comment" + val).addClass("on");
     }
-
 }
 
 function initSearch() {
@@ -83,33 +82,19 @@ function initSearch() {
 }
 
 function search() {
-    var category = $("#category-filter-select option:selected").val();
     var keyword = $("#keyword option:selected").val();
     var content = $(".search-input").val();
 
-    location.href = encodeURI("/pc/menu/myBookmark?category=" + category + "&keyword=" + keyword + "&content=" + content);
+    location.href = encodeURI("/pc/menu/myComment?pageNum=0&keyword=" + keyword + "&content=" + content);
 }
 
 function movePage(page) {
-    var category = $("#category-filter-select option:selected").val();
     var keyword = $("#keyword option:selected").val();
     var content = $(".search-input").val();
 
-    location.href = encodeURI("/pc/menu/myBookmark?pageNum=" + page + "&category=" + category + "&keyword=" + keyword + "&content=" + content);
+    location.href = encodeURI("/pc/menu/myComment?pageNum=" + page + "&keyword=" + keyword + "&content=" + content);
 }
 
-function goView(boardId, pCategory) {
-    location.href = encodeURI("/pc/board/view?boardNum=" + boardId + "&pageNum=0&type=all&category=" + pCategory + "&keyword=all&content=");
-}
-
-function goDelete(boardNum) {
-
-    openModal('삭제를 하시겠습니까?', 'type2', function () {
-        var pageNum = $("input[name=pageNum]").val();
-        var category = $("#category-filter-select option:selected").val();
-        var keyword = $("#keyword option:selected").val();
-        var content = $(".search-input").val();
-
-        location.href = encodeURI("/pc/menu/deleteBookmark?boardNum=" + boardNum + "&pageNum=" + pageNum + "&category=" + category + "&keyword=" + keyword + "&content=" + content);
-    });
+function goComment(commentId, boardId, pCategory) {
+    location.href = encodeURI("/pc/board/view?pageNum=0&keyword=all&content=&type=all&category=" + pCategory + "&boardNum=" + boardId + "&commentId=" + commentId);
 }

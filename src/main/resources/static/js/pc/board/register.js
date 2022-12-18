@@ -333,11 +333,10 @@ function goList() {
 
 function makeQueryUrl() {
     var pageNum = $("input[name=pageNum]").val();
-    var pageSize = $("input[name=pageSize]").val();
     var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
 }
 
 function goSignUp() {
@@ -353,26 +352,35 @@ function goLogout() {
 }
 
 function goCategory(pCategory) {
-    var pageSize = $("input[name=pageSize]").val();
-
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
+    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
 }
 
 function goType(pType) {
-    var pageSize = $("input[name=pageSize]").val();
-
-    location.href="/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
+    location.href="/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&keyword=all&content=";
 }
 
 function goBest() {
     var pageNum = $("input[name=pageNum]").val();
-    var pageSize = $("input[name=pageSize]").val();
-
-    location.href="/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=all&content=";
+    location.href="/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=";
 }
 
 function search() {
     var content = $(".search-input").val();
-
     location.href = "/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=all&content=" + content;
+}
+
+function goMyAccount() {
+    location.href = "/pc/menu/account";
+}
+
+function goMyList() {
+    location.href = "/pc/menu/myList?pageNum=0";
+}
+
+function goBookmark() {
+    location.href = "/pc/menu/myBookmark?pageNum=0";
+}
+
+function goMyComment() {
+    location.href = "/pc/menu/myComment?pageNum=0";
 }

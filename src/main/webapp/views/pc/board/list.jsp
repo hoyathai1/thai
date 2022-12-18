@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet"  type="text/css" href="/css/pc/board/list.css">
+<link rel="stylesheet"  type="text/css" href="/css/pc/board/base.css">
 <html>
 <head>
     <title></title>
@@ -28,9 +29,15 @@
                         <li onclick="goLogin()">로그인</li>
                     </c:if>
                     <c:if test="${not empty principal}">
+                        <c:if test="${principal.userAuth eq 'ROLE_ADMIN'}">
+                            <li onclick="javascript:location.href='/admin/main'">
+                                관리자
+                            </li>
+                        </c:if>
                         <li onclick="goMyAccount()">프로필</li>
                         <li onclick="goMyList()">내가쓴글</li>
-                        <li>저장글</li>
+                        <li onclick="goMyComment()">내 댓글</li>
+                        <li onclick="goBookmark()">저장글</li>
                         <li onclick="goLogout()">로그아웃</li>
                     </c:if>
                 </ul>
@@ -94,12 +101,12 @@
                     </tr>
                 </c:forEach>
 
-                <c:forEach items="${list.content}" var="board" varStatus="status">
+                <c:forEach items="${list.content}" var="board">
                     <fmt:parseDate value="${board.createDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
                     <fmt:formatDate pattern="yyyy.MM.dd" value="${ parsedDateTime }" var="boardDate"/>
                     <tr>
                         <td class="type">${board.typeName}</td>
-                        <td class="title" onclick="goView('${board.id}', '${status.index}')">${board.title} <div class="comment-cnt">${board.commentCount}</div></td>
+                        <td class="title" onclick="goView('${board.id}')">${board.title} <div class="comment-cnt">${board.commentCount}</div></td>
 
                         <c:if test="${board.user eq true}">
                             <td class="author">${board.username}</td>
@@ -113,6 +120,11 @@
                         <td class="likes">${board.likes}</td>
                     </tr>
                 </c:forEach>
+                <c:if test="${empty list.content}">
+                    <tr>
+                        <td colspan="6" class="empty">검색결과가 없습니다.</td>
+                    </tr>
+                </c:if>
             </tbody>
         </table>
         <div class="area">

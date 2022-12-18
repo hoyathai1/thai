@@ -6,8 +6,11 @@ import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.user.domain.User;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface BoardService {
     Page<BoardDto> searchBoard(Search search);
+    Page<BoardDto> searchBoardForPcDetail(Search search);
     Page<BoardDto> searchBoardForDetail(Search search);
     BoardDto searchOne(Search search);
     Board saveBoard(Board board);

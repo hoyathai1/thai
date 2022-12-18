@@ -18,17 +18,15 @@ $(document).ready(function () {
 
     getCommentList(currentCommentPage);
 
-    var pageNum = $("input[name=pageNum]").val();
-    getList(pageNum);
+    getList(0);
 });
 
 function makeQueryUrl() {
     var pageNum = $("input[name=pageNum]").val();
-    var pageSize = $("input[name=pageSize]").val();
     var content = $(".search-input").val();
     var keyword = $("input[name=keyword]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
 }
 
 function goSignUp() {
@@ -43,23 +41,34 @@ function goLogout() {
     location.href="/logout";
 }
 
-function goCategory(pCategory) {
-    var pageSize = $("input[name=pageSize]").val();
+function goMyAccount() {
+    location.href = "/pc/menu/account";
+}
 
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
+function goMyList() {
+    location.href = "/pc/menu/myList?pageNum=0";
+}
+
+function goBookmark() {
+    location.href = "/pc/menu/myBookmark?pageNum=0";
+}
+
+function goMyComment() {
+    location.href = "/pc/menu/myComment?pageNum=0";
+}
+
+function goCategory(pCategory) {
+    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
 }
 
 function goType(pType) {
-    var pageSize = $("input[name=pageSize]").val();
-
-    location.href="/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
+    location.href="/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&keyword=all&content=";
 }
 
 function goBest() {
     var pageNum = $("input[name=pageNum]").val();
-    var pageSize = $("input[name=pageSize]").val();
 
-    location.href="/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=all&content=";
+    location.href="/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=";
 }
 
 function search() {
@@ -921,17 +930,10 @@ function getReplyTime(timeValue) {
     return month + '.' + date + " " + hours + ':' + minutes;
 }
 
-function getList() {
+function getList(page) {
+    var boardNum = $("input[name=boardNum]").val();
     var content = $("input[name=content]").val();
     var keyword = $("input[name=keyword]").val();
-    var pageSize = $("input[name=pageSize]").val();
-    var pageNum = $("input[name=pageNum]").val();
-
-    var index = $("input[name=pageIndex]").val();
-    var total = Number(pageNum) * Number(pageSize) + Number(index);
-
-    var pPage = parseInt(total/20);
-    var board_index = total%20;
 
     $.ajax({
         type : 'post',
@@ -942,16 +944,16 @@ function getList() {
         },
         dataType : 'json',
         data : JSON.stringify({
+            boardNum : boardNum,
             best : best,
             type : type,
             category : category,
             keyword: keyword,
             content: content,
-            pageNum : pPage,
-            pageSize : 20
+            pageNum : page
         }),
         success : function (result) {
-            setListHtmlIndex(result, board_index);
+            setListHtmlIndex(result);
         },
         beforeSend : function () {
             $(".div_load_image").css("display", "block");
@@ -962,19 +964,19 @@ function getList() {
     });
 }
 
-function setListHtmlIndex(data, index) {
+function setListHtmlIndex(data) {
+    var boardNum = $("input[name=boardNum]").val();
     var listHtml = "";
 
-    var loopCnt = 0;
     $(data.list.content).each(function () {
-        if (loopCnt == index) {
+        if (this.id == boardNum) {
             listHtml += "<tr class='on'>";
         } else {
             listHtml += "<tr>";
         }
 
         listHtml += "   <td class='type'>" + this.typeName + "</td>";
-        listHtml += "   <td class='title' onclick='goView(" + this.id + "," + loopCnt + ")'>";
+        listHtml += "   <td class='title' onclick='goView(" + this.id + ")'>";
         listHtml += "       " + this.title + "<div class='comment-cnt'>" + this.commentCount + "</div>"
         listHtml += "   </td>";
 
@@ -989,39 +991,6 @@ function setListHtmlIndex(data, index) {
         listHtml += "   <td class='likes'>" + this.likes + "</td>";
 
         listHtml += "</tr>";
-
-        loopCnt++;
-    });
-
-    $(".board-list").html(listHtml);
-
-    setPagingBtn(data);
-}
-
-function setListHtmlPage(data) {
-    var listHtml = "";
-
-    var loopCnt = 0;
-    $(data.list.content).each(function () {
-        listHtml += "<tr>";
-        listHtml += "   <td class='type'>" + this.typeName + "</td>";
-        listHtml += "   <td class='title' onclick='goView(" + this.id + "," + loopCnt + ")'>";
-        listHtml += "       " + this.title + "<div class='comment-cnt'>" + this.commentCount + "</div>"
-        listHtml += "   </td>";
-
-        if (this.user) {
-            listHtml += "   <td class='author'>" + this.username + "</td>";
-        } else {
-            listHtml += "   <td class='author'>" + this.author + "(" + this.ip + ")</td>";
-        }
-
-        listHtml += "   <td class='boardDate'>" + getBoardTime(this.createDate) + "</td>";
-        listHtml += "   <td class='board-view'>" + this.view + "</td>";
-        listHtml += "   <td class='likes'>" + this.likes + "</td>";
-
-        listHtml += "</tr>";
-
-        loopCnt++;
     });
 
     $(".board-list").html(listHtml);
@@ -1035,9 +1004,9 @@ function setPagingBtn(data) {
 
     // prev
     if (data.pageDto.startPage == 0) {
-        pageHtml += "<li class='page-prev' onclick='movePage(" + data.pageDto.startPage + ")'>&laquo;</li>"
+        pageHtml += "<li class='page-prev' onclick='getList(" + data.pageDto.startPage + ")'>&laquo;</li>"
     } else {
-        pageHtml += "<li class='page-prev' onclick='movePage(" + Number(data.pageDto.startPage) - 1 + ")'>&laquo;</li>"
+        pageHtml += "<li class='page-prev' onclick='getList(" + Number(data.pageDto.startPage) - 1 + ")'>&laquo;</li>"
     }
 
     // page
@@ -1046,15 +1015,15 @@ function setPagingBtn(data) {
             pageHtml += "<li class='page active'>" + (i+1) + "</li>";
             $("input[name=subPageNum]").val(i);
         } else {
-            pageHtml += "<li class='page' onclick='movePage(" + i + ")'>"+ (i+1) + "</li>";
+            pageHtml += "<li class='page' onclick='getList(" + i + ")'>"+ (i+1) + "</li>";
         }
     }
 
     // next
     if (data.pageDto.endPage == 0) {
-        pageHtml += "<li class='page-next' onclick='movePage(" + data.pageDto.endPage + ")'>&raquo;</li>";
+        pageHtml += "<li class='page-next' onclick='getList(" + data.pageDto.endPage + ")'>&raquo;</li>";
     } else {
-        pageHtml += "<li class='page-next' onclick='movePage(" + Number(data.pageDto.endPage) + ")'>&raquo;</li>";
+        pageHtml += "<li class='page-next' onclick='getList(" + Number(data.pageDto.endPage) + ")'>&raquo;</li>";
     }
 
     pageHtml += "</ul>";
@@ -1062,59 +1031,6 @@ function setPagingBtn(data) {
     $(".paging").html(pageHtml);
 }
 
-function movePage(page) {
-    var content = $("input[name=content]").val();
-    var keyword = $("input[name=keyword]").val();
-
-    $.ajax({
-        type : 'post',
-        url : '/pc/board/list',
-        headers : {
-            "Content-Type" : "application/json",
-            "X-HTTP-Method-Override" : "POST"
-        },
-        dataType : 'json',
-        data : JSON.stringify({
-            best : best,
-            type : type,
-            category : category,
-            keyword: keyword,
-            content: content,
-            pageNum : page,
-            pageSize : 20
-        }),
-        success : function (result) {
-            setListHtmlPage(result);
-        },
-        beforeSend : function () {
-            $(".div_load_image").css("display", "block");
-        },
-        complete : function () {
-            $(".div_load_image").css("display", "none");
-        }
-    });
-}
-
-function goView(id, pindex) {
-    var pageSize = $("input[name=pageSize]").val();
-    var subPageNum = $("input[name=subPageNum]").val();
-
-    // var index = $("input[name=pageIndex]").val();
-    var total = (Number(subPageNum)) * 20 + Number(pindex);
-
-    // 페이징 세팅 (목록갈떄 사용)
-    var listPage = 0;
-    var index = 0;
-    if (total >= pageSize) {
-        listPage = total / pageSize;
-        index = total % pageSize;
-    } else {
-        listPage = 0;
-        index = total;
-    }
-
-    $("input[name=pageNum]").val(parseInt(listPage));
-
-
-    location.href = "/pc/board/view?boardNum=" + id + "&index=" + index + "&" + makeQueryUrl();
+function goView(id) {
+    location.href = "/pc/board/view?boardNum=" + id + "&" + makeQueryUrl();
 }

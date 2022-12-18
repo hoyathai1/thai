@@ -72,10 +72,6 @@ public class PcBoardController {
             x.setTypeName(categoryService.getBoardTypeName(x.getType(), x.getCategory()));
         });
 
-        if (search.getPageSize() == 0) {
-            search.setPageSize(30);
-        }
-
         model.addAttribute("list", list);
         model.addAttribute("inform", inform);
         model.addAttribute("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
@@ -92,7 +88,7 @@ public class PcBoardController {
 
         try {
             Map<String, Object> map = new HashMap<>();
-            Page<BoardDto> list = boardService.searchBoard(search);
+            Page<BoardDto> list = boardService.searchBoardForPcDetail(search);
 
             list.stream().forEach(x->{
                 x.setTypeName(categoryService.getBoardTypeName(x.getType(), x.getCategory()));
@@ -100,7 +96,7 @@ public class PcBoardController {
 
             map.put("list", list);
             map.put("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
-            map.put("search", search);
+//            map.put("search", search);
 
             entity = new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception e) {

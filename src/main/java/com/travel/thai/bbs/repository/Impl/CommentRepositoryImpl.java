@@ -101,7 +101,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
         // 검색어 있을때
         if (StringUtils.isNotEmpty(search.getContent())) {
-            whereBuilder.and(comment.content.eq(search.getContent()));
+            whereBuilder.and(comment.content.contains(search.getContent()));
         }
 
         List<CommentDto> result = queryFactory
@@ -186,5 +186,41 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
         commentDto.setCommentTotalCount(count);
 
         return commentDto;
+    }
+
+    @Override
+    public PageImpl<CommentDto> searchListForPc(Search search, Pageable pageable) {
+        BooleanBuilder whereBuilder = new BooleanBuilder();
+
+        // 검색어 있을때
+        if (StringUtils.isNotEmpty(search.getContent())) {
+            whereBuilder.and(comment.content.contains(search.getContent()));
+        }
+
+        List<CommentDto> result = queryFactory
+                .select(Projections.constructor(CommentDto.class,
+                        comment.id,
+                        comment.content,
+                        comment.upper,
+                        comment.createDate,
+                        board.title,
+                        board.category
+                ))
+                .from(comment)
+                .leftJoin(board).on(board.id.eq(comment.upper))
+                .where(whereBuilder.and(comment.userId.eq(search.getUserId())).and(comment.isDel.isFalse()))
+                .orderBy(comment.createDate.desc())
+                .offset(pageable.getOffset())         // 페이지 번호
+                .limit(pageable.getPageSize())        // 페이지 사이즈
+                .fetch();
+
+        int count = queryFactory
+                .selectOne()
+                .from(comment)
+                .where(whereBuilder.and(comment.userId.eq(search.getUserId())).and(comment.isDel.isFalse()))
+                .orderBy(comment.createDate.desc())
+                .fetch().size();
+
+        return new PageImpl<>(result, pageable, count);
     }
 }

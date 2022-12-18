@@ -53,6 +53,9 @@ public class PcMenuController {
     @Autowired
     private LikesService likesService;
 
+    @Autowired
+    private CommentService commentService;
+
     @RequestMapping(value = "/account", method = RequestMethod.GET)
     public String account(HttpServletRequest request, HttpServletResponse response, Model model
             , @ModelAttribute("search") Search search, @AuthenticationPrincipal User user) {
@@ -197,13 +200,20 @@ public class PcMenuController {
     @RequestMapping(value = "/myBookmark", method = RequestMethod.GET)
     public String bookmark(HttpServletRequest request, HttpServletResponse response, Model model, @ModelAttribute("search") Search search
             , @AuthenticationPrincipal User user) {
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
 
         if (user == null) {
-            return "redirect:/warning";
+            return "/common/warning";
         }
 
         search.setUserId(user.getUserId());
-        Page<BookMarkDto> list = bookMarkService.searchBoard(search);
+        Page<BookMarkDto> list = bookMarkService.searchBoardForPc(search);
+
+        list.stream().forEach(x->{
+            x.setTypeName(categoryService.getBoardTypeName(x.getType(), x.getCategory()));
+        });
 
         user.setPassword(null);
         model.addAttribute("user", user);
@@ -212,6 +222,58 @@ public class PcMenuController {
         model.addAttribute("search", search);
 
         return "/pc/menu/myBookmark";
+    }
+
+    @RequestMapping(value = "/deleteBookmark", method = RequestMethod.GET)
+    public String deleteBookmark(HttpServletRequest request, HttpServletResponse response, Model model, @ModelAttribute("search") Search search
+            , @AuthenticationPrincipal User user) {
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
+
+        if (user == null) {
+            return "/common/warning";
+        }
+
+        BookMark bookMark = new BookMark();
+        bookMark.setBoard_id(search.getBoardNum());
+        bookMark.setUser_id(user.getUserId());
+        bookMarkService.delete(bookMark);
+
+        search.setUserId(user.getUserId());
+        Page<BookMarkDto> list = bookMarkService.searchBoardForPc(search);
+
+        list.stream().forEach(x->{
+            x.setTypeName(categoryService.getBoardTypeName(x.getType(), x.getCategory()));
+        });
+
+        user.setPassword(null);
+        model.addAttribute("user", user);
+        model.addAttribute("list", list);
+        model.addAttribute("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+        model.addAttribute("search", search);
+
+        return "/pc/menu/myBookmark";
+    }
+
+    @RequestMapping(value = "/myComment", method = RequestMethod.GET)
+    public String myComment(HttpServletRequest request, HttpServletResponse response, Model model, @ModelAttribute("search") Search search
+            , @AuthenticationPrincipal User user) {
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
+
+        if (user == null) {
+            return "/common/warning";
+        }
+
+        search.setUserId(user.getUserId());
+        Page<CommentDto> list= commentService.searchListForPc(search);
+        model.addAttribute("list", list);
+        model.addAttribute("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+        model.addAttribute("search", search);
+
+        return "/pc/menu/myComment";
     }
 
     private String getEmail1(String email) {

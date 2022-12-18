@@ -9,4 +9,5 @@ public interface BookMarkService {
     boolean delete(BookMark bookMark);
     Boolean isBookMark(BookMark bookMark);
     Page<BookMarkDto> searchBoard(Search search);
+    Page<BookMarkDto> searchBoardForPc(Search search);
 }

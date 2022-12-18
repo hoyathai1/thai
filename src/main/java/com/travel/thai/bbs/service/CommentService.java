@@ -19,4 +19,6 @@ public interface CommentService {
     void modifyContent(CommentDto dto);
 
     CommentDto searchListForAdmin(Search search);
+
+    Page<CommentDto> searchListForPc(Search search);
 }

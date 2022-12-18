@@ -63,32 +63,25 @@ public class BoardCategoryService {
         return bctRepo.getBoardTypeName(typeId, categoryId);
     }
 
-    @Transactional(readOnly = true)
-    @Cacheable("BoardCategoryAllList")
     public List<BoardCategory> getBoardCategoryAllList() {
         return bcRepo.getCategoryAllList();
     }
 
     @Transactional
-    @CacheEvict(value = {"BoardCategoryAllList", "boardCategoryList", "boardCategory"}, allEntries = true)
     public void unuseCategory(String categoryId) {
         bcRepo.unuseCategory(categoryId);
     }
 
     @Transactional
-    @CacheEvict(value = {"BoardCategoryAllList", "boardCategoryList", "boardCategory"}, allEntries = true)
     public void useCategory(String categoryId) {
         bcRepo.useCategory(categoryId);
     }
 
     @Transactional
-    @CacheEvict(value = {"BoardCategoryAllList", "boardCategoryList", "boardCategory"}, allEntries = true)
     public void modifyCategory(BoardCategory boardCategory) {
         bcRepo.modifyCategory(boardCategory);
     }
 
-    @Transactional
-    @CacheEvict(value = {"BoardCategoryAllList", "boardCategoryList", "boardCategory"}, allEntries = true)
     public void registerCategory(BoardCategory boardCategory) {
         boardCategory.setUse(false);
         boardCategory.setOrderBy(9);
@@ -100,28 +93,30 @@ public class BoardCategoryService {
     }
 
     @Transactional
-    @CacheEvict(value = {"BoardCategoryAllList", "boardCategoryList", "boardCategory", "boardType", "boardTypeList"}, allEntries = true)
     public void unuseType(Long typeId) {
         bctRepo.unuseType(typeId);
     }
 
     @Transactional
-    @CacheEvict(value = {"BoardCategoryAllList", "boardCategoryList", "boardCategory", "boardType", "boardTypeList"}, allEntries = true)
     public void useType(Long typeId) {
         bctRepo.useType(typeId);
     }
 
     @Transactional
-    @CacheEvict(value = {"BoardCategoryAllList", "boardCategoryList", "boardCategory", "boardType", "boardTypeList"}, allEntries = true)
     public void modifyType(BoardType boardType) {
         bctRepo.modifyType(boardType);
     }
 
-    @Transactional
-    @CacheEvict(value = {"BoardCategoryAllList", "boardCategoryList", "boardCategory", "boardType", "boardTypeList"}, allEntries = true)
     public void registerType(BoardType boardType) {
         boardType.setUse(false);
         bctRepo.save(boardType);
     }
 
+    @CacheEvict(value = {"BoardCategoryAllList", "boardCategoryList", "boardCategory"}, allEntries = true)
+    public void categoryCacheInit() {
+    }
+
+    @CacheEvict(value = {"boardType", "boardTypeList"}, allEntries = true)
+    public void typeCacheInit() {
+    }
 }

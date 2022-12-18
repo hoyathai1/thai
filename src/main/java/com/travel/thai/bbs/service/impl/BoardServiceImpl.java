@@ -53,6 +53,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Page<BoardDto> searchBoardForPcDetail(Search search) {
+        search.setPageSize(20);
+
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), search.getPageSize()
+        );
+
+        return boardRepository.searchForPcDetail(search, pageable);
+    }
+
+    @Override
     public Page<BoardDto> searchBoardForDetail(Search search) {
         search.setPageSize(10);
 

@@ -15,17 +15,14 @@ $(document).ready(function () {
 
 function makeQueryUrl() {
     var pageNum = $("input[name=pageNum]").val();
-    var pageSize = $("input[name=pageSize]").val();
     var content = $(".search-input").val();
     var keyword = $("input[name=keyword]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
 }
 
 function goCategory(pCategory) {
-    var pageSize = $("input[name=pageSize]").val();
-
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
+    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
 }
 
 function goSignUp() {
@@ -41,19 +38,23 @@ function goLogout() {
 }
 
 function goMyAccount() {
-    location.href = "/pc/menu/account?" + makeQueryUrl();
+    location.href = "/pc/menu/account";
 }
 
 function goMyList() {
-    location.href = "/pc/menu/myList";
+    location.href = "/pc/menu/myList?pageNum=0";
+}
+
+function goBookmark() {
+    location.href = "/pc/menu/myBookmark?pageNum=0";
 }
 
 function goMyComment() {
-    location.href = "/pc/menu/myComment";
+    location.href = "/pc/menu/myComment?pageNum=0";
 }
 
-function goOriginal(boardId) {
-    location.href = "/pc/board/view?boardNum=62&index=4&type=all&best=&category=thai&pageNum=0&pageSize=30&keyword=all&content=";
+function goOriginal(boardId, pCategory) {
+    location.href = "/pc/board/view?boardNum=" + boardId + "&type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
 }
 
 function onLikes(val) {

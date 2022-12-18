@@ -28,14 +28,20 @@
         <div class="menu">
             <nav>
                 <ul>
-                    <li onclick="goMyAccount()">프로필</li>
-                    <li onclick="goMyList()">내가쓴글</li>
-                    <li>저장글</li>
                     <c:if test="${empty principal}">
                         <li onclick="goSignUp()">회원가입</li>
                         <li onclick="goLogin()">로그인</li>
                     </c:if>
                     <c:if test="${not empty principal}">
+                        <c:if test="${principal.userAuth eq 'ROLE_ADMIN'}">
+                            <li onclick="javascript:location.href='/admin/main'">
+                                관리자
+                            </li>
+                        </c:if>
+                        <li onclick="goMyAccount()">프로필</li>
+                        <li onclick="goMyList()">내가쓴글</li>
+                        <li onclick="goMyComment()">내 댓글</li>
+                        <li onclick="goBookmark()">저장글</li>
                         <li onclick="goLogout()">로그아웃</li>
                     </c:if>
                 </ul>

@@ -6,8 +6,11 @@ import com.travel.thai.bbs.domain.Search;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface BoardRepositoryCustom {
     PageImpl<BoardDto> search(Search search, Pageable pageable);
+    PageImpl<BoardDto> searchForPcDetail(Search search, Pageable pageable);
     PageImpl<BoardDto> searchForDetail(Search search, Pageable pageable);
     BoardDto searchOne(Search search);
     void increseViewCount(Search search);

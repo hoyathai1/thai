@@ -32,5 +32,4 @@ public class Search {
     private int likes;
     private int comment;
 
-
 }
