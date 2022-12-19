@@ -8,6 +8,11 @@ var currentCommentPage = 0;
 
 $(document).ready(function () {
 
+    if(detectMobileDevice(window.navigator.userAgent)) {
+        var hUrl = new URL(location.href);
+        location.href = "/board/view" + hUrl.search;
+    }
+
     if (best == 'Y') {
         $("#best").addClass("on");
     } else {
@@ -528,10 +533,12 @@ function deleteBtnByOwner() {
  * URL 공유 버튼
  */
 function shareBtn() {
+    var boardNum = $("input[name=boardNum]").val();
+    var category = $("input[name=category]").val();
     var url = '';
     var textarea = document.createElement("textarea");
     document.body.appendChild(textarea);
-    url = window.document.location.href;
+    url = window.document.location.origin + "/board/view?boardNum=" + boardNum + "&type=all&best=&category=" + category + "&pageNum=0&keyword=all&content=";
     textarea.value = url;
     textarea.select();
     document.execCommand("copy");

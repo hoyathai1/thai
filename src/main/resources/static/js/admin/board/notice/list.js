@@ -54,29 +54,27 @@ imageSelector.addEventListener('change', function (e) {
 });
 
 function insertImageDate(file) {
-    const reader = new FileReader();
-
-    reader.onload = (base64) => {
-        const image = new Image();
-
-        image.src = base64.target.result;
-
-        image.onload = (e) => {
-            const $canvas = document.createElement(`canvas`);
-            const ctx = $canvas.getContext(`2d`);
-
-            $canvas.width = e.target.width;
-            $canvas.height = e.target.height;
-
-            ctx.drawImage(e.target, 0, 0);
-
-            // 용량이 줄어든 base64 이미지
+    if (file.size < 50000) {
+        const reader = new FileReader();
+        reader.addEventListener('load', function (e) {
             focusEditor();
-            document.execCommand('insertImage', false, $canvas.toDataURL(`image/jpeg`, 0.5));
-        }
-    }
+            document.execCommand('insertImage', false, `${reader.result}`);
+        });
 
-    reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+    } else if (file.size < 200000) {
+        resizeImage(file, 0.9, 850);
+    } else if (file.size < 500000) {
+        resizeImage(file, 0.9, 850);
+    } else if (file.size < 1000000) {
+        resizeImage(file, 0.8, 850);
+    } else if (file.size < 2000000) {
+        resizeImage(file, 0.7, 850);
+    } else if (file.size < 5000000) {
+        resizeImage(file, 0.6, 850);
+    } else {
+        resizeImage(file, 0.5, 850);
+    }
 }
 
 function setStyle(style) {

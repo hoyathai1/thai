@@ -5,6 +5,11 @@ const type = urlParams.get('type');
 
 $(document).ready(function () {
 
+    if(detectMobileDevice(window.navigator.userAgent)) {
+        var hUrl = new URL(location.href);
+        location.href = "/board/list" + hUrl.search;
+    }
+
     if (best == 'Y') {
         $("#best").addClass("on");
     } else {

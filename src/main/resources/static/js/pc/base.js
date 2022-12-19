@@ -1,3 +1,16 @@
+function detectMobileDevice(agent) {
+    const mobileRegex = [
+        /Android/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i
+    ]
+
+    return mobileRegex.some(mobile => agent.match(mobile))
+}
+
 function isEmpty(str) {
     if (str == null || str == "" || str == undefined || str == "undefined") {
         return true;
@@ -194,4 +207,54 @@ function setModal() {
 function sleep (delay) {
     var start = new Date().getTime();
     while (new Date().getTime() < start + delay);
+}
+
+
+/***
+ * 게시판 이미지 리사이즈
+ *
+ * @param file
+ * @param quality
+ * @param maxsize
+ */
+function resizeImage(file, quality, maxsize) {
+    const reader = new FileReader();
+
+    reader.onload = (base64) => {
+        const image = new Image();
+
+        image.src = base64.target.result;
+
+        image.onload = (e) => {
+            const $canvas = document.createElement('canvas');
+            const ctx = $canvas.getContext('2d');
+
+            let width = e.target.width;
+            let height = e.target.height;
+
+            if (width > height) {
+                if (width > maxsize) {
+                    height *= maxsize/width;
+                    width = maxsize;
+                }
+            } else {
+                if (height > maxsize) {
+                    width *= maxsize / height;
+                    height = maxsize;
+                }
+            }
+
+            $canvas.width = width;
+            $canvas.height = height;
+
+            ctx.drawImage(e.target, 0, 0, width, height);
+
+            // 용량이 줄어든 base64 이미지
+            focusEditor();
+            document.execCommand('insertImage', false, $canvas.toDataURL('image/jpeg', quality));
+        }
+
+    };
+
+    reader.readAsDataURL(file);
 }

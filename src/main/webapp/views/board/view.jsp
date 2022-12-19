@@ -11,10 +11,10 @@
 <div class="container">
     <div class="view">
         <div class="view-header">
-            <%--<c:if test="${not empty principal}">--%>
-                <%--<c:if test="${isBookMark eq true}"><div class="bookmark-ico on" onclick="setBookMark()"></div></c:if>--%>
-                <%--<c:if test="${isBookMark eq false}"><div class="bookmark-ico off" onclick="setBookMark()"></div></c:if>--%>
-            <%--</c:if>--%>
+            <c:if test="${not empty principal}">
+                <c:if test="${isBookMark eq true}"><div class="bookmark-ico on" onclick="setBookMark()"></div></c:if>
+                <c:if test="${isBookMark eq false}"><div class="bookmark-ico off" onclick="setBookMark()"></div></c:if>
+            </c:if>
             <div class="title">
                 ${board.title}
             </div>
@@ -35,14 +35,15 @@
 
         <div class="view-body">
             <div class="board-info">
-                <div class="view-count">${board.view}</div>
-                <div class="view-recom"><c:out value="${likesCnt}" /></div>
-                <div class="view-replay-cnt">0</div>
-
-                <c:if test="${not empty principal}">
-                    <c:if test="${isBookMark eq true}"><div class="bookmark-ico on" onclick="setBookMark()"></div></c:if>
-                    <c:if test="${isBookMark eq false}"><div class="bookmark-ico off" onclick="setBookMark()"></div></c:if>
-                </c:if>
+                <div class="view-info-left">
+                    <div class="view-count">${board.view}</div>
+                    <div class="view-recom"><c:out value="${likesCnt}" /></div>
+                    <div class="view-replay-cnt">0</div>
+                </div>
+                <div class="view-info-right">
+                    <div class="share-ico" onclick="shareBtn()"></div>
+                    <div class="share" onclick="shareBtn()">공유</div>
+                </div>
             </div>
             <div class="board-content">
                 ${board.contents}

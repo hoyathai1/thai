@@ -869,3 +869,19 @@ function setListHtmlForBoard(data) {
 function goView(id) {
     location.href = "/board/view?boardNum=" + id + "&" + makeQueryUrl();
 }
+
+/**
+ * URL 공유 버튼
+ */
+function shareBtn() {
+    var boardNum = $("input[name=boardNum]").val();
+    var url = '';
+    var textarea = document.createElement("textarea");
+    document.body.appendChild(textarea);
+    url = window.document.location.origin + "/board/view?boardNum=" + boardNum + "&type=all&best=&category=" + category + "&pageNum=0&keyword=all&content=";
+    textarea.value = url;
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+    openModal("URL이 복사되었습니다.", "type3", null);
+}

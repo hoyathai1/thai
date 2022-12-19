@@ -200,7 +200,7 @@
     width: 30px;
     height: 30px;
     position: absolute;
-    right: 0;
+    right: 10;
 }
 
 .bookmark-ico.on {
@@ -210,7 +210,7 @@
     width: 30px;
     height: 30px;
     position: absolute;
-    right: 0;
+    right: 10;
 }
 
 .view .view-header .title-sub {
@@ -246,6 +246,11 @@
 .view .view-body .board-info {
     font-size: 12px;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.view .view-body .board-info .view-info-left {
     display: flex;
 }
 
@@ -299,6 +304,23 @@
     color: #7c7874;
 }
 
+.view .view-body .board-info .view-info-right {
+    display: flex;
+}
+
+.view .view-body .board-info .share {
+    font-weight: bold;
+    color: #7c7874;
+}
+
+.view .view-body .board-info .share-ico {
+    background: url("/img/share.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 14px;
+    height: 14px;
+}
+
 .view .view-body .board-content {
     font-size: 14px;
 }
@@ -309,7 +331,7 @@
 
 .view .view-body .board-content img{
     max-width: 100%!important;
-    max-height: 100%!important;
+    height: auto!important;
 }
 
 .view .view-body .likes {
