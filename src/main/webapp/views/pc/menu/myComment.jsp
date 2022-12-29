@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet"  type="text/css" href="/css/pc/menu/myComment.css">
-<link rel="stylesheet"  type="text/css" href="/css/pc/board/base.css">
+<%--<link rel="stylesheet"  type="text/css" href="/css/pc/board/base.css">--%>
 <html>
 <head>
     <title></title>
@@ -86,9 +86,9 @@
         <c:forEach items="${list.content}" var="comment">
             <fmt:parseDate value="${comment.createDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
             <fmt:formatDate pattern="yyyy.MM.dd" value="${ parsedDateTime }" var="commentDate"/>
-            <div class="comment">
+            <div class="comment" onclick="goComment('${comment.id}', '${comment.boardId}', '${comment.category}')">
                 <div class="title">
-                    <span>게시글: </span><div onclick="goComment('${comment.id}', '${comment.boardId}', '${comment.category}')">${comment.title}</div>
+                    <span>게시글: </span><div>${comment.title}</div>
                 </div>
                 <div class="content">
                     <span>내용: </span><div>${comment.content}</div>

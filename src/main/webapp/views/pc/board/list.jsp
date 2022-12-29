@@ -45,135 +45,211 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="category">
-            <div class="list">
-                <c:forEach items="${allCategory}" var="category">
-                    <div class="name" onclick="goCategory('${category.id}')">${category.name}</div>
-                </c:forEach>
+    <div class="wrapper">
+        <div class="right-sidebar">
+            <c:if test="${not empty principal}">
+            <div class="alert">
+                <div class="user-info" onclick="goMyAccount()">
+                    <strong>${principal.username}</strong>님
+                </div>
+                <div class="user-alert">
+                    <div class="top">
+                        <button onclick="goMyAccount()">프로필</button>
+                        <button onclick="goMyList()">내가쓴글</button>
+                        <button onclick="goMyComment()">내 댓글</button>
+                    </div>
+                    <div class="bottom">
+                        <button onclick="goBookmark()">저장글</button>
+                        <button onclick="goNotiModal()">
+                            <c:if test="${isHasNoti eq false}">
+                                <div class="alert-ico" id="alert-ico-id"></div>알림
+                            </c:if>
+                            <c:if test="${isHasNoti eq true}">
+                                <div class="alert-ico on" id="alert-ico-id"></div>알림
+                            </c:if>
+                        </button>
+                    </div>
+                </div>
             </div>
+            </c:if>
+            <c:if test="${empty principal}">
+                <div class="alert off">
+                </div>
+            </c:if>
+
+            <c:if test="${banner.rightBanner.show eq true}">
+                <div class="right-logo" style="background: url(/banner/${banner.rightBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.rightBanner.link}')"></div>
+            </c:if>
+            <c:if test="${banner.rightBanner.show eq false}">
+                <div class="right-logo"></div>
+            </c:if>
         </div>
 
-        <div class="subject">
-            <div class="subject-area" onclick="goCategory('${boardCategory.id}')">
-                <div class="ico-thai"></div>
-                <h1>${boardCategory.name}</h1>
-            </div>
-
-            <div class="search-area">
-                <input class="search-input" placeholder="검색어를 입력하세요." value="${search.content}">
-                <button class="search-btn" onclick="search()">검색</button>
-            </div>
+        <div class="left-sidebar">
+            <c:if test="${banner.leftBanner.show eq true}">
+                <div class="left-logo" style="background: url(/banner/${banner.leftBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.leftBanner.link}')"></div>
+            </c:if>
+            <c:if test="${banner.leftBanner.show eq false}">
+                <div class="left-logo"></div>
+            </c:if>
         </div>
 
-        <div class="types">
-            <div class="list">
-                <div class="type" id="all" onclick="goType('all')">전체</div>
-                <div class="type" id="best" onclick="goBest()">인기</div>
-                <c:forEach items="${boardType}" var="type">
-                    <div class="type" id="${type.type}" onclick="goType('${type.type}')">${type.name}</div>
-                </c:forEach>
+        <div class="container">
+            <div class="category">
+                <div class="list">
+                    <c:forEach items="${allCategory}" var="category">
+                        <div class="name" onclick="goCategory('${category.id}')">${category.name}</div>
+                    </c:forEach>
+                </div>
             </div>
-        </div>
 
-        <table class="list">
-            <thead>
-                <tr>
-                    <th class="type">타입</th>
-                    <th class="title">제목</th>
-                    <th class="author">글쓴이</th>
-                    <th class="createDate">날짜</th>
-                    <th class="view">조회</th>
-                    <th class="likes">추천</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach items="${inform}" var="inform">
-                    <fmt:parseDate value="${inform.createDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-                    <fmt:formatDate pattern="yyyy.MM.dd" value="${ parsedDateTime }" var="informDate"/>
-                    <tr class="inform">
-                        <td class="type">공지</td>
-                        <td class="title" onclick="goinform('${inform.id}')">${inform.title}</td>
-                        <td class="author">${inform.username}</td>
-                        <td class="createDate">${informDate}</td>
-                        <td class="view"></td>
-                        <td class="likes"></td>
-                    </tr>
-                </c:forEach>
+            <c:if test="${banner.topBanner.show eq true}">
+                <div class="top-logo" style="background: url(/banner/${banner.topBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.topBanner.link}')"></div>
+            </c:if>
 
-                <c:forEach items="${list.content}" var="board">
-                    <fmt:parseDate value="${board.createDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-                    <fmt:formatDate pattern="yyyy.MM.dd" value="${ parsedDateTime }" var="boardDate"/>
+            <div class="subject">
+                <div class="subject-area" onclick="goCategory('${boardCategory.id}')">
+                    <div class="ico-thai"></div>
+                    <h1>${boardCategory.name}</h1>
+                </div>
+
+                <div class="search-area">
+                    <input class="search-input" placeholder="검색어를 입력하세요." value="${search.content}">
+                    <button class="search-btn" onclick="search()">검색</button>
+                </div>
+            </div>
+
+            <div class="types">
+                <div class="list">
+                    <div class="type" id="all" onclick="goType('all')">전체</div>
+                    <div class="type" id="best" onclick="goBest()">인기</div>
+                    <c:forEach items="${boardType}" var="type">
+                        <div class="type" id="${type.type}" onclick="goType('${type.type}')">${type.name}</div>
+                    </c:forEach>
+                </div>
+            </div>
+
+            <table class="list">
+                <thead>
                     <tr>
-                        <td class="type">${board.typeName}</td>
-                        <td class="title" onclick="goView('${board.id}')">${board.title} <div class="comment-cnt">${board.commentCount}</div></td>
-
-                        <c:if test="${board.user eq true}">
-                            <td class="author">${board.username}</td>
-                        </c:if>
-                        <c:if test="${board.user eq false}">
-                            <td class="author">${board.author}(${board.ip})</td>
-                        </c:if>
-
-                        <td class="createDate">${boardDate}</td>
-                        <td class="view">${board.view}</td>
-                        <td class="likes">${board.likes}</td>
+                        <th class="type">타입</th>
+                        <th class="title">제목</th>
+                        <th class="author">글쓴이</th>
+                        <th class="createDate">날짜</th>
+                        <th class="view">조회</th>
+                        <th class="likes">추천</th>
                     </tr>
-                </c:forEach>
-                <c:if test="${empty list.content}">
-                    <tr>
-                        <td colspan="6" class="empty">검색결과가 없습니다.</td>
-                    </tr>
-                </c:if>
-            </tbody>
-        </table>
-        <div class="area">
-            <div class="search-area">
-                <select class="search-select register-select">
-                    <option value="all" <c:if test ="${search.keyword eq 'all'}">selected="selected"</c:if>>
-                        제목+내용
-                    </option>
-                    <option value="title" <c:if test ="${search.keyword eq 'title'}">selected="selected"</c:if>>
-                        제목
-                    </option>
-                    <option value="content" <c:if test ="${search.keyword eq 'content'}">selected="selected"</c:if>>
-                        내용
-                    </option>
-                </select>
-                <input class="search-input" placeholder="검색어를 입력하세요." id="bottomSearch" value="${search.content}">
-                <button class="search-btn" onclick="searchForKeyword()">검색</button>
-            </div>
-            <div class="btn-area">
-                <button onclick="goRegister()">글쓰기</button>
-            </div>
-        </div>
-        <div class="paging">
-            <ul>
-                <c:if test="${not empty list.content}">
-                    <c:if test="${pageDto.startPage eq 0}">
-                        <li class="page-prev" onclick="movePage('${pageDto.startPage}')">&laquo;</li>
-                    </c:if>
-                    <c:if test="${pageDto.startPage ne 0}">
-                        <li class="page-prev" onclick="movePage('${pageDto.startPage - 1}')">&laquo;</li>
-                    </c:if>
-
-                    <c:forEach var="i" begin="${pageDto.startPage}" end="${pageDto.endPage}" step="1">
-                        <c:if test="${pageDto.curPage eq i}">
-                            <li class="page active">${i+1}</li>
-                        </c:if>
-                        <c:if test="${pageDto.curPage ne i}">
-                            <li class="page" onclick="movePage('${i}')">${i+1}</li>
-                        </c:if>
+                </thead>
+                <tbody>
+                    <c:forEach items="${inform}" var="inform">
+                        <fmt:parseDate value="${inform.createDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                        <fmt:formatDate pattern="yyyy.MM.dd" value="${ parsedDateTime }" var="informDate"/>
+                        <tr class="inform">
+                            <td class="type">공지</td>
+                            <td class="title" onclick="goinform('${inform.id}')">${inform.title}</td>
+                            <td class="author">${inform.username}</td>
+                            <td class="createDate">${informDate}</td>
+                            <td class="view"></td>
+                            <td class="likes"></td>
+                        </tr>
                     </c:forEach>
 
-                    <c:if test="${pageDto.endPage eq 0}">
-                        <li class="page-next" onclick="movePage('${pageDto.endPage}')">&raquo;</li>
+                    <c:forEach items="${list.content}" var="board">
+                        <fmt:parseDate value="${board.createDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                        <fmt:formatDate pattern="yyyy.MM.dd" value="${ parsedDateTime }" var="boardDate"/>
+                        <tr>
+                            <td class="type">${board.typeName}</td>
+                            <td class="title" onclick="goView('${board.id}')">${board.title} <div class="comment-cnt">${board.commentCount}</div></td>
+
+                            <c:if test="${board.user eq true}">
+                                <td class="author">${board.username}</td>
+                            </c:if>
+                            <c:if test="${board.user eq false}">
+                                <td class="author">${board.author}(${board.ip})</td>
+                            </c:if>
+
+                            <td class="createDate">${boardDate}</td>
+                            <td class="view">${board.view}</td>
+                            <td class="likes">${board.likes}</td>
+                        </tr>
+                    </c:forEach>
+                    <c:if test="${empty list.content}">
+                        <tr>
+                            <td colspan="6" class="empty">검색결과가 없습니다.</td>
+                        </tr>
                     </c:if>
-                    <c:if test="${pageDto.endPage ne 0}">
-                        <li class="page-next" onclick="movePage('${pageDto.endPage+1}')">&raquo;</li>
+                </tbody>
+            </table>
+            <div class="area">
+                <div class="search-area">
+                    <select class="search-select register-select">
+                        <option value="all" <c:if test ="${search.keyword eq 'all'}">selected="selected"</c:if>>
+                            전체
+                        </option>
+                        <option value="title" <c:if test ="${search.keyword eq 'title'}">selected="selected"</c:if>>
+                            제목
+                        </option>
+                        <option value="content" <c:if test ="${search.keyword eq 'content'}">selected="selected"</c:if>>
+                            내용
+                        </option>
+                        <option value="author" <c:if test ="${search.keyword eq 'author'}">selected="selected"</c:if>>
+                            작성자
+                        </option>
+                    </select>
+                    <input class="search-input" placeholder="검색어를 입력하세요." id="bottomSearch" value="${search.content}">
+                    <button class="search-btn" onclick="searchForKeyword()">검색</button>
+                </div>
+                <div class="btn-area">
+                    <button onclick="goRegister()">글쓰기</button>
+                </div>
+            </div>
+            <div class="paging">
+                <ul>
+                    <c:if test="${not empty list.content}">
+                        <c:if test="${pageDto.startPage eq 0}">
+                            <li class="page-prev" onclick="movePage('${pageDto.startPage}')">&laquo;</li>
+                        </c:if>
+                        <c:if test="${pageDto.startPage ne 0}">
+                            <li class="page-prev" onclick="movePage('${pageDto.startPage - 1}')">&laquo;</li>
+                        </c:if>
+
+                        <c:forEach var="i" begin="${pageDto.startPage}" end="${pageDto.endPage}" step="1">
+                            <c:if test="${pageDto.curPage eq i}">
+                                <li class="page active">${i+1}</li>
+                            </c:if>
+                            <c:if test="${pageDto.curPage ne i}">
+                                <li class="page" onclick="movePage('${i}')">${i+1}</li>
+                            </c:if>
+                        </c:forEach>
+
+                        <c:if test="${pageDto.endPage eq 0}">
+                            <li class="page-next" onclick="movePage('${pageDto.endPage}')">&raquo;</li>
+                        </c:if>
+                        <c:if test="${pageDto.endPage ne 0}">
+                            <li class="page-next" onclick="movePage('${pageDto.endPage+1}')">&raquo;</li>
+                        </c:if>
                     </c:if>
-                </c:if>
-            </ul>
+                </ul>
+            </div>
+
+            <c:if test="${banner.bottomBanner.show eq true}">
+                <div class="bottom-logo" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.bottomBanner.link}')"></div>
+            </c:if>
+        </div>
+
+    </div> <%--.wrapper--%>
+
+    <div class='alert-modal'>
+        <div class='alert-modal-display'>
+            <div class="alert-modal-info">
+                <div class="title"><strong>알림</strong></div>
+                <div class="x-btn" onclick="closeNotiModal()"><div class="x-ico"></div></div>
+            </div>
+            <div class="alert-modal-option">
+                <div class="all-option" onclick="allDeleteNoti()">전체삭제</div>
+            </div>
+            <div class='alert-modal-content'>
+            </div>
         </div>
     </div>
 

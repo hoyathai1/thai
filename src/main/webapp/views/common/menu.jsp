@@ -68,6 +68,10 @@
                 <div class="note-ico"></div>
                 <div class="menu-font">내가쓴글</div>
             </div>
+            <div class="area" onclick="goComment()">
+                <div class="note-ico"></div>
+                <div class="menu-font">내댓글</div>
+            </div>
             <div class="area" onclick="goBookMark()">
                 <div class="favorite-ico"></div>
                 <div class="menu-font">저장글</div>

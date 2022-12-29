@@ -103,27 +103,21 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
-                            배너 관리 (X)
+                            배너 관리
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="javascript:;" class="nav-link">
+                            <a href="/admin/banner/pc?category=thai" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>미정</p>
+                                <p>PC배너</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="javascript:;" class="nav-link">
+                            <a href="/admin/banner/mobile?category=thai" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>미정</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="javascript:;" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>미정</p>
+                                <p>모바일배너</p>
                             </a>
                         </li>
                     </ul>

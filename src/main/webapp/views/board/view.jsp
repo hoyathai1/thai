@@ -124,7 +124,19 @@
     <div class="div-border"></div>
     <div class="board-list">
     </div>
+
+    <c:if test="${banner.bottomBanner.show eq true}">
+        <div class="bottomBanner"><div class="bannerImg" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat; background-size: contain; background-position: center;" onclick="clickBanner('${banner.bottomBanner.link}')"></div></div>
+    </c:if>
 </div>
+
+<input type="hidden" name="leftBannerShow" value="${banner.leftBanner.show}">
+<input type="hidden" name="leftBannerUrl" value="/banner/${banner.leftBanner.fileName}">
+<input type="hidden" name="leftBannerLink" value="${banner.leftBanner.link}">
+
+<input type="hidden" name="rightBannerShow" value="${banner.rightBanner.show}">
+<input type="hidden" name="rightBannerUrl" value="/banner/${banner.rightBanner.fileName}">
+<input type="hidden" name="rightBannerLink" value="${banner.rightBanner.link}">
 
 <input type="hidden" name="boardNum" value="${search.boardNum}">
 <input type="hidden" name="pageNum" value="${search.pageNum}">

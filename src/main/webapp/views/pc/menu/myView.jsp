@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet"  type="text/css" href="/css/pc/menu/myView.css">
-<link rel="stylesheet"  type="text/css" href="/css/pc/board/base.css">
+<%--<link rel="stylesheet"  type="text/css" href="/css/pc/board/base.css">--%>
 <html>
 <head>
     <title>게시글</title>

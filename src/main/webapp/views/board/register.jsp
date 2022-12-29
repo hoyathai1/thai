@@ -80,6 +80,10 @@
             </c:if>
         </div>
     </div>
+
+    <c:if test="${banner.bottomBanner.show eq true}">
+        <div class="bottomBanner"><div class="bannerImg" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat; background-size: contain; background-position: center;" onclick="clickBanner('${banner.bottomBanner.link}')"></div></div>
+    </c:if>
 </div>
 
 <form id="uploadForm" method="post" enctype="multipart/form-data">
