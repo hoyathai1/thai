@@ -21,23 +21,27 @@ function makeQueryUrl() {
     var likes = $("input[name=likes]").val();
     var comment = $("input[name=comment]").val();
 
-    return "pageNum=" + pageNum + "&category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("pageNum=" + pageNum + "&category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content);
+}
+
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
 }
 
 function goSignUp() {
-    location.href="/pc/signUp?" + makeQueryUrl();
+    location.href = "/pc/signUp?" + makeQueryUrl();
 }
 
 function goLogin() {
-    location.href="/pc/login";
+    location.href = "/pc/login";
 }
 
 function goLogout() {
-    location.href="/logout";
+    location.href = "/logout";
 }
 
 function goCategory(pCategory) {
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=");
 }
 
 function goList() {

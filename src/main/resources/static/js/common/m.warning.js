@@ -1,5 +1,3 @@
-$(document).ready(function () {
-    setTimeout(function () {
-        location.href="/board/list";
-    }, 2000);
-}
+setTimeout(function () {
+    location.href = "/";
+}, 2000);

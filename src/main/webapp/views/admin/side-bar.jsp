@@ -8,7 +8,7 @@
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
-    <a href="index3.html" class="brand-link">
+    <a href="/" class="brand-link">
         <img src="/img/elephant.png" alt="HellowThai" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">HellowThai</span>
     </a>
@@ -20,7 +20,7 @@
                 <%--<img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">--%>
             </div>
             <div class="info">
-                <a href="javascript:;" class="d-block">${principal.username}</a>
+                <a href="/admin/main" class="d-block">${principal.username}</a>
             </div>
         </div>
 
@@ -118,6 +118,12 @@
                             <a href="/admin/banner/mobile?category=thai" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>모바일배너</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/banner/board?category=thai" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>배너 게시글</p>
                             </a>
                         </li>
                     </ul>

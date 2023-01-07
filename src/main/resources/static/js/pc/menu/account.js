@@ -21,23 +21,23 @@ function makeQueryUrl() {
     var content = $(".search-input").val();
     var keyword = $("input[name=keyword]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content);
 }
 
 function goCategory(pCategory) {
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=");
 }
 
 function goSignUp() {
-    location.href="/pc/signUp?" + makeQueryUrl();
+    location.href = "/pc/signUp?" + makeQueryUrl();
 }
 
 function goLogin() {
-    location.href="/pc/login";
+    location.href = "/pc/login";
 }
 
 function goLogout() {
-    location.href="/logout";
+    location.href = "/logout";
 }
 
 function goMyAccount() {
@@ -169,5 +169,9 @@ function changeInfo() {
 }
 
 function moveChangePwd() {
-    location.href="/pc/menu/accountPwd?" + makeQueryUrl();
+    location.href = "/pc/menu/accountPwd?" + makeQueryUrl();
+}
+
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
 }

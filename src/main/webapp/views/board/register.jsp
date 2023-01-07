@@ -82,7 +82,7 @@
     </div>
 
     <c:if test="${banner.bottomBanner.show eq true}">
-        <div class="bottomBanner"><div class="bannerImg" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat; background-size: contain; background-position: center;" onclick="clickBanner('${banner.bottomBanner.link}')"></div></div>
+        <div class="bottomBanner"><div class="bannerImg" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat; background-size: contain; background-position: center;" onclick="clickBanner('${banner.bottomBanner.link}', '${banner.bottomBanner.board}')"></div></div>
     </c:if>
 </div>
 

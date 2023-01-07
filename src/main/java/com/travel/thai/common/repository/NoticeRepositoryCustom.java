@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface NoticeRepositoryCustom {
     List<NoticeDto> search();
+    NoticeDto searchDetail(Search search);
     PageImpl<NoticeDto> searchForPaging(Search search, Pageable pageable);
+    PageImpl<NoticeDto> searchForPagingAdmin(Search search, Pageable pageable);
     void updateNotice(Notice param);
     void activeNotice(Notice param);
 }

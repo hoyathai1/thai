@@ -82,6 +82,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="topBannerIsBoard" <c:if test="${dto.topBanner.board eq true}">checked</c:if>>
+                                    <label class="form-check-label" for="topBannerIsBoard">외부링크</label>
+                                </div>
                             </div>
 
                             <div class="card-footer">
@@ -117,6 +121,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="bottomBannerIsBoard" <c:if test="${dto.bottomBanner.board eq true}">checked</c:if>>
+                                    <label class="form-check-label" for="bottomBannerIsBoard">외부링크</label>
+                                </div>
                             </div>
 
                             <div class="card-footer">
@@ -133,12 +141,12 @@
                     <div class="col-6">
                         <div class="card card-success">
                             <div class="card-header">
-                                <h3 class="card-title">좌측배너 (400px x 75px)</h3>
+                                <h3 class="card-title">댓글 배너 (400px x 75px)</h3>
                             </div>
 
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="leftBannerLink">좌측배너 링크 주소</label>
+                                    <label for="leftBannerLink">댓글배너 링크 주소</label>
                                     <input type="text" class="form-control" id="leftBannerLink" placeholder="www." value="${dto.leftBanner.link}">
                                 </div>
                                 <div class="form-group">
@@ -151,6 +159,10 @@
                                             </form>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="leftBannerIsBoard" <c:if test="${dto.leftBanner.board eq true}">checked</c:if>>
+                                    <label class="form-check-label" for="leftBannerIsBoard">외부링크</label>
                                 </div>
                             </div>
 
@@ -186,6 +198,10 @@
                                             </form>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="rightBannerIsBoard" <c:if test="${dto.rightBanner.board eq true}">checked</c:if>>
+                                    <label class="form-check-label" for="rightBannerIsBoard">외부링크</label>
                                 </div>
                             </div>
 

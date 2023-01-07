@@ -51,6 +51,9 @@ public class Board {
     @ColumnDefault(value = "false")
     private boolean isDel;
 
+    @ColumnDefault(value = "false")
+    private boolean isImg;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 

@@ -225,3 +225,11 @@ function resizeImage(file, quality, maxsize) {
 
     reader.readAsDataURL(file);
 }
+
+function clickBanner(url, isBoard) {
+    if (isBoard == 'true') {
+        location.href = "/board/inform?boardNum=" + url + "&" + makeQueryUrl();
+    } else {
+        window.open(url);
+    }
+}

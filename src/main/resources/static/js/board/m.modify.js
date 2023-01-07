@@ -169,7 +169,7 @@ function checkStyle() {
 
 function goBack() {
     var boardNum = $("input[name=boardNum]").val();
-    location.href="/board/view?boardNum=" + boardNum + "&" + makeQueryUrl();
+    location.href = "/board/view?boardNum=" + boardNum + "&" + makeQueryUrl();
 }
 
 function makeQueryUrl() {
@@ -178,7 +178,7 @@ function makeQueryUrl() {
     var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
 
-    return "type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content);
 }
 
 function imageSizeChange( image ) {

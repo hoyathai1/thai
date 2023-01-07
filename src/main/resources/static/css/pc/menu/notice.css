@@ -1,0 +1,250 @@
+:root{
+    --black_gray: #464646;
+    --gray: #646464;
+    --light_gray: #e2e2e2;
+    --blue: #2828CD;
+    --border: #bcbcbc;
+}
+
+body {
+    margin: 0 auto;
+}
+
+.top-gnb {
+    display: flex;
+    height: 24px;
+    background-color: var(--light_gray);
+    align-items: center;
+    justify-content: space-around;
+}
+
+.top-gnb .description {
+
+}
+
+.top-gnb .description h6 {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0;
+}
+
+.top-gnb .menu {
+}
+.top-gnb .menu nav ul {
+    margin: 0;
+    list-style:none;
+}
+
+.top-gnb .menu nav ul li {
+    float: left;
+    font-size: 12px;
+    color: black;
+    cursor:pointer;
+}
+
+.top-gnb .menu nav ul li:after {
+    content : "|";
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.top-gnb .menu nav ul li:last-child:after {
+    content : "";
+}
+
+.container {
+    min-width: 528px;
+    margin: 0 auto;
+    width: 50%;
+}
+
+.category {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    background-color: var(--gray);
+    box-shadow: 1px 1px 1px 1px var(--light_gray);
+}
+
+.category .list {
+    display: flex;
+    margin-left: 25px;
+}
+
+.category .list .name {
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.category .list .name:after {
+    content: '|';
+    color: #7d7576;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.category .list .name:last-child:after {
+    content: '';
+    margin-left: 15px;
+}
+
+.subject {
+    margin-top: 5px;
+    height: 40px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between
+}
+
+.subject .subject-area {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+}
+
+.subject .subject-area .ico-thai {
+    background: url("/img/thai.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 46px;
+    height: 100%;
+}
+
+.subject .search-area {
+
+}
+
+.subject .search-area .search-input {
+    font-size: 12px;
+    padding: 3px;
+    border: 3px solid var(--light_gray);
+    height: 24px;
+}
+
+.subject .search-area .search-input:focus {
+    border: 3px solid var(--light_gray);
+    outline: none;
+
+}
+
+.subject .search-area .search-btn {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    box-shadow: 0 1px 1px #aaa;
+    height: 24px;
+    cursor: pointer;
+    background-color:transparent;
+    font-size: 12px;
+}
+
+.subject .subject-area h1 {
+    margin: 0px 0px 0px 5px;
+    font-size: 25px;
+}
+
+table.list {
+    margin-top: 10px;
+    table-layout: fixed;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table thead tr th {
+    font-size: 12px;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+table thead tr th.categoryName {
+    width: 10%;
+}
+table thead tr th.type {
+    width: 10%;
+}
+table thead tr th.title {
+    width: 60%;
+}
+table thead tr th.createDate {
+    width: 20%;
+}
+
+table tbody tr {
+    border-top: 1px solid var(--border);
+}
+
+table tbody tr.inform {
+    background-color: #FFFFCC;
+}
+
+table tbody tr td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+table tbody tr td.categoryName {
+    text-align: center;
+}
+
+table tbody tr td.type {
+    text-align: center;
+}
+
+table tbody tr td.title {
+    cursor: pointer;
+}
+
+table tbody tr td.createDate {
+    text-align: center;
+}
+
+table tbody tr td.move button {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    box-shadow: 0 1px 1px #aaa;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+div.paging {
+    display: flex;
+    justify-content: center;
+}
+
+div.paging ul {
+    list-style:none;
+}
+
+div.paging ul li {
+    float: left;
+    font-size: 12px;
+    padding: 4px 8px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+div.paging ul li.active {
+    background-color: var(--gray);
+    color: white;
+    border: 1px solid var(--gray);
+}
+
+div.paging ul li:hover:not(.active) {background-color: #ddd;}
+
+div.paging ul li:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+div.paging ul li:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

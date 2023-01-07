@@ -2,6 +2,7 @@ package com.travel.thai.user.controller;
 
 import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.common.service.EmailService;
+import com.travel.thai.common.util.LogUtil;
 import com.travel.thai.common.util.StringUtils;
 import com.travel.thai.user.domain.User;
 import com.travel.thai.user.domain.UserDto;
@@ -96,7 +97,7 @@ public class UserController {
         ResponseEntity<String> entity = null;
 
         try {
-            userDto.setIp(request.getRemoteAddr());
+            userDto.setIp(LogUtil.etRemoteAddr(request));
             userService.signUp(userDto);
 
             /**
@@ -150,6 +151,12 @@ public class UserController {
     public String findPwd(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         return "user/findPwd";
+    }
+
+    @RequestMapping(value = {"/pc/find/pwd"}, method = RequestMethod.GET)
+    public String pcFindPwd(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        return "pc/user/findPwd";
     }
 
     @RequestMapping(value = {"/tempPwdEmail"}, method = RequestMethod.POST)

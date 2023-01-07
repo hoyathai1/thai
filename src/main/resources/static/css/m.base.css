@@ -18,6 +18,11 @@ input:autofill:active {
     transition: background-color 5000s ease-in-out 0s;
 }
 
+body {
+    /*font-family: 'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',arial,sans-serif*/
+    font-family: -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",arial,Dotum,돋움,sans-serif;
+}
+
 /* Text box placeholder setting */
 [contenteditable=true]:empty:not(:focus):before {
     content: attr(placeholder);
@@ -327,10 +332,10 @@ body {
 
 .header-gnb li a {
     display: block;
-    padding: 8px;
+    padding: 8px 2px 6px 2px;
     text-decoration: none;
     text-align: center;
-    font-size: 15px;
+    font-size: 0.8em;
     color: var(--light_gray);
     font-weight: bold;
 }

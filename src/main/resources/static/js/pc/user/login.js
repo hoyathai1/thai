@@ -1,3 +1,16 @@
+$(document).ready(function () {
+    if(detectMobileDevice(window.navigator.userAgent)) {
+        var hUrl = new URL(location.href);
+        location.href = encodeURI("/login" + hUrl.search);
+    }
+
+    if (best == 'Y') {
+        $("#best").addClass("on");
+    } else {
+        $("#" + type).addClass("on");
+    }
+});
+
 function btnLogin() {
     var id = $("input[name=username]").val();
     var password = $("input[name=password]").val();

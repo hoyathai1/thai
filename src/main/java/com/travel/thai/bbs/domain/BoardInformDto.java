@@ -60,4 +60,14 @@ public class BoardInformDto {
         this.createDate = createDate;
         this.isDel = isDel;
     }
+
+    @Builder
+    public BoardInformDto(Long id, String category, String title, String username, LocalDateTime createDate, boolean isDel) {
+        this.id = id;
+        this.category = category;
+        this.title = title;
+        this.username = username;
+        this.createDate = createDate;
+        this.isDel = isDel;
+    }
 }

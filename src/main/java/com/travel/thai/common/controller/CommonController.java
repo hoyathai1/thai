@@ -1,10 +1,7 @@
 package com.travel.thai.common.controller;
 
 import com.travel.thai.bbs.domain.*;
-import com.travel.thai.bbs.service.BoardCategoryService;
-import com.travel.thai.bbs.service.BoardNotiService;
-import com.travel.thai.bbs.service.BoardService;
-import com.travel.thai.bbs.service.BookMarkService;
+import com.travel.thai.bbs.service.*;
 import com.travel.thai.common.domain.Notice;
 import com.travel.thai.common.domain.NoticeDto;
 import com.travel.thai.common.service.NoticeService;
@@ -49,6 +46,9 @@ public class CommonController {
 
     @Autowired
     private BoardCategoryService boardCategoryService;
+
+    @Autowired
+    private CommentService commentService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String main(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -179,6 +179,23 @@ public class CommonController {
         model.addAttribute("search", search);
 
         return "/common/myNoti";
+    }
+
+    @RequestMapping(value = "/menu/myComment", method = RequestMethod.GET)
+    public String myComment(HttpServletRequest request, HttpServletResponse response, Model model, @ModelAttribute("search") Search search
+            , @AuthenticationPrincipal User user) {
+
+        if (user == null) {
+            return "/common/warning";
+        }
+
+        search.setUserId(user.getUserId());
+        Page<CommentDto> list= commentService.searchListForPc(search);
+        model.addAttribute("list", list);
+        model.addAttribute("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+        model.addAttribute("search", search);
+
+        return "/common/myComment";
     }
 
     @RequestMapping(value = "/menu/bookmark", method = RequestMethod.GET)

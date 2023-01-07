@@ -2,6 +2,8 @@ package com.travel.thai.pc.controller;
 
 import com.travel.thai.bbs.domain.*;
 import com.travel.thai.bbs.service.*;
+import com.travel.thai.common.service.BannerService;
+import com.travel.thai.common.session.UserSessionCounter;
 import com.travel.thai.common.util.LogUtil;
 import com.travel.thai.common.util.RSAUtil;
 import com.travel.thai.common.util.StringUtils;
@@ -55,6 +57,12 @@ public class PcBoardController {
     @Autowired
     private BoardCategoryService categoryService;
 
+    @Autowired
+    private BoardNotiService boardNotiService;
+
+    @Autowired
+    private BannerService bannerService;
+
     @Value("${board.img.temp.dir}")
     private String TEMP_DIR;
 
@@ -64,6 +72,14 @@ public class PcBoardController {
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
         model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
+        model.addAttribute("banner", bannerService.getBannerForPc(search.getCategory()));
+
+        // 알림
+        boolean isHasNoti = false;
+        if (user != null) {
+            search.setUserId(user.getUserId());
+            isHasNoti = boardNotiService.isHasNoti(search);
+        }
 
         Page<BoardDto> list = boardService.searchBoard(search);
         List<BoardInformDto> inform = boardInformService.search(search);
@@ -73,6 +89,7 @@ public class PcBoardController {
         });
 
         model.addAttribute("list", list);
+        model.addAttribute("isHasNoti", isHasNoti);
         model.addAttribute("inform", inform);
         model.addAttribute("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
         model.addAttribute("search", search);
@@ -97,6 +114,114 @@ public class PcBoardController {
             map.put("list", list);
             map.put("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
 //            map.put("search", search);
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/informList", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> listForInformAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.listForInformAjax][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+            Page<BoardDto> list = boardService.searchBoardForPcInformDetail(search);
+
+            list.stream().forEach(x->{
+                x.setTypeName(categoryService.getBoardTypeName(x.getType(), x.getCategory()));
+            });
+
+            map.put("list", list);
+            map.put("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/boardNoti", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> boardNotiAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.boardNoti][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+            if (user == null) {
+                return new ResponseEntity<>(map, HttpStatus.OK);
+            }
+
+            // 알림
+            search.setUserId(user.getUserId());
+            Page<BoardNotiDto> list = boardNotiService.search(search);
+
+            list.stream().forEach(x->{
+                if (x.getContent().contains("</br>")) {
+                    x.setContent(x.getContent().substring(0, x.getContent().indexOf("</br>")));
+                }
+            });
+
+            map.put("list", list);
+            map.put("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/allDeleteNoti", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> allDeleteNotiAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.allDeleteNoti][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+            if (user == null) {
+                return new ResponseEntity<>(map, HttpStatus.OK);
+            }
+
+            search.setUserId(user.getUserId());
+            boardNotiService.allDeleteNoti(search);
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
+    @RequestMapping(value = "/deleteNoti", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> deleteNotiAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.deleteNoti][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+            if (user == null) {
+                return new ResponseEntity<>(map, HttpStatus.OK);
+            }
+
+            search.setUserId(user.getUserId());
+            boardNotiService.deleteNoti(search);
 
             entity = new ResponseEntity<>(map, HttpStatus.OK);
         } catch (Exception e) {
@@ -135,13 +260,18 @@ public class PcBoardController {
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
         model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
+        model.addAttribute("banner", bannerService.getBannerForPc(search.getCategory()));
 
         BoardDto board = boardService.searchOne(search);
         int likes = likesService.getLikesCount(search.getBoardNum());
         boolean isLikes = false;
         boolean isBookMark = false;
+        boolean isHasNoti = false;
 
         if (user != null) {
+            search.setUserId(user.getUserId());
+            isHasNoti = boardNotiService.isHasNoti(search);
+
             isLikes = likesService.isLikesByUserId(search.getBoardNum(), user.getUserId());
 
             BookMark bookMark = new BookMark();
@@ -156,6 +286,7 @@ public class PcBoardController {
         boardService.increseViewCount(search);
 
         model.addAttribute("isLikes", isLikes);
+        model.addAttribute("isHasNoti", isHasNoti);
         model.addAttribute("likes", likes);
         model.addAttribute("board", board);
         model.addAttribute("search", search);
@@ -170,9 +301,17 @@ public class PcBoardController {
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
         model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
+        model.addAttribute("banner", bannerService.getBannerForPc(search.getCategory()));
+
+        boolean isHasNoti = false;
+        if (user != null) {
+            search.setUserId(user.getUserId());
+            isHasNoti = boardNotiService.isHasNoti(search);
+        }
 
         BoardInformDto boardInform = boardInformService.searchOne(search);
 
+        model.addAttribute("isHasNoti", isHasNoti);
         model.addAttribute("board", boardInform);
 
         return "pc/board/inform";
@@ -242,6 +381,7 @@ public class PcBoardController {
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
         model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
+        model.addAttribute("banner", bannerService.getBannerForPc(search.getCategory()));
 
         HttpSession session = request.getSession();
         String[] fileList = (String[]) session.getAttribute("fileNameList");
@@ -249,6 +389,14 @@ public class PcBoardController {
         if (fileList!= null && fileList.length > 0) {
             session.removeAttribute("fileNameList");
         }
+
+        boolean isHasNoti = false;
+        if (user != null) {
+            search.setUserId(user.getUserId());
+            isHasNoti = boardNotiService.isHasNoti(search);
+        }
+
+        model.addAttribute("isHasNoti", isHasNoti);
 
         return "pc/board/register";
     }
@@ -271,8 +419,13 @@ public class PcBoardController {
                 board.setIp(request.getRemoteAddr());
             }
 
-            Board result = boardService.saveBoard(board);
             String[] fileNameList = (String[]) session.getAttribute("fileNameList");
+
+            if (fileNameList != null || fileNameList.length > 0) {
+                board.setImg(true);
+            }
+
+            Board result = boardService.saveBoard(board);
 
             boardService.moveImage(fileNameList, board);
 
@@ -333,16 +486,21 @@ public class PcBoardController {
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
         model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
+        model.addAttribute("banner", bannerService.getBannerForPc(search.getCategory()));
 
         try {
             HttpSession session = request.getSession();
             String[] fileList = (String[]) session.getAttribute("fileNameList");
+            boolean isHasNoti = false;
 
             if (fileList!= null && fileList.length > 0) {
                 session.removeAttribute("fileNameList");
             }
 
             if (user != null) {
+                search.setUserId(user.getUserId());
+                isHasNoti = boardNotiService.isHasNoti(search);
+
                 BoardDto board = boardService.searchOne(search);
 
                 if (user.getUserId().equals(board.getUserId())) {
@@ -369,6 +527,8 @@ public class PcBoardController {
                 model.addAttribute("board", board);
                 model.addAttribute("search", search);
             }
+
+            model.addAttribute("isHasNoti", isHasNoti);
         } catch (Exception e) {
             return "redirect:/warning";
         }
@@ -384,9 +544,16 @@ public class PcBoardController {
         HttpSession session = request.getSession();
 
         try {
+            String[] fileNameList = (String[]) session.getAttribute("fileNameList");
+
+            if (fileNameList != null || fileNameList.length > 0) {
+                board.setImg(true);
+            } else {
+                board.setImg(false);
+            }
+
             boolean result = boardService.modifyBoard(board, user);
 
-            String[] fileNameList = (String[]) session.getAttribute("fileNameList");
             boardService.moveImage(fileNameList, board);
 
             entity = new ResponseEntity(result, HttpStatus.OK);

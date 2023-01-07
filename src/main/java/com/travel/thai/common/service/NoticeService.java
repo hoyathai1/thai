@@ -10,7 +10,9 @@ import java.util.List;
 public interface NoticeService {
     Notice saveNotice(Notice notice);
     List<NoticeDto> search();
+    NoticeDto searchDetail(Search search);
     Page<NoticeDto> searchForPaging(Search search);
+    Page<NoticeDto> searchForPagingAdmin(Search search);
     void updateNotice(Notice notice);
     void activeNotice(Notice notice);
 }

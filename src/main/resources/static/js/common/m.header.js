@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 
         var hUrl = new URL(location.href);
-        location.href="/pc" + hUrl.pathname + hUrl.search;
+        location.href = encodeURI("/pc" + hUrl.pathname + hUrl.search);
     }
 
     if (path != '/board/list') {
@@ -45,7 +45,7 @@ function detectMobileDevice(agent) {
 }
 
 function goSignUp() {
-    location.href="/signUp?" + makeQueryUrl();
+    location.href = "/signUp?" + makeQueryUrl();
 }
 
 function goLogin() {
@@ -57,7 +57,7 @@ function goLogout() {
 }
 
 function goMain(category_id) {
-    location.href="/board/list?type=all&best=N&category=" + category_id + "&pageNum=0";
+    location.href = encodeURI("/board/list?type=all&best=N&category=" + category_id + "&pageNum=0");
 }
 
 function goMenu() {

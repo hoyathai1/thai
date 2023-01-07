@@ -7,7 +7,11 @@
 <link rel="stylesheet"  type="text/css" href="/css/pc/board/base.css">
 <html>
 <head>
-    <title>게시글</title>
+    <meta property="og:title" content="헬타이">
+    <meta property="og:url" content="http://hellowthai.com/">
+    <meta property="og:image" content="/img/logo.png">
+    <meta property="og:description" content="태국정보를 공유하는 커뮤님티입니다.">
+    <title>헬타이</title>
 </head>
 <body>
     <sec:authorize access="isAuthenticated()">
@@ -28,6 +32,7 @@
         <div class="menu">
             <nav>
                 <ul>
+                    <li onclick="goNotice()">공지사항</li>
                     <c:if test="${empty principal}">
                         <li onclick="goSignUp()">회원가입</li>
                         <li onclick="goLogin()">로그인</li>
@@ -82,7 +87,7 @@
             </c:if>
 
             <c:if test="${banner.rightBanner.show eq true}">
-                <div class="right-logo" style="background: url(/banner/${banner.rightBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.rightBanner.link}')"></div>
+                <div class="right-logo" style="background: url(/banner/${banner.rightBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.rightBanner.link}', '${banner.rightBanner.board}')"></div>
             </c:if>
             <c:if test="${banner.rightBanner.show eq false}">
                 <div class="right-logo"></div>
@@ -91,7 +96,7 @@
 
         <div class="left-sidebar">
             <c:if test="${banner.leftBanner.show eq true}">
-                <div class="left-logo" style="background: url(/banner/${banner.leftBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.leftBanner.link}')"></div>
+                <div class="left-logo" style="background: url(/banner/${banner.leftBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.leftBanner.link}', '${banner.leftBanner.board}')"></div>
             </c:if>
             <c:if test="${banner.leftBanner.show eq false}">
                 <div class="left-logo"></div>
@@ -108,7 +113,7 @@
             </div>
 
             <c:if test="${banner.topBanner.show eq true}">
-                <div class="top-logo" style="background: url(/banner/${banner.topBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.topBanner.link}')"></div>
+                <div class="top-logo" style="background: url(/banner/${banner.topBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.topBanner.link}', '${banner.topBanner.board}')"></div>
             </c:if>
 
             <div class="subject">
@@ -148,7 +153,7 @@
                     <div class="info">
                         <div class="left">
                             <c:if test="${board.user eq true}">
-                                <div class="author">${board.author}</div>
+                                <div class="author" onclick="goUserModal('${board.id}', '${board.author}')" id="${board.id}">${board.author}</div>
                             </c:if>
                             <c:if test="${board.user eq false}">
                                 <div class="author">${board.author} (${board.ip})</div>
@@ -277,7 +282,7 @@
 
             </div>
             <c:if test="${banner.bottomBanner.show eq true}">
-                <div class="bottom-logo" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.bottomBanner.link}')"></div>
+                <div class="bottom-logo" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat;" onclick="clickBanner('${banner.bottomBanner.link}', '${banner.bottomBanner.board}')"></div>
             </c:if>
         </div>
     </div> <%--.wrapper--%>
@@ -292,6 +297,18 @@
                 <div class="all-option" onclick="allDeleteNoti()">전체삭제</div>
             </div>
             <div class='alert-modal-content'>
+            </div>
+        </div>
+    </div>
+
+    <div class='user-modal'>
+        <div class='user-modal-display'>
+            <div class="user-modal-info">
+                <div class="title"><strong>유저정보</strong></div>
+                <div class="x-btn" onclick="closeUserModal()"><div class="x-ico"></div></div>
+            </div>
+            <div class='user-modal-content' data-id="">
+                <div onclick="authorSearch()">작성 글 보기</div>
             </div>
         </div>
     </div>

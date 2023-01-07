@@ -751,3 +751,77 @@ div.paging ul li:last-child {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
+
+
+/*
+    모달창
+*/
+.modal {
+    position: fixed;
+    top:0; left: 0; bottom: 0; right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.modal .modal-display {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    background-color: #e2e2e2;
+    border-radius: 10px;
+    width: 300px;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal .modal-display .modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal .modal-display .modal-content .ipt {
+    border: 1px solid #989898;
+    outline: none;
+    padding: 6px;
+    margin-top: 5px;
+    width: 67%;
+}
+
+.modal .modal-display .modal-content .ipt:focus {
+    border: 2px solid #989898;
+}
+
+.modal .modal-content .modal-btn-area {
+    width: 70%;
+    margin-bottom: 0px;
+    margin-top: 50px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.modal .modal-content .modal-btn-area button {
+    width: 45%;
+
+    border: 1px var(--gray) solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--gray);
+    height: 32px;
+}
+
+.modal .modal-content .modal-btn-area button.on {
+    background-color: var(--gray);
+    color: white;
+}
+
+.empty {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

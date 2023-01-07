@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BoardNotiServiceImpl implements BoardNotiService {
@@ -27,7 +28,24 @@ public class BoardNotiServiceImpl implements BoardNotiService {
     }
 
     @Override
+    public boolean isHasNoti(Search search) {
+        return boardNotiRepository.isHasNoti(search);
+    }
+
+    @Override
     public BoardNoti save(BoardNoti noti) {
         return boardNotiRepository.save(noti);
+    }
+
+    @Override
+    @Transactional
+    public void allDeleteNoti(Search search) {
+        boardNotiRepository.allDeleteNoti(search);
+    }
+
+    @Override
+    @Transactional
+    public void deleteNoti(Search search) {
+        boardNotiRepository.deleteNoti(search);
     }
 }

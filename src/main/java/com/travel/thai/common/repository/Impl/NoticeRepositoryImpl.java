@@ -38,6 +38,7 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
                 .from(notice)
                 .leftJoin(user).on(user.userId.eq(notice.userId))
                 .leftJoin(boardCategory).on(boardCategory.id.eq(notice.category))
+                .where(notice.isDel.isFalse())
                 .orderBy(notice.id.desc())
                 .fetch();
 
@@ -46,6 +47,63 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
 
     @Override
     public PageImpl<NoticeDto> searchForPaging(Search search, Pageable pageable) {
+        List<NoticeDto> result = queryFactory
+                .select(Projections.constructor(NoticeDto.class,
+                        notice.id,
+                        boardCategory.name,
+                        boardCategory.id,
+                        notice.type,
+                        notice.userId,
+                        user.name,
+                        notice.title,
+                        notice.isDel,
+                        notice.createDate
+                ))
+                .from(notice)
+                .leftJoin(user).on(user.userId.eq(notice.userId))
+                .leftJoin(boardCategory).on(boardCategory.id.eq(notice.category))
+                .where(notice.isDel.isFalse())
+                .orderBy(notice.id.desc())
+                .offset(pageable.getOffset())   // 페이지 번호
+                .limit(pageable.getPageSize())    // 페이지 사이즈
+                .fetch();
+
+        int count = queryFactory
+                .selectOne()
+                .from(notice)
+                .orderBy(notice.id.desc())
+                .fetch().size();
+
+        return new PageImpl<>(result, pageable, count);
+    }
+
+    @Override
+    public NoticeDto searchDetail(Search search) {
+        NoticeDto dto = queryFactory
+                .select(Projections.constructor(NoticeDto.class,
+                        notice.id,
+                        boardCategory.name,
+                        boardCategory.id,
+                        notice.type,
+                        notice.userId,
+                        user.name,
+                        notice.title,
+                        notice.isDel,
+                        notice.createDate,
+                        notice.contents
+                ))
+                .from(notice)
+                .leftJoin(user).on(user.userId.eq(notice.userId))
+                .leftJoin(boardCategory).on(boardCategory.id.eq(notice.category))
+                .where(notice.id.eq(search.getBoardNotiId()).and(notice.isDel.isFalse()))
+                .orderBy(notice.id.desc())
+                .fetchOne();
+
+        return dto;
+    }
+
+    @Override
+    public PageImpl<NoticeDto> searchForPagingAdmin(Search search, Pageable pageable) {
         List<NoticeDto> result = queryFactory
                 .select(Projections.constructor(NoticeDto.class,
                         notice.id,

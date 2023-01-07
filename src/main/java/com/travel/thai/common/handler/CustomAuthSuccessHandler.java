@@ -58,10 +58,10 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         }
 
 
-        User user = (User) authentication.getPrincipal();
-        if ("ROLE_ADMIN".equals(user.getUserAuth())) {
-            uri = "/admin/main/";
-        }
+//        User user = (User) authentication.getPrincipal();
+//        if ("ROLE_ADMIN".equals(user.getUserAuth())) {
+//            uri = "/admin/main/";
+//        }
 
 
         redirectStrategy.sendRedirect(request, response, uri);

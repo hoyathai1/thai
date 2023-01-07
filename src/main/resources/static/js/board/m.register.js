@@ -14,7 +14,9 @@ const imageSelector = document.getElementById('img-selector');
 var isAjax = false;
 
 $(document).ready(function () {
-
+    if (bType != 'all' && best != 'Y') {
+        $(".register-select").val(bType);
+    }
 });
 
 function btnRegister() {
@@ -84,7 +86,7 @@ function btnRegister() {
             type: sType
         }),
         success : function (data) {
-            location.href="/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
+            location.href = encodeURI("/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0");
         },
         error : function () {
 
@@ -144,7 +146,7 @@ function btnRegisterLogin() {
             best: best
         }),
         success : function (data) {
-            location.href="/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
+            location.href = encodeURI("/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0");
         },
         error : function () {
 
@@ -190,26 +192,40 @@ imageSelector.addEventListener('change', function (e) {
 });
 
 function insertImageDate(file) {
-    if (file.size < 50000) {
-        const reader = new FileReader();
-        reader.addEventListener('load', function (e) {
-            focusEditor();
-            document.execCommand('insertImage', false, `${reader.result}`);
-        });
+    if (file.type == 'image/gif') {
+        if (file.size < 200000) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function (e) {
+                focusEditor();
+                document.execCommand('insertImage', false, `${reader.result}`);
+            });
 
-        reader.readAsDataURL(file);
-    } else if (file.size < 200000) {
-        resizeImage(file, 0.9, 850);
-    } else if (file.size < 500000) {
-        resizeImage(file, 0.9, 850);
-    } else if (file.size < 1000000) {
-        resizeImage(file, 0.8, 850);
-    } else if (file.size < 2000000) {
-        resizeImage(file, 0.7, 850);
-    } else if (file.size < 5000000) {
-        resizeImage(file, 0.6, 850);
+            reader.readAsDataURL(file);
+        } else {
+            alert("gif는 2메가를 넘길수없습니다.");
+        }
     } else {
-        resizeImage(file, 0.5, 850);
+        if (file.size < 50000) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function (e) {
+                focusEditor();
+                document.execCommand('insertImage', false, `${reader.result}`);
+            });
+
+            reader.readAsDataURL(file);
+        } else if (file.size < 200000) {
+            resizeImage(file, 0.9, 850);
+        } else if (file.size < 500000) {
+            resizeImage(file, 0.9, 850);
+        } else if (file.size < 1000000) {
+            resizeImage(file, 0.8, 850);
+        } else if (file.size < 2000000) {
+            resizeImage(file, 0.7, 850);
+        } else if (file.size < 5000000) {
+            resizeImage(file, 0.6, 850);
+        } else {
+            resizeImage(file, 0.5, 850);
+        }
     }
 }
 
@@ -256,7 +272,7 @@ function makeQueryUrl() {
     var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
 
-    return "type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content);
 }
 
 function imageSizeChange( image ) {

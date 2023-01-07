@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     if(detectMobileDevice(window.navigator.userAgent)) {
         var hUrl = new URL(location.href);
-        location.href = "/board/list" + hUrl.search;
+        location.href = encodeURI("/board/list" + hUrl.search);
     }
 
     if (best == 'Y') {
@@ -23,7 +23,7 @@ function makeQueryUrl() {
     var content = $(".search-input").val();
     var keyword = $('.search-select').val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content);
 }
 
 function goCategory(pCategory) {
@@ -37,27 +37,31 @@ function goType(pType) {
 function goBest() {
     var pageNum = $("input[name=pageNum]").val();
 
-    location.href="/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=");
 }
 
 function search() {
     var content = $(".search-input").val();
 
-    location.href = "/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=all&content=" + content;
+    location.href = encodeURI("/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=all&content=" + content);
 }
 
 function searchForKeyword() {
     var content = $("#bottomSearch").val();
     var keyword = $(".search-select").val();
 
-    location.href = "/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=" + keyword + "&content=" + content;
+    location.href = encodeURI("/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=" + keyword + "&content=" + content);
 }
 
 function movePage(page) {
     var keyword = $('.search-select').val();
     var content = $('.search-input').val();
 
-    location.href = "/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=" + page + "&keyword=" + keyword + "&content=" + content;
+    location.href = encodeURI("/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=" + page + "&keyword=" + keyword + "&content=" + content);
+}
+
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
 }
 
 function goSignUp() {

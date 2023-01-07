@@ -159,7 +159,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">게시 공 등록</h4>
+                    <h4 class="modal-title">게시 공지 등록</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
                         <span aria-hidden="true">×</span>
                     </button>

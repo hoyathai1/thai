@@ -7,5 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface BoardNotiRepositoryCustom {
     PageImpl<BoardNotiDto> search(Search search, Pageable pageable);
-
+    boolean isHasNoti(Search search);
+    void allDeleteNoti(Search search);
+    void deleteNoti(Search search);
 }

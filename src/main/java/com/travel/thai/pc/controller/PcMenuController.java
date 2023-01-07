@@ -2,6 +2,7 @@ package com.travel.thai.pc.controller;
 
 import com.travel.thai.bbs.domain.*;
 import com.travel.thai.bbs.service.*;
+import com.travel.thai.common.domain.NoticeDto;
 import com.travel.thai.common.service.NoticeService;
 import com.travel.thai.common.util.LogUtil;
 import com.travel.thai.common.util.RSAUtil;
@@ -116,6 +117,37 @@ public class PcMenuController {
         model.addAttribute("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
 
         return "/pc/menu/myList";
+    }
+
+    @RequestMapping(value = "/notice", method = RequestMethod.GET)
+    public String notice(HttpServletRequest request, HttpServletResponse response, Model model
+            , @ModelAttribute("search") Search search, @AuthenticationPrincipal User user) {
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
+
+        Page<NoticeDto> list = noticeService.searchForPaging(search);
+
+        model.addAttribute("list", list);
+        model.addAttribute("search", search);
+        model.addAttribute("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+
+        return "/pc/menu/notice";
+    }
+
+    @RequestMapping(value = "/noticeView", method = RequestMethod.GET)
+    public String noticeDetail(HttpServletRequest request, HttpServletResponse response, Model model
+            , @ModelAttribute("search") Search search, @AuthenticationPrincipal User user) {
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("allCategory", boardCategoryService.getBoardCategoryList());
+
+        NoticeDto dto = noticeService.searchDetail(search);
+
+        model.addAttribute("dto", dto);
+        model.addAttribute("search", search);
+
+        return "/pc/menu/noticeView";
     }
 
     @RequestMapping(value = "/myView", method = RequestMethod.GET)

@@ -4,6 +4,8 @@ import com.travel.thai.bbs.domain.*;
 import com.travel.thai.bbs.repository.BoardFileRepository;
 import com.travel.thai.bbs.repository.BoardRepository;
 import com.travel.thai.bbs.service.BoardService;
+import com.travel.thai.common.service.DayStatService;
+import com.travel.thai.common.util.HttpUtil;
 import com.travel.thai.common.util.RSAUtil;
 import com.travel.thai.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Autowired
     private BoardFileRepository boardFileRepository;
+
+    @Autowired
+    private DayStatService dayStatService;
 
     @Value("${board.img.dir}")
     private String IMG_DIR;
@@ -64,6 +69,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Page<BoardDto> searchBoardForPcInformDetail(Search search) {
+        search.setPageSize(20);
+
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), search.getPageSize()
+        );
+
+        return boardRepository.searchForPcInformDetail(search, pageable);
+    }
+
+    @Override
     public Page<BoardDto> searchBoardForDetail(Search search) {
         search.setPageSize(10);
 
@@ -72,6 +88,17 @@ public class BoardServiceImpl implements BoardService {
         );
 
         return boardRepository.searchForDetail(search, pageable);
+    }
+
+    @Override
+    public Page<BoardDto> searchBoardForInformDetail(Search search) {
+        search.setPageSize(10);
+
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), search.getPageSize()
+        );
+
+        return boardRepository.searchForInformDetail(search, pageable);
     }
 
     @Override
@@ -104,12 +131,19 @@ public class BoardServiceImpl implements BoardService {
             if (!board.isUser()) {
                 String encPassword = RSAUtil.encryptRSA(board.getPassword());
                 board.setPassword(encPassword);
+
+                board.setAuthor(HttpUtil.convertHtmlStr(board.getAuthor()));
             }
+
+            board.setCategory(HttpUtil.convertHtmlStr(board.getCategory()));
+            board.setType(HttpUtil.convertHtmlStr(board.getType()));
+            board.setTitle(HttpUtil.convertHtmlStr(board.getTitle()));
         } catch (Exception e) {
             // TODO: 예외처리
         }
 
         Board result = boardRepository.save(board);
+        dayStatService.statNewBoard();
 
         return result;
     }
@@ -146,6 +180,10 @@ public class BoardServiceImpl implements BoardService {
         boolean isModify = false;
 
         try {
+            //xss
+            board.setType(HttpUtil.convertHtmlStr(board.getType()));
+            board.setTitle(HttpUtil.convertHtmlStr(board.getTitle()));
+
             if (user != null) {
                 Search search = new Search();
                 search.setBoardNum(board.getId());

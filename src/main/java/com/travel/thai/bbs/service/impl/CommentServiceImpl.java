@@ -1,6 +1,9 @@
 package com.travel.thai.bbs.service.impl;
 
 import com.travel.thai.bbs.domain.*;
+import com.travel.thai.common.domain.DayStat;
+import com.travel.thai.common.service.DayStatService;
+import com.travel.thai.common.util.HttpUtil;
 import com.travel.thai.user.domain.User;
 import org.springframework.data.domain.Page;
 import com.travel.thai.bbs.repository.BoardNotiRepository;
@@ -30,6 +33,9 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private BoardNotiRepository boardNotiRepository;
 
+    @Autowired
+    private DayStatService dayStatService;
+
     @Override
     public Comment saveComment(CommentDto commentDto, User user) {
         Board board = new Board();
@@ -42,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
             comment.setUser(true);
             comment.setAuthor(user.getName());
         } else {
-            comment.setAuthor(commentDto.getAuthor());
+            comment.setAuthor(HttpUtil.convertHtmlStr((commentDto.getAuthor())));
 
             // password
             try {
@@ -63,13 +69,15 @@ public class CommentServiceImpl implements CommentService {
         }
 
         String content = commentDto.getContent();
+        content = HttpUtil.convertHtmlStr(content);
         content = content.replaceAll("\n", "</br>");
+
         comment.setContent(content);
         comment.setUpper(commentDto.getBoardId());
         comment.setIp(commentDto.getIp());
 
         Comment result = commentRepository.save(comment);
-
+        dayStatService.statNewComment();
 
         Search search = new Search();
         search.setBoardNum(commentDto.getBoardId());

@@ -7,7 +7,7 @@
 <%--<link rel="stylesheet"  type="text/css" href="/css/pc/board/base.css">--%>
 <html>
 <head>
-    <title></title>
+    }
 </head>
 <body>
 <sec:authorize access="isAuthenticated()">
@@ -21,6 +21,7 @@
     <div class="menu">
         <nav>
             <ul>
+                <li onclick="goNotice()">공지사항</li>
                 <c:if test="${empty principal}">
                     <li onclick="goSignUp()">회원가입</li>
                     <li onclick="goLogin()">로그인</li>

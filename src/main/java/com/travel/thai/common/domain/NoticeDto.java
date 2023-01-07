@@ -18,6 +18,20 @@ public class NoticeDto {
     private LocalDateTime createDate;
     private String contents;
 
+    @Builder
+    public NoticeDto(Long id, String categoryName, String categoryId, String type, String userId, String author, String title, boolean isDel, LocalDateTime createDate) {
+        this.id = id;
+        this.categoryName = categoryName;
+        this.categoryId = categoryId;
+        this.type = type;
+        this.userId = userId;
+        this.author = author;
+        this.title = title;
+        this.isDel = isDel;
+        this.createDate = createDate;
+    }
+
+    @Builder
     public NoticeDto(Long id, String categoryName, String categoryId, String type, String userId, String author, String title, boolean isDel, LocalDateTime createDate, String contents) {
         this.id = id;
         this.categoryName = categoryName;

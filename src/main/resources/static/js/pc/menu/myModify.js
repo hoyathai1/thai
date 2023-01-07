@@ -27,17 +27,17 @@ function btnModify() {
     var sType = $(".register-select").val();
 
     if (isEmpty(title) || lengthCheckUnder(title, 1)) {
-        alert("제목을 입력해주세요.")
+        alert("제목을 입력해주세요.");
         return;
     }
 
     if (isEmpty(contents) || lengthCheckUnder(title, 1)) {
-        alert("내을 입력해주세요.")
+        alert("내을 입력해주세요.");
         return;
     }
 
     if ($("#editor img").length > 10) {
-        alert("이미지는 최대 10개까지 등록 가능합니다.")
+        alert("이미지는 최대 10개까지 등록 가능합니다.");
         return;
     }
 
@@ -252,7 +252,7 @@ function makeQueryUrl() {
     var likes = $("input[name=likes]").val();
     var comment = $("input[name=comment]").val();
 
-    return "pageNum=" + pageNum + "&category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("pageNum=" + pageNum + "&category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content);
 }
 
 function goSignUp() {
@@ -283,4 +283,7 @@ function goMyComment() {
     location.href = "/pc/menu/myComment?pageNum=0";
 }
 
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
+}
 

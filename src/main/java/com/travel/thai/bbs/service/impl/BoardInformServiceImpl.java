@@ -51,6 +51,16 @@ public class BoardInformServiceImpl implements BoardInformService {
         return boardInformRepository.searchForAdmin(search, pageable);
     }
 
+
+    @Override
+    public Page<BoardInformDto> searchBannerForAdmin(Search search) {
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), 15
+        );
+
+        return boardInformRepository.searchForBanner(search, pageable);
+    }
+
     @Override
     public BoardInformDto searchOne(Search search) {
         BoardInformDto result = boardInformRepository.searchOne(search);
@@ -70,6 +80,21 @@ public class BoardInformServiceImpl implements BoardInformService {
     public BoardInformDto searchOneForAdmin(Search search) {
 
         BoardInformDto result = boardInformRepository.searchOneForAdmin(search);
+
+        List<BoardFileDto> fileDto = boardInformFileRepository.getImageList(result.getId());
+
+        for (BoardFileDto dto : fileDto) {
+            String replaceContent = "";
+            replaceContent = result.getContents().replace(dto.getName(), dto.getDir()+dto.getName());
+            result.setContents(replaceContent);
+        }
+
+        return result;
+    }
+
+    @Override
+    public BoardInformDto searchBannerOneForAdmin(Search search) {
+        BoardInformDto result = boardInformRepository.searchBannerOneForAdmin(search);
 
         List<BoardFileDto> fileDto = boardInformFileRepository.getImageList(result.getId());
 

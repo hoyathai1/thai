@@ -751,6 +751,96 @@
     margin-top: 20px;
 }
 
+.listBanner {
+    height: 75px;
+    width: 100%;
+}
 
+.bottomBanner {
+    height: 75px;
+    width: 100%;
+}
 
+.bottomBanner .bannerImg {
+    height: 100%;
+    width: 100%;
+}
 
+/**
+    유저 정보창
+ */
+
+.user-modal {
+    display: none;
+}
+
+.user-modal .user-modal-display {
+    position: absolute;
+    background-color: white;
+    border: 1px solid var(--gray);
+    width: 120px;
+    height: 75px;
+}
+
+.user-modal-info {
+    height: 32px;
+}
+
+.user-modal-info .title {
+    position: absolute;
+    padding: 10px 5px 5px 10px;
+    font-size: 13px;
+    color: darkblue;
+}
+
+.user-modal-info .x-btn {
+    width: 20px;
+    height: 20px;
+    background-color: black;
+    float: right;
+    cursor: pointer;
+}
+
+.user-modal-content {
+    margin-left: 15px;
+    margin-top: 5px;
+}
+
+.user-modal-content div {
+    margin-bottom: 5px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.user-modal-content div:hover {
+    font-weight: bold;
+}
+
+.x-ico {
+}
+
+.x-ico:before, .x-ico:after {
+    position: absolute;
+    right: 9px;
+    content:' ';height: 20px;width: 1px;background-color: white;
+}
+.x-ico:before {transform: rotate(45deg);}
+.x-ico:after {transform: rotate(-45deg);}
+
+.img-ico {
+    background: url("/img/img.png") no-repeat;
+    background-size: contain;
+    width: 16px;
+    height: 15px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.talk-ico {
+    background: url("/img/talking.png") no-repeat;
+    background-size: contain;
+    width: 16px;
+    height: 15px;
+    display: inline-block;
+    vertical-align: top;
+}

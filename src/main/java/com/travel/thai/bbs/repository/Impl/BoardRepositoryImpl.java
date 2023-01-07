@@ -28,6 +28,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     private static final String ALL = "all";
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
+    private static final String AUTHOR = "author";
 
     private static final String BEST = "Y";
 
@@ -47,11 +48,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         if (StringUtils.isNotEmpty(search.getContent())) {
             if (ALL.equals(search.getKeyword()) & StringUtils.isNotEmpty(search.getContent())) {
                 whereBuilder.and(board.title.contains(search.getContent()))
-                        .or(board.contentsTxt.contains(search.getContent()));
+                        .or(board.contentsTxt.contains(search.getContent()))
+                        .or(board.author.eq(search.getContent()));
             } else if (TITLE.equals(search.getKeyword())) {
                 whereBuilder.and(board.title.contains(search.getContent()));
             } else if (CONTENT.equals(search.getKeyword())) {
                 whereBuilder.and(board.contentsTxt.contains(search.getContent()));
+            } else if (AUTHOR.equals(search.getKeyword())) {
+                whereBuilder.and(board.author.contains(search.getContent()));
             }
         }
 
@@ -77,7 +81,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         board.ip,
                         boardCategory.id,
                         boardCategory.name,
-                        board.type
+                        board.type,
+                        board.isImg
                 ))
                 .from(board)
                 .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
@@ -138,7 +143,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         board.ip,
                         boardCategory.id,
                         boardCategory.name,
-                        board.type
+                        board.type,
+                        board.isImg
                 ))
                 .from(board)
                 .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
@@ -162,7 +168,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public PageImpl<BoardDto> searchForDetail(Search search, Pageable pageable) {
+    public PageImpl<BoardDto> searchForPcInformDetail(Search search, Pageable pageable) {
         BooleanBuilder whereBuilder = new BooleanBuilder();
 
         // 검색어 있을때
@@ -205,7 +211,136 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
                 .leftJoin(user).on(board.userId.eq(user.userId))
                 .leftJoin(boardCategory).on(boardCategory.id.eq(board.category))
+                .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
+                .groupBy(board.id)
+                .orderBy(board.createDate.desc())
+                .offset(pageable.getOffset())   // 페이지 번호
+                .limit(pageable.getPageSize())    // 페이지 사이즈
+                .fetch();
+
+        int count = queryFactory
+                .selectOne()
+                .from(board)
+                .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
+                .orderBy(board.createDate.desc())
+                .fetch().size();
+
+        return new PageImpl<>(results, pageable, count);
+    }
+
+    @Override
+    public PageImpl<BoardDto> searchForDetail(Search search, Pageable pageable) {
+        BooleanBuilder whereBuilder = new BooleanBuilder();
+
+        // 검색어 있을때
+        if (StringUtils.isNotEmpty(search.getContent())) {
+            if (ALL.equals(search.getKeyword()) & StringUtils.isNotEmpty(search.getContent())) {
+                whereBuilder.and(board.title.contains(search.getContent()))
+                        .or(board.contentsTxt.contains(search.getContent()))
+                        .or(board.author.eq(search.getContent()));
+            } else if (TITLE.equals(search.getKeyword())) {
+                whereBuilder.and(board.title.contains(search.getContent()));
+            } else if (CONTENT.equals(search.getKeyword())) {
+                whereBuilder.and(board.contentsTxt.contains(search.getContent()));
+            } else if (AUTHOR.equals(search.getKeyword())) {
+                whereBuilder.and(board.author.contains(search.getContent()));
+            }
+        }
+
+        if (BEST.equals(search.getBest())) {
+            whereBuilder.and(board.likes.size().gt(BEST_SIZE));
+        } else {
+            if (!ALL.equals(search.getType())) {
+                whereBuilder.and(board.type.eq(search.getType()));
+            }
+        }
+
+        List<BoardDto> results = queryFactory
+                .select(Projections.constructor(BoardDto.class,
+                        board.id,
+                        board.title,
+                        user.name,
+                        board.author,
+                        board.createDate,
+                        board.view,
+                        comment.id.count().intValue(),
+                        board.likes.size(),
+                        board.isUser,
+                        board.ip,
+                        boardCategory.id,
+                        boardCategory.name,
+                        board.type,
+                        board.isImg
+                ))
+                .from(board)
+                .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
+                .leftJoin(user).on(board.userId.eq(user.userId))
+                .leftJoin(boardCategory).on(boardCategory.id.eq(board.category))
                 .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()).and(board.id.lt(search.getBoardNum())))
+                .groupBy(board.id)
+                .orderBy(board.createDate.desc())
+                .offset(pageable.getOffset())   // 페이지 번호
+                .limit(pageable.getPageSize())    // 페이지 사이즈
+                .fetch();
+
+        int count = queryFactory
+                .selectOne()
+                .from(board)
+                .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
+                .orderBy(board.createDate.desc())
+                .fetch().size();
+
+        return new PageImpl<>(results, pageable, count);
+    }
+
+    @Override
+    public PageImpl<BoardDto> searchForInformDetail(Search search, Pageable pageable) {
+        BooleanBuilder whereBuilder = new BooleanBuilder();
+
+        // 검색어 있을때
+        if (StringUtils.isNotEmpty(search.getContent())) {
+            if (ALL.equals(search.getKeyword()) & StringUtils.isNotEmpty(search.getContent())) {
+                whereBuilder.and(board.title.contains(search.getContent()))
+                        .or(board.contentsTxt.contains(search.getContent()))
+                        .or(board.author.eq(search.getContent()));
+            } else if (TITLE.equals(search.getKeyword())) {
+                whereBuilder.and(board.title.contains(search.getContent()));
+            } else if (CONTENT.equals(search.getKeyword())) {
+                whereBuilder.and(board.contentsTxt.contains(search.getContent()));
+            } else if (AUTHOR.equals(search.getKeyword())) {
+                whereBuilder.and(board.author.contains(search.getContent()));
+            }
+        }
+
+        if (BEST.equals(search.getBest())) {
+            whereBuilder.and(board.likes.size().gt(BEST_SIZE));
+        } else {
+            if (!ALL.equals(search.getType())) {
+                whereBuilder.and(board.type.eq(search.getType()));
+            }
+        }
+
+        List<BoardDto> results = queryFactory
+                .select(Projections.constructor(BoardDto.class,
+                        board.id,
+                        board.title,
+                        user.name,
+                        board.author,
+                        board.createDate,
+                        board.view,
+                        comment.id.count().intValue(),
+                        board.likes.size(),
+                        board.isUser,
+                        board.ip,
+                        boardCategory.id,
+                        boardCategory.name,
+                        board.type
+                ))
+                .from(board)
+                .leftJoin(comment).on(board.id.eq(comment.upper).and(comment.isDel.isFalse()))
+                .leftJoin(user).on(board.userId.eq(user.userId))
+                .leftJoin(boardCategory).on(boardCategory.id.eq(board.category))
+                .where(whereBuilder.and(board.category.eq(search.getCategory())).and(board.isDel.isFalse()))
                 .groupBy(board.id)
                 .orderBy(board.createDate.desc())
                 .offset(pageable.getOffset())   // 페이지 번호
@@ -264,11 +399,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         if (StringUtils.isNotEmpty(search.getContent())) {
             if (ALL.equals(search.getKeyword()) & StringUtils.isNotEmpty(search.getContent())) {
                 whereBuilder.and(board.title.contains(search.getContent()))
-                        .or(board.contentsTxt.contains(search.getContent()));
+                        .or(board.contentsTxt.contains(search.getContent()))
+                        .or(board.author.eq(search.getContent()));
             } else if (TITLE.equals(search.getKeyword())) {
                 whereBuilder.and(board.title.contains(search.getContent()));
             } else if (CONTENT.equals(search.getKeyword())) {
                 whereBuilder.and(board.contentsTxt.contains(search.getContent()));
+            } else if (AUTHOR.equals(search.getKeyword())) {
+                whereBuilder.and(board.author.contains(search.getContent()));
             }
         }
 
@@ -441,7 +579,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         // 검색어 있을때
         if (StringUtils.isNotEmpty(search.getContent())) {
             whereBuilder.and(board.title.contains(search.getContent()))
-                    .or(board.contentsTxt.contains(search.getContent()));
+                    .or(board.contentsTxt.contains(search.getContent()))
+                    .or(board.author.eq(search.getContent()));
         }
 
         List<BoardDto> results = queryFactory

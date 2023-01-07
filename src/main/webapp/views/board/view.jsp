@@ -20,7 +20,7 @@
             </div>
             <div class="title-sub">
                 <c:if test="${board.user eq true}">
-                    <div class="author">${board.author}</div>
+                    <div class="author" onclick="goUserModal('${board.id}', '${board.author}')" id="${board.id}">${board.author}</div>
                 </c:if>
                 <c:if test="${board.user eq false}">
                     <div class="author">${board.author} (${board.ip})</div>
@@ -126,17 +126,31 @@
     </div>
 
     <c:if test="${banner.bottomBanner.show eq true}">
-        <div class="bottomBanner"><div class="bannerImg" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat; background-size: contain; background-position: center;" onclick="clickBanner('${banner.bottomBanner.link}')"></div></div>
+        <div class="bottomBanner"><div class="bannerImg" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat; background-size: contain; background-position: center;" onclick="clickBanner('${banner.bottomBanner.link}', '${banner.bottomBanner.board}')"></div></div>
     </c:if>
+</div>
+
+<div class='user-modal'>
+    <div class='user-modal-display'>
+        <div class="user-modal-info">
+            <div class="title"><strong>유저정보</strong></div>
+            <div class="x-btn" onclick="closeUserModal()"><div class="x-ico"></div></div>
+        </div>
+        <div class='user-modal-content' data-id="">
+            <div onclick="authorSearch()">작성 글 보기</div>
+        </div>
+    </div>
 </div>
 
 <input type="hidden" name="leftBannerShow" value="${banner.leftBanner.show}">
 <input type="hidden" name="leftBannerUrl" value="/banner/${banner.leftBanner.fileName}">
 <input type="hidden" name="leftBannerLink" value="${banner.leftBanner.link}">
+<input type="hidden" name="leftBannerBoard" value="${banner.leftBanner.board}">
 
 <input type="hidden" name="rightBannerShow" value="${banner.rightBanner.show}">
 <input type="hidden" name="rightBannerUrl" value="/banner/${banner.rightBanner.fileName}">
 <input type="hidden" name="rightBannerLink" value="${banner.rightBanner.link}">
+<input type="hidden" name="rightBannerBoard" value="${banner.rightBanner.board}">
 
 <input type="hidden" name="boardNum" value="${search.boardNum}">
 <input type="hidden" name="pageNum" value="${search.pageNum}">

@@ -40,7 +40,7 @@ public class AdminNoticeController {
     @RequestMapping(value = {"/list"}, method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response, Model model, @ModelAttribute("search") Search search, @AuthenticationPrincipal User user) {
 
-        Page<NoticeDto> list = noticeService.searchForPaging(search);
+        Page<NoticeDto> list = noticeService.searchForPagingAdmin(search);
         model.addAttribute("list", list);
         model.addAttribute("category", bc.getBoardCategoryList());
         model.addAttribute("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));

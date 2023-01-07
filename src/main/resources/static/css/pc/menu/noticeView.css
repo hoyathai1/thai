@@ -1,0 +1,557 @@
+:root{
+    --black_gray: #464646;
+    --gray: #646464;
+    --light_gray: #e2e2e2;
+    --blue: #2828CD;
+    --border: #bcbcbc;
+}
+
+.div_load_image {
+    display: none;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+}
+
+body {
+    margin: 0 auto;
+}
+
+.top-gnb {
+    display: flex;
+    height: 24px;
+    background-color: var(--light_gray);
+    align-items: center;
+    justify-content: space-around;
+}
+
+.top-gnb .description {
+
+}
+
+.top-gnb .description h6 {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0;
+}
+
+.top-gnb .menu {
+}
+.top-gnb .menu nav ul {
+    margin: 0;
+    list-style:none;
+}
+
+.top-gnb .menu nav ul li {
+    float: left;
+    font-size: 12px;
+    color: black;
+    cursor:pointer;
+}
+
+.top-gnb .menu nav ul li:after {
+    content : "|";
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.top-gnb .menu nav ul li:last-child:after {
+    content : "";
+}
+
+.container {
+    min-width: 528px;
+    margin: 0 auto;
+    width: 50%;
+}
+
+.category {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    background-color: var(--gray);
+    box-shadow: 1px 1px 1px 1px var(--light_gray);
+}
+
+.category .list {
+    display: flex;
+    margin-left: 25px;
+}
+
+.category .list .name {
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.category .list .name:after {
+    content: '|';
+    color: #7d7576;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.category .list .name:last-child:after {
+    content: '';
+    margin-left: 15px;
+}
+
+.subject {
+    margin-top: 5px;
+    height: 40px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between
+}
+
+.subject .subject-area {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+}
+
+.subject .subject-area .ico-thai {
+    background: url("/img/thai.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 46px;
+    height: 100%;
+}
+
+.subject .search-area {
+
+}
+
+.subject .search-area .search-input {
+    font-size: 12px;
+    padding: 3px;
+    border: 3px solid var(--light_gray);
+    height: 24px;
+}
+
+.subject .search-area .search-input:focus {
+    border: 3px solid var(--light_gray);
+    outline: none;
+
+}
+
+.subject .search-area .search-btn {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    box-shadow: 0 1px 1px #aaa;
+    height: 24px;
+    cursor: pointer;
+    background-color:transparent;
+    font-size: 12px;
+}
+
+.subject .subject-area h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.content .view {
+    border-top: 2px solid var(--gray);
+    margin-top: 20px;
+}
+
+.content .view .title {
+    padding: 10px 5px 0px 5px;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+}
+
+.bookmark-ico.off {
+    background: url("/img/bookmark-off.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.bookmark-ico.on {
+    background: url("/img/bookmark-on.png") no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.content .view .info {
+    padding: 0px 0px 15px 5px;
+    margin: 5px 0px 0px 0px;
+    font-size: 12px;
+    display: flex;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.content .view .info .left {
+    display: flex;
+    width: 30%;
+}
+
+.content .view .info .left .author {
+
+}
+
+.content .view .info .left .author:after {
+    content: '|';
+    margin-right: 5px;
+    margin-left: 5px;
+    color: var(--light_gray);
+}
+
+.content .view .info .left .createDate {
+
+}
+
+.content .view .info .right {
+    width: 70%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.content .view .info .right .views {
+
+}
+
+.content .view .info .right .views:before {
+    content: "조회";
+    margin-right: 2px;
+}
+
+.content .view .info .right .views:after {
+    content: "|";
+    color: var(--light_gray);
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.content .view .info .right .likes {
+
+}
+
+.content .view .info .right .likes:before {
+    content: '추천';
+    margin-right: 2px;
+}
+
+.content .view .info .right .likes:after {
+    content: "|";
+    color: var(--light_gray);
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.content .view .info .right .comment-count {
+
+}
+
+.content .view .info .right .comment-count:before {
+    content: "댓글";
+    margin-right: 2px;
+}
+
+.content .view .info .right .comment-count:after {
+
+}
+
+.content .view .contents {
+    padding-top: 30px;
+    margin-bottom: 50px;
+}
+
+.content .view .contents div {
+    padding: 2px;
+}
+
+.content .view .contents img {
+    max-width: 100%!important;
+    max-height: 100%!important;
+}
+
+.btn-area {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.btn-area button {
+    border: 1px var(--gray) solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--gray);
+    height: 32px;
+    width: 15%;
+}
+
+.btn-area button.on {
+    background-color: var(--gray);
+    color: white;
+}
+
+.border-line {
+    border-bottom: 2px solid var(--gray);
+}
+
+/*
+    게시글 버튼
+*/
+.view-btn {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left {
+
+}
+
+.right {
+
+}
+
+.view-btn div button {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    box-shadow: 0 1px 1px #aaa;
+    height: 28px;
+    width: 60px;
+    cursor: pointer;
+    background-color: white;
+    font-size: 12px;
+}
+
+.view-btn div button.delete {
+    background-color: var(--gray);
+    box-shadow: 0 1px 1px var(--light_gray);
+    color: white;
+}
+
+.board-list {
+
+}
+
+/*
+    리스트
+*/
+
+table.list {
+    margin-top: 5px;
+    table-layout: fixed;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table thead tr th {
+    font-size: 12px;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+table thead tr th.type {
+    width: 10%;
+}
+table thead tr th.title {
+    width: 45%;
+}
+table thead tr th.author {
+    width: 15%;
+}
+table thead tr th.boardDate {
+    width: 10%;
+}
+table thead tr th.board-view {
+    width: 10%;
+}
+table thead tr th.likes {
+    width: 10%;
+}
+
+table tbody tr {
+    border-top: 1px solid var(--border);
+}
+
+table tbody tr.on {
+    background-color: azure;
+}
+
+table tbody tr.inform {
+    background-color: #FFFFCC;
+}
+
+table tbody tr td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+table tbody tr td.type {
+    text-align: center;
+}
+
+table tbody tr.inform td.type {
+    color: var(--blue);
+    font-weight: bold;
+}
+
+table tbody tr td.title {
+    cursor: pointer;
+}
+
+table tbody tr td.title .comment-cnt {
+    display: inline-block;
+    color: var(--border);
+}
+
+table tbody tr td.title .comment-cnt:before {
+    content: "[";
+}
+
+table tbody tr td.title .comment-cnt:after {
+    content: "]";
+}
+
+table tbody tr td.author {
+}
+
+table tbody tr td.boardDate {
+    text-align: center;
+}
+
+table tbody tr td.board-view {
+    text-align: center;
+}
+
+table tbody tr td.likes {
+    text-align: center;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+div.paging {
+    display: flex;
+    justify-content: center;
+}
+
+div.paging ul {
+    list-style:none;
+}
+
+div.paging ul li {
+    float: left;
+    font-size: 12px;
+    padding: 4px 8px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+div.paging ul li.active {
+    background-color: var(--gray);
+    color: white;
+    border: 1px solid var(--gray);
+}
+
+div.paging ul li:hover:not(.active) {background-color: #ddd;}
+
+div.paging ul li:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+div.paging ul li:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+
+/*
+    모달창
+*/
+.modal {
+    position: fixed;
+    top:0; left: 0; bottom: 0; right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.modal .modal-display {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    background-color: #e2e2e2;
+    border-radius: 10px;
+    width: 300px;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal .modal-display .modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal .modal-display .modal-content .ipt {
+    border: 1px solid #989898;
+    outline: none;
+    padding: 6px;
+    margin-top: 5px;
+    width: 67%;
+}
+
+.modal .modal-display .modal-content .ipt:focus {
+    border: 2px solid #989898;
+}
+
+.modal .modal-content .modal-btn-area {
+    width: 70%;
+    margin-bottom: 0px;
+    margin-top: 50px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.modal .modal-content .modal-btn-area button {
+    width: 45%;
+
+    border: 1px var(--gray) solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--gray);
+    height: 32px;
+}
+
+.modal .modal-content .modal-btn-area button.on {
+    background-color: var(--gray);
+    color: white;
+}
+
+.empty {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

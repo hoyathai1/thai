@@ -29,6 +29,7 @@ public class EmailService {
 
         if (user == null) {
             // TODO: 예외처리 추가
+            return;
         }
 
         String str = getTempPassword();

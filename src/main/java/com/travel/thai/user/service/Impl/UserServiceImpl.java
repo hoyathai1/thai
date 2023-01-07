@@ -4,6 +4,8 @@ import com.travel.thai.bbs.domain.BoardDto;
 import com.travel.thai.bbs.domain.BoardFileDto;
 import com.travel.thai.bbs.domain.Search;
 import com.travel.thai.bbs.repository.BoardRepository;
+import com.travel.thai.common.domain.DayStat;
+import com.travel.thai.common.service.DayStatService;
 import com.travel.thai.common.util.StringUtils;
 import com.travel.thai.user.domain.User;
 import com.travel.thai.user.domain.UserDto;
@@ -34,6 +36,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDetailService userDetailService;
 
+    @Autowired
+    private DayStatService dayStatService;
+
     @Transactional
     @Override
     public User signUp(UserDto userDto) {
@@ -51,7 +56,10 @@ public class UserServiceImpl implements UserService {
             user.setUserAuth("ROLE_USER");
         }
 
-        return userRepository.save(user);
+        User register = userRepository.save(user);
+        dayStatService.statNewUser();
+
+        return register;
     }
 
     @Override

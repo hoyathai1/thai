@@ -32,4 +32,12 @@ public class Search {
     private int likes;
     private int comment;
 
+    private Long boardNotiId;
+
+    private String position;
+    private String link;
+    private String device;
+    private boolean isBoard;
+
+    private String pointType;
 }

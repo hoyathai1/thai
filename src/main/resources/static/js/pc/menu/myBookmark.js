@@ -13,13 +13,13 @@ function makeQueryUrl() {
     var content = $(".search-input").val();
     var keyword = $("input[name=keyword]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content);
 }
 
 function goCategory(pCategory) {
     var pageSize = $("input[name=pageSize]").val();
 
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&pageSize=" + pageSize + "&keyword=all&content=");
 }
 
 function goSignUp() {
@@ -112,4 +112,8 @@ function goDelete(boardNum) {
 
         location.href = encodeURI("/pc/menu/deleteBookmark?boardNum=" + boardNum + "&pageNum=" + pageNum + "&category=" + category + "&keyword=" + keyword + "&content=" + content);
     });
+}
+
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
 }

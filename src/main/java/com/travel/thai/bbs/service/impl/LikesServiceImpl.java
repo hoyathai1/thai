@@ -5,6 +5,7 @@ import com.travel.thai.bbs.domain.Likes;
 import com.travel.thai.bbs.domain.LikesDto;
 import com.travel.thai.bbs.repository.LikesRepository;
 import com.travel.thai.bbs.service.LikesService;
+import com.travel.thai.common.service.DayStatService;
 import com.travel.thai.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

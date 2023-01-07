@@ -12,9 +12,13 @@ public interface BoardInformService {
 
     Page<BoardInformDto> searchForAdmin(Search search);
 
+    Page<BoardInformDto> searchBannerForAdmin(Search search);
+
     BoardInformDto searchOne(Search search);
 
     BoardInformDto searchOneForAdmin(Search search);
+
+    BoardInformDto searchBannerOneForAdmin(Search search);
 
     void modifyBoardInform(BoardInform boardInform);
 

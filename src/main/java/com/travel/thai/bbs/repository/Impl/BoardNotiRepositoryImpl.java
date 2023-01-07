@@ -38,17 +38,49 @@ public class BoardNotiRepositoryImpl implements BoardNotiRepositoryCustom {
                 .from(boardNoti)
                 .leftJoin(board).on(boardNoti.board_id.eq(board.id).and(board.isDel.isFalse()))
                 .leftJoin(comment).on(boardNoti.comment_id.eq(comment.id).and(comment.isDel.isFalse()))
-                .where(boardNoti.user_id.eq(search.getUserId()))
+                .where(boardNoti.user_id.eq(search.getUserId()).and(boardNoti.isRead.isFalse()).and(board.isDel.isFalse()).and(comment.isDel.isFalse()))
                 .orderBy(boardNoti.createDate.desc())
                 .fetch();
 
         int count = queryFactory
                 .selectOne()
                 .from(boardNoti)
-                .where(boardNoti.user_id.eq(search.getUserId()))
+                .leftJoin(board).on(boardNoti.board_id.eq(board.id).and(board.isDel.isFalse()))
+                .leftJoin(comment).on(boardNoti.comment_id.eq(comment.id).and(comment.isDel.isFalse()))
+                .where(boardNoti.user_id.eq(search.getUserId()).and(boardNoti.isRead.isFalse()).and(board.isDel.isFalse()).and(comment.isDel.isFalse()))
                 .orderBy(boardNoti.createDate.desc())
                 .fetch().size();
 
         return new PageImpl<>(results, pageable, count);
+    }
+
+    @Override
+    public void allDeleteNoti(Search search) {
+        queryFactory.update(boardNoti)
+                .set(boardNoti.isRead, true)
+                .where(boardNoti.user_id.eq(search.getUserId()))
+                .execute();
+    }
+
+    @Override
+    public void deleteNoti(Search search) {
+        queryFactory.update(boardNoti)
+                .set(boardNoti.isRead, true)
+                .where(boardNoti.user_id.eq(search.getUserId()).and(boardNoti.id.eq(search.getBoardNotiId())))
+                .execute();
+    }
+
+    @Override
+    public boolean isHasNoti(Search search) {
+        int count = queryFactory
+                .selectOne()
+                .from(boardNoti)
+                .leftJoin(board).on(boardNoti.board_id.eq(board.id).and(board.isDel.isFalse()))
+                .leftJoin(comment).on(boardNoti.comment_id.eq(comment.id).and(comment.isDel.isFalse()))
+                .where(boardNoti.user_id.eq(search.getUserId()).and(boardNoti.isRead.isFalse()).and(board.isDel.isFalse()).and(comment.isDel.isFalse()))
+                .orderBy(boardNoti.createDate.desc())
+                .fetch().size();
+
+        return count > 0;
     }
 }

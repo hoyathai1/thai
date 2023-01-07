@@ -29,6 +29,14 @@
             <button class="btn two" onclick="goList()">목록보기</button>
         </div>
     </div>
+
+    <div class="div-border"></div>
+    <div class="board-list">
+    </div>
+
+    <c:if test="${banner.bottomBanner.show eq true}">
+        <div class="bottomBanner"><div class="bannerImg" style="background: url(/banner/${banner.bottomBanner.fileName}) no-repeat; background-size: contain; background-position: center;" onclick="clickBanner('${banner.bottomBanner.link}', '${banner.bottomBanner.board}')"></div></div>
+    </c:if>
 </div>
 
 <input type="hidden" name="boardNum" value="${search.boardNum}">
@@ -36,6 +44,11 @@
 <input type="hidden" name="pageSize" value="${search.pageSize}">
 <input type="hidden" name="keyword" value="${search.keyword}">
 <input type="hidden" name="content" value="${search.content}">
+
+<input type="hidden" name="rightBannerShow" value="${banner.rightBanner.show}">
+<input type="hidden" name="rightBannerUrl" value="/banner/${banner.rightBanner.fileName}">
+<input type="hidden" name="rightBannerLink" value="${banner.rightBanner.link}">
+<input type="hidden" name="rightBannerBoard" value="${banner.rightBanner.board}">
 
 <input type="hidden" name="loginId" value="${principal.userId}">
 <input type="hidden" name="isLogin" value="${principal != null}">

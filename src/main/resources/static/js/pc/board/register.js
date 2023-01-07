@@ -17,13 +17,16 @@ $(document).ready(function () {
 
     if(detectMobileDevice(window.navigator.userAgent)) {
         var hUrl = new URL(location.href);
-        location.href = "/board/register" + hUrl.search;
+        location.href = encodeURI("/board/register" + hUrl.search);
     }
 
     if (best == 'Y') {
         $("#best").addClass("on");
     } else {
         $("#" + type).addClass("on");
+        if (type != 'all') {
+            $(".register-select").val(type);
+        }
     }
 });
 
@@ -77,7 +80,7 @@ function btnRegister() {
 
     $.ajax({
         type : 'post',
-        url : '/board/register',
+        url : '/pc/board/register',
         headers : {
             "Content-Type" : "application/json",
             "X-HTTP-Method-Override" : "POST"
@@ -94,7 +97,7 @@ function btnRegister() {
             type: sType
         }),
         success : function (data) {
-            location.href="/pc/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
+            location.href = encodeURI("/pc/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0");
         },
         error : function () {
 
@@ -116,12 +119,12 @@ function btnRegisterLogin() {
     var contentsTxt = "";
 
     if (isEmpty(title) || lengthCheckUnder(title, 1)) {
-        alert("제목을 입력해주세요.")
+        alert("제목을 입력해주세요.");
         return;
     }
 
     if (isEmpty(contents) || lengthCheckUnder(title, 1)) {
-        alert("내을 입력해주세요.")
+        alert("내을 입력해주세요.");
         return;
     }
 
@@ -138,7 +141,7 @@ function btnRegisterLogin() {
 
     $.ajax({
         type : 'post',
-        url : '/board/register',
+        url : '/pc/board/register',
         headers : {
             "Content-Type" : "application/json",
             "X-HTTP-Method-Override" : "POST"
@@ -154,7 +157,7 @@ function btnRegisterLogin() {
             best: best
         }),
         success : function (data) {
-            location.href="/pc/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0";
+            location.href = encodeURI("/pc/board/list?type=" + sType + "&best=N&category=" + category + "&pageNum=0");
         },
         error : function () {
 
@@ -200,26 +203,40 @@ imageSelector.addEventListener('change', function (e) {
 });
 
 function insertImageDate(file) {
-    if (file.size < 50000) {
-        const reader = new FileReader();
-        reader.addEventListener('load', function (e) {
-            focusEditor();
-            document.execCommand('insertImage', false, `${reader.result}`);
-        });
+    if (file.type == 'image/gif') {
+        if (file.size < 200000) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function (e) {
+                focusEditor();
+                document.execCommand('insertImage', false, `${reader.result}`);
+            });
 
-        reader.readAsDataURL(file);
-    } else if (file.size < 200000) {
-        resizeImage(file, 0.9, 850);
-    } else if (file.size < 500000) {
-        resizeImage(file, 0.9, 850);
-    } else if (file.size < 1000000) {
-        resizeImage(file, 0.8, 850);
-    } else if (file.size < 2000000) {
-        resizeImage(file, 0.7, 850);
-    } else if (file.size < 5000000) {
-        resizeImage(file, 0.6, 850);
+            reader.readAsDataURL(file);
+        } else {
+            alert("gif는 2메가를 넘길수없습니다.");
+        }
     } else {
-        resizeImage(file, 0.5, 850);
+        if (file.size < 50000) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function (e) {
+                focusEditor();
+                document.execCommand('insertImage', false, `${reader.result}`);
+            });
+
+            reader.readAsDataURL(file);
+        } else if (file.size < 200000) {
+            resizeImage(file, 0.9, 850);
+        } else if (file.size < 500000) {
+            resizeImage(file, 0.9, 850);
+        } else if (file.size < 1000000) {
+            resizeImage(file, 0.8, 850);
+        } else if (file.size < 2000000) {
+            resizeImage(file, 0.7, 850);
+        } else if (file.size < 5000000) {
+            resizeImage(file, 0.6, 850);
+        } else {
+            resizeImage(file, 0.5, 850);
+        }
     }
 }
 
@@ -278,8 +295,13 @@ function imgToFile() {
             u8arr[n] = bstr.charCodeAt(n);
         }
 
-        var fileName = getFileNameDate() + ".jpg"
-        var file = new File([u8arr], fileName, {type:"image/jpeg"});
+        var extension = img[i].src.split("data:image/")[1].split(";")[0]
+
+        var fileName = getFileNameDate() + "." + extension
+        var file = new File([u8arr], fileName, {type:"image/"+extension});
+
+        // var fileName = getFileNameDate() + ".jpg"
+        // var file = new File([u8arr], fileName, {type:"image/jpeg"});
 
         formData.append("uploadFile", file);
 
@@ -321,7 +343,7 @@ function getFileNameDate() {
 }
 
 function goList() {
-    location.href="/pc/board/list?" + makeQueryUrl();
+    location.href = "/pc/board/list?" + makeQueryUrl();
 }
 
 function makeQueryUrl() {
@@ -329,7 +351,11 @@ function makeQueryUrl() {
     var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content);
+}
+
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
 }
 
 function goSignUp() {
@@ -345,16 +371,16 @@ function goLogout() {
 }
 
 function goCategory(pCategory) {
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=");
 }
 
 function goType(pType) {
-    location.href="/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&keyword=all&content=");
 }
 
 function goBest() {
     var pageNum = $("input[name=pageNum]").val();
-    location.href="/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=");
 }
 
 function search() {

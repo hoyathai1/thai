@@ -7,7 +7,6 @@ var isRunning = false;
 var currentCommentPage = 0;
 
 $(document).ready(function () {
-
     if(detectMobileDevice(window.navigator.userAgent)) {
         var hUrl = new URL(location.href);
         location.href = "/board/view" + hUrl.search;
@@ -31,19 +30,23 @@ function makeQueryUrl() {
     var content = $(".search-input").val();
     var keyword = $("input[name=keyword]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content);
+}
+
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
 }
 
 function goSignUp() {
-    location.href="/pc/signUp?" + makeQueryUrl();
+    location.href = "/pc/signUp?" + makeQueryUrl();
 }
 
 function goLogin() {
-    location.href="/pc/login";
+    location.href = "/pc/login";
 }
 
 function goLogout() {
-    location.href="/logout";
+    location.href = "/logout";
 }
 
 function goMyAccount() {
@@ -63,23 +66,27 @@ function goMyComment() {
 }
 
 function goCategory(pCategory) {
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=");
 }
 
 function goType(pType) {
-    location.href="/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&keyword=all&content=");
 }
 
 function goBest() {
     var pageNum = $("input[name=pageNum]").val();
 
-    location.href="/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=");
+}
+
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
 }
 
 function search() {
     var content = $(".search-input").val();
 
-    location.href = "/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=all&content=" + content;
+    location.href = encodeURI("/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=all&content=" + content);
 }
 
 function goList() {
@@ -538,7 +545,7 @@ function shareBtn() {
     var url = '';
     var textarea = document.createElement("textarea");
     document.body.appendChild(textarea);
-    url = window.document.location.origin + "/board/view?boardNum=" + boardNum + "&type=all&best=&category=" + category + "&pageNum=0&keyword=all&content=";
+    url = encodeURI(window.document.location.origin + "/board/view?boardNum=" + boardNum + "&type=all&best=&category=" + category + "&pageNum=0&keyword=all&content=");
     textarea.value = url;
     textarea.select();
     document.execCommand("copy");
@@ -938,6 +945,8 @@ function getReplyTime(timeValue) {
 }
 
 function getList(page) {
+    closeUserModal();
+
     var boardNum = $("input[name=boardNum]").val();
     var content = $("input[name=content]").val();
     var keyword = $("input[name=keyword]").val();
@@ -984,11 +993,15 @@ function setListHtmlIndex(data) {
 
         listHtml += "   <td class='type'>" + this.typeName + "</td>";
         listHtml += "   <td class='title' onclick='goView(" + this.id + ")'>";
-        listHtml += "       " + this.title + "<div class='comment-cnt'>" + this.commentCount + "</div>"
+        listHtml += "       " + this.title;
+        if (this.img) {
+            listHtml += "<div class='img-ico'></div>";
+        }
+        listHtml += "<div class='comment-cnt'>" + this.commentCount + "</div>";
         listHtml += "   </td>";
 
         if (this.user) {
-            listHtml += "   <td class='author'>" + this.username + "</td>";
+            listHtml += "   <td class='author isUser' onclick='goUserModal(\"" + this.id + "\", \"" + this.author + "\")' id='"+this.id+"'>" + this.username + "</td>";
         } else {
             listHtml += "   <td class='author'>" + this.author + "(" + this.ip + ")</td>";
         }

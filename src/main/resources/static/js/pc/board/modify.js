@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     if(detectMobileDevice(window.navigator.userAgent)) {
         var hUrl = new URL(location.href);
-        location.href = "/board/modify" + hUrl.search;
+        location.href = encodeURI("/board/modify" + hUrl.search);
     }
 
     if (best == 'Y') {
@@ -252,12 +252,12 @@ function getFileNameDate() {
 }
 
 function goList() {
-    location.href="/pc/board/list?" + makeQueryUrl();
+    location.href = "/pc/board/list?" + makeQueryUrl();
 }
 
 function goBack() {
     var boardNum = $("input[name=boardNum]").val();
-    location.href="/pc/board/view?boardNum=" + boardNum + "&" + makeQueryUrl();
+    location.href = "/pc/board/view?boardNum=" + boardNum + "&" + makeQueryUrl();
 }
 
 function makeQueryUrl() {
@@ -265,36 +265,56 @@ function makeQueryUrl() {
     var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content);
+}
+
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
 }
 
 function goSignUp() {
-    location.href="/pc/signUp?" + makeQueryUrl();
+    location.href = "/pc/signUp?" + makeQueryUrl();
 }
 
 function goLogin() {
-    location.href="/pc/login";
+    location.href = "/pc/login";
 }
 
 function goLogout() {
-    location.href="/logout";
+    location.href = "/logout";
 }
 
 function goCategory(pCategory) {
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=");
 }
 
 function goType(pType) {
-    location.href="/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=" + pType + "&best=&category=" + category + "&pageNum=0&keyword=all&content=");
 }
 
 function goBest() {
     var pageNum = $("input[name=pageNum]").val();
-    location.href="/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=Y&category=" + category + "&pageNum=" + pageNum + "&keyword=all&content=");
 }
 
 function search() {
     var content = $(".search-input").val();
 
-    location.href = "/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=all&content=" + content;
+    location.href = encodeURI("/pc/board/list?type=" + type + "&best=&category=" + category + "&pageNum=0&keyword=all&content=" + content);
+}
+
+function goMyAccount() {
+    location.href = "/pc/menu/account";
+}
+
+function goMyList() {
+    location.href = "/pc/menu/myList?pageNum=0";
+}
+
+function goBookmark() {
+    location.href = "/pc/menu/myBookmark?pageNum=0";
+}
+
+function goMyComment() {
+    location.href = "/pc/menu/myComment?pageNum=0";
 }

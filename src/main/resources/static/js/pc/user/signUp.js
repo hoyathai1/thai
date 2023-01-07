@@ -5,7 +5,16 @@ var isValidName = false;
 var isValidEmail = true;
 
 $(document).ready(function () {
+    if(detectMobileDevice(window.navigator.userAgent)) {
+        var hUrl = new URL(location.href);
+        location.href = encodeURI("/signUp" + hUrl.search);
+    }
 
+    if (best == 'Y') {
+        $("#best").addClass("on");
+    } else {
+        $("#" + type).addClass("on");
+    }
 });
 
 function changeDomain() {

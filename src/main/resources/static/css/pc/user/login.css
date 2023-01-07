@@ -82,6 +82,7 @@ button.btn {
 .remember label {
     font-size: 14px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .remember input {
@@ -121,4 +122,9 @@ button.btn {
 
 .user-btn .signUp-btn {
     margin-right: 10px;
+    cursor: pointer;
+}
+
+.user-btn .find-pwd-btn {
+    cursor: pointer;
 }

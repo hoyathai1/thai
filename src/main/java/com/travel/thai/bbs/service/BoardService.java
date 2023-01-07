@@ -11,7 +11,9 @@ import java.util.List;
 public interface BoardService {
     Page<BoardDto> searchBoard(Search search);
     Page<BoardDto> searchBoardForPcDetail(Search search);
+    Page<BoardDto> searchBoardForPcInformDetail(Search search);
     Page<BoardDto> searchBoardForDetail(Search search);
+    Page<BoardDto> searchBoardForInformDetail(Search search);
     BoardDto searchOne(Search search);
     Board saveBoard(Board board);
     void increseViewCount(Search search);

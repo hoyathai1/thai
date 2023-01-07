@@ -20,6 +20,10 @@ import static com.travel.thai.user.domain.QUser.user;
 public class UserRepositoryImpl implements UserRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
+    private static final String REGISTER_BOARD = "REGISTER";
+    private static final String GET_LIKES = "LIKES";
+    private static final String INFO = "INFO";
+
     @Override
     public User searchOne(String userId) {
         User result = queryFactory

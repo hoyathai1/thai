@@ -30,12 +30,26 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
+    public NoticeDto searchDetail(Search search) {
+        return noticeRepository.searchDetail(search);
+    }
+
+    @Override
     public Page<NoticeDto> searchForPaging(Search search) {
         Pageable pageable = PageRequest.of(
                 search.getPageNum(), 15
         );
 
         return noticeRepository.searchForPaging(search, pageable);
+    }
+
+    @Override
+    public Page<NoticeDto> searchForPagingAdmin(Search search) {
+        Pageable pageable = PageRequest.of(
+                search.getPageNum(), 15
+        );
+
+        return noticeRepository.searchForPagingAdmin(search, pageable);
     }
 
     @Override

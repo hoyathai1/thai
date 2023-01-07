@@ -2,6 +2,9 @@ const urlParams = new URL(location.href).searchParams;
 const category = urlParams.get('category');
 const best = urlParams.get('best');
 const bType = urlParams.get('type');
+var banner = "";
+var isShow = "";
+var index = 0;
 
 $(document).ready(function () {
     var pageNum = $("input[name=pageNum]").val();
@@ -14,6 +17,14 @@ $(document).ready(function () {
         $("#bestBtn").html("전체글보기");
     } else {
         $("#bestBtn").html("인기글보기");
+    }
+
+    isShow = $("input[name=topBannerShow]").val();
+    if (isShow == 'true') {
+        var bannerLink = $("input[name=topBannerLink]").val();
+        var bannerUrl = $("input[name=topBannerUrl]").val();
+        var bannerBoard = $("input[name=topBannerBoard]").val();
+        banner += "<div class='board listBanner' style='background: url(" + bannerUrl + ") no-repeat; background-size: contain; background-position: center;' onclick='clickBanner(\"" + bannerLink + "\", \"" + bannerBoard + "\")'></div>";
     }
 });
 
@@ -101,7 +112,14 @@ function setListHtml(data) {
     $(data.list.content).each(function () {
         listHtml += "<div class='board' data-id='" + this.id + "' onclick='goView(" + this.id + ")'>";
         listHtml += "   <div class='content'>";
-        listHtml += "       <div class='title'>" + this.title + "</div>";
+        listHtml += "       <div class='title'>";
+        if (this.img) {
+            listHtml += "<div class='img-ico'></div>";
+        } else {
+            listHtml += "<div class='talk-ico'></div>";
+        }
+        listHtml += this.title;
+        listHtml += "</div>";
         listHtml += "       <div class='info'>";
 
         if (this.user) {
@@ -118,6 +136,12 @@ function setListHtml(data) {
         listHtml += "   <div class='reply'>" + this.commentCount + "</div>";
         listHtml += "</div>";
 
+        if (index == 25 && isShow == 'true') {
+            listHtml += banner;
+            index = 0;
+        }
+
+        index++;
     });
 
     $(".board-list").append(listHtml);
@@ -211,7 +235,7 @@ function search() {
     var keyword = $(".search-select").val();
     var content = $(".search-input").val();
 
-    location.href = "/board/list?type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=0&keyword=" + keyword + "&content=" + content;
+    location.href = encodeURI("/board/list?type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=0&keyword=" + keyword + "&content=" + content);
 }
 
 function makeQueryUrl() {
@@ -219,7 +243,7 @@ function makeQueryUrl() {
     var keyword = $(".searc\h-select").val();
     var content = $(".search-input").val();
 
-    return "type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content);
 }
 
 function goView(id) {
@@ -243,7 +267,7 @@ function goBest() {
         param_best = "Y";
     }
 
-    location.href = "/board/list?type=" + bType + "&best=" + param_best + "&category=" + category + "&pageNum=0";
+    location.href = encodeURI("/board/list?type=" + bType + "&best=" + param_best + "&category=" + category + "&pageNum=0");
 }
 
 function init() {

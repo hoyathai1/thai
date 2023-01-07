@@ -35,7 +35,7 @@ public class BoardInformRepositoryImpl implements BoardInformRepositoryCustom {
                 ))
                 .from(boardInform)
                 .leftJoin(user).on(boardInform.userId.eq(user.userId))
-                .where(boardInform.category.eq(search.getCategory()).and(boardInform.type.eq(search.getType())).and(boardInform.isDel.isFalse()))
+                .where(boardInform.category.eq(search.getCategory()).and(boardInform.type.eq(search.getType())).and(boardInform.isDel.isFalse()).and(boardInform.isBanner.isFalse()))
                 .orderBy(boardInform.createDate.desc())
                 .fetch();
 
@@ -68,7 +68,38 @@ public class BoardInformRepositoryImpl implements BoardInformRepositoryCustom {
                 .leftJoin(user).on(boardInform.userId.eq(user.userId))
                 .leftJoin(boardCategory).on(boardCategory.id.eq(boardInform.category))
                 .leftJoin(boardType).on(boardType.boardCategory.id.eq(boardCategory.id).and(boardType.type.eq(boardInform.type)))
-                .where(whereBuilder)
+                .where(whereBuilder.and(boardInform.isBanner.isFalse()))
+                .orderBy(boardInform.createDate.desc())
+                .offset(pageable.getOffset())   // 페이지 번호
+                .limit(pageable.getPageSize())    // 페이지 사이즈
+                .fetch();
+
+        int count = queryFactory.selectOne().from(boardInform).where(whereBuilder).fetch().size();
+
+        return new PageImpl<>(result, pageable, count);
+    }
+
+    @Override
+    public PageImpl<BoardInformDto> searchForBanner(Search search, Pageable pageable) {
+        BooleanBuilder whereBuilder = new BooleanBuilder();
+
+        if (StringUtils.isNotEmpty(search.getContent())) {
+            whereBuilder.and(boardInform.category.eq(search.getCategory()));
+        }
+
+        List<BoardInformDto> result = queryFactory
+                .select(Projections.constructor(BoardInformDto.class,
+                        boardInform.id,
+                        boardCategory.name,
+                        boardInform.title,
+                        user.name,
+                        boardInform.createDate,
+                        boardInform.isDel
+                ))
+                .from(boardInform)
+                .leftJoin(user).on(boardInform.userId.eq(user.userId))
+                .leftJoin(boardCategory).on(boardCategory.id.eq(boardInform.category))
+                .where(whereBuilder.and(boardInform.isBanner.isTrue()))
                 .orderBy(boardInform.createDate.desc())
                 .offset(pageable.getOffset())   // 페이지 번호
                 .limit(pageable.getPageSize())    // 페이지 사이즈
@@ -114,6 +145,27 @@ public class BoardInformRepositoryImpl implements BoardInformRepositoryCustom {
                 .from(boardInform)
                 .leftJoin(user).on(boardInform.userId.eq(user.userId))
                 .where(boardInform.id.eq(search.getBoardNum()))
+                .orderBy(boardInform.createDate.desc())
+                .fetchOne();
+
+        return result;
+    }
+
+    @Override
+    public BoardInformDto searchBannerOneForAdmin(Search search) {
+        BoardInformDto result = queryFactory
+                .select(Projections.constructor(BoardInformDto.class,
+                        boardInform.id,
+                        boardInform.category,
+                        boardInform.title,
+                        user.name,
+                        boardInform.contents,
+                        boardInform.createDate,
+                        boardInform.isDel
+                ))
+                .from(boardInform)
+                .leftJoin(user).on(boardInform.userId.eq(user.userId))
+                .where(boardInform.id.eq(search.getBoardNum()).and(boardInform.isBanner.isTrue()))
                 .orderBy(boardInform.createDate.desc())
                 .fetchOne();
 

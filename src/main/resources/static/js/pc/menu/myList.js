@@ -18,23 +18,23 @@ function makeQueryUrl() {
     var content = $(".search-input").val();
     var keyword = $("input[name=keyword]").val();
 
-    return "type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + type + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&keyword=" + keyword + "&content=" + content);
 }
 
 function goCategory(pCategory) {
-    location.href="/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/list?type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=");
 }
 
 function goSignUp() {
-    location.href="/pc/signUp?" + makeQueryUrl();
+    location.href = "/pc/signUp?" + makeQueryUrl();
 }
 
 function goLogin() {
-    location.href="/pc/login";
+    location.href = "/pc/login";
 }
 
 function goLogout() {
-    location.href="/logout";
+    location.href = "/logout";
 }
 
 function goMyAccount() {
@@ -54,7 +54,7 @@ function goMyComment() {
 }
 
 function goOriginal(boardId, pCategory) {
-    location.href = "/pc/board/view?boardNum=" + boardId + "&type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=";
+    location.href = encodeURI("/pc/board/view?boardNum=" + boardId + "&type=all&best=&category=" + pCategory + "&pageNum=0&keyword=all&content=");
 }
 
 function onLikes(val) {
@@ -96,7 +96,7 @@ function search() {
     var keyword = $("#keyword option:selected").val();
     var content = $(".search-input").val();
 
-    location.href = "/pc/menu/myList?category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content;
+    location.href = encodeURI("/pc/menu/myList?category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content);
 }
 
 function movePage(page) {
@@ -106,7 +106,7 @@ function movePage(page) {
     var keyword = $("#keyword option:selected").val();
     var content = $(".search-input").val();
 
-    location.href = "/pc/menu/myList?pageNum=" + page + "&category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content;
+    location.href = encodeURI("/pc/menu/myList?pageNum=" + page + "&category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content);
 }
 
 function goView(boardId) {
@@ -117,5 +117,9 @@ function goView(boardId) {
     var keyword = $("#keyword option:selected").val();
     var content = $(".search-input").val();
 
-    location.href = "/pc/menu/myView?boardNum=" + boardId + "&pageNum=" + pageNum + "&category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content;
+    location.href = encodeURI("/pc/menu/myView?boardNum=" + boardId + "&pageNum=" + pageNum + "&category=" + category + "&likes=" + likes + "&comment=" + comment + "&keyword=" + keyword + "&content=" + content);
+}
+
+function goNotice() {
+    location.href = "/pc/menu/notice?" + makeQueryUrl();
 }

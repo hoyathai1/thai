@@ -42,6 +42,9 @@ public class BoardInform {
     @ColumnDefault(value = "false")
     private boolean isDel;
 
+    @ColumnDefault(value = "false")
+    private boolean isBanner;
+
     @PrePersist // 데이터 생성이 이루어질때 사전 작업
     public void prePersist() {
         this.createDate = LocalDateTime.now();

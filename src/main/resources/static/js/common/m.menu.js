@@ -22,6 +22,10 @@ function goMyList() {
     location.href="/menu/myList?page=0&pageSize=15";
 }
 
+function goComment() {
+    location.href="/menu/myComment?page=0&pageSize=15";
+}
+
 function goMyNoti() {
     location.href="/menu/myNoti?page=0&pageSize=15";
 }

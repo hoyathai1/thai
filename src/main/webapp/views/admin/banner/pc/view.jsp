@@ -200,7 +200,6 @@
     </div> <%--.wrapper--%>
 
     <script type="text/javascript" src="/js/jquery-3.6.1.min.js"></script>
-    <script type="text/javascript" src="/js/pc/board/list.js"></script>
     <script type="text/javascript" src="/js/pc/base.js"></script>
 </body>
 </html>

@@ -11,7 +11,9 @@ import java.util.List;
 public interface BoardRepositoryCustom {
     PageImpl<BoardDto> search(Search search, Pageable pageable);
     PageImpl<BoardDto> searchForPcDetail(Search search, Pageable pageable);
+    PageImpl<BoardDto> searchForPcInformDetail(Search search, Pageable pageable);
     PageImpl<BoardDto> searchForDetail(Search search, Pageable pageable);
+    PageImpl<BoardDto> searchForInformDetail(Search search, Pageable pageable);
     BoardDto searchOne(Search search);
     void increseViewCount(Search search);
     boolean isExistBoard(long boardNum);

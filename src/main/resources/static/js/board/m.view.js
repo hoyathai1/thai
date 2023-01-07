@@ -4,8 +4,15 @@ const best = urlParams.get('best');
 const bType = urlParams.get('type');
 
 var currentCommentPage = 0;
-
 var isRunning = false;
+
+var leftBanner = "";
+var isLeftShow = "";
+var leftIndex = 0;
+
+var rightBanner = "";
+var isRightShow = "";
+var rightIndex = 0;
 
 $(document).ready(function () {
     $(".createDate").html(getBoardTime($(".createDate").html()));
@@ -13,6 +20,22 @@ $(document).ready(function () {
     getCommentList(currentCommentPage);
 
     getList(0);
+
+    isLeftShow = $("input[name=leftBannerShow]").val();
+    if (isLeftShow == 'true') {
+        var bannerLink = $("input[name=leftBannerLink]").val();
+        var bannerUrl = $("input[name=leftBannerUrl]").val();
+        var bannerBoard = $("input[name=leftBannerBoard]").val();
+        leftBanner += "<div class='comment listBanner' style='background: url(" + bannerUrl + ") no-repeat; background-size: contain; background-position: center;' onclick='clickBanner(\"" + bannerLink + "\", \"" + bannerBoard + "\")'></div>";
+    }
+
+    isRightShow = $("input[name=rightBannerShow]").val();
+    if (isRightShow == 'true') {
+        var bannerLink = $("input[name=rightBannerLink]").val();
+        var bannerUrl = $("input[name=rightBannerUrl]").val();
+        var bannerBoard = $("input[name=rightBannerBoard]").val();
+        rightBanner += "<div class='board listBanner' style='background: url(" + bannerUrl + ") no-repeat; background-size: contain; background-position: center;' onclick='clickBanner(\"" + bannerLink + "\", \"" + bannerBoard + "\")'></div>";
+    }
 });
 
 function moveScrollToComment() {
@@ -48,7 +71,7 @@ function makeQueryUrl() {
     var keyword = $("input[name=keyword]").val();
     var content = $("input[name=content]").val();
 
-    return "type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content;
+    return encodeURI("type=" + bType + "&best=" + best + "&category=" + category + "&pageNum=" + pageNum + "&pageSize=" + pageSize + "&keyword=" + keyword + "&content=" + content);
 }
 
 function getCommentList(page) {
@@ -141,7 +164,20 @@ function setListHtml(data) {
             listHtml += "   <div class='createDate add'>" + getReplyTime(this.createDate) + "</div>";
             listHtml += "</div>";
 
+            if (leftIndex == 15 && isLeftShow == 'true') {
+                listHtml += leftBanner;
+                leftIndex = 0;
+            }
+
+            leftIndex++;
         });
+
+        if (leftIndex == 15 && isLeftShow == 'true') {
+            listHtml += leftBanner;
+            leftIndex = 0;
+        }
+
+        leftIndex++;
     });
 
     $(".comment-list").html(listHtml);
@@ -827,7 +863,16 @@ function setListHtmlForBoard(data) {
     $(data.list.content).each(function () {
         listHtml += "<div class='board' data-id='" + this.id + "' onclick='goView(" + this.id + ")'>";
         listHtml += "   <div class='content'>";
-        listHtml += "       <div class='title'>" + this.title + "</div>";
+        listHtml += "       <div class='title'>";
+
+        if (this.img) {
+            listHtml += "<div class='img-ico'></div>";
+        } else {
+            listHtml += "<div class='talk-ico'></div>";
+        }
+
+        listHtml += this.title;
+        listHtml += "</div>";
         listHtml += "       <div class='info'>";
 
         if (this.user) {
@@ -844,6 +889,12 @@ function setListHtmlForBoard(data) {
         listHtml += "   <div class='reply'>" + this.commentCount + "</div>";
         listHtml += "</div>";
 
+        if (rightIndex == 15 && isRightShow == 'true') {
+            listHtml += rightBanner;
+            rightIndex=0;
+        }
+
+        rightIndex++;
     });
 
     $(".board-list").append(listHtml);
@@ -878,10 +929,31 @@ function shareBtn() {
     var url = '';
     var textarea = document.createElement("textarea");
     document.body.appendChild(textarea);
-    url = window.document.location.origin + "/board/view?boardNum=" + boardNum + "&type=all&best=&category=" + category + "&pageNum=0&keyword=all&content=";
+    url = encodeURI(window.document.location.origin + "/board/view?boardNum=" + boardNum + "&type=all&best=&category=" + category + "&pageNum=0&keyword=all&content=");
     textarea.value = url;
     textarea.select();
     document.execCommand("copy");
     document.body.removeChild(textarea);
     openModal("URL이 복사되었습니다.", "type3", null);
+}
+
+function goUserModal(id, author) {
+    $(".user-modal-content").attr("data-author", author);
+
+    var popT = $("#" + id).offset().top; //fe_laypopH 의 top 좌표값
+    var popL = $("#" + id).offset().left; //fe_laypopH 의 top 좌표값
+    $('.user-modal-display').css('top',popT+20+'px'); //레이어팝업 style="(top 좌표값 - 100)px";
+    $('.user-modal-display').css('left',popL+'px'); //레이어팝업 style="(top 좌표값 - 100)px";
+    $(".user-modal").css("display", "block");
+
+}
+
+function closeUserModal() {
+    $(".user-modal").css("display", "none");
+}
+
+function authorSearch() {
+    var author = $(".user-modal-content").data("author");
+
+    location.href = encodeURI("/pc/board/list?type=all&best=&category=thai&pageNum=0&keyword=author&content=" + author);
 }

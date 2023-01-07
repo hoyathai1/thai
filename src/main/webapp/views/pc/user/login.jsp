@@ -6,7 +6,11 @@
 <link rel="stylesheet"  type="text/css" href="/css/pc/user/login.css">
 <html>
 <head>
-    <title></title>
+    <meta property="og:title" content="헬타이">
+    <meta property="og:url" content="http://hellowthai.com/">
+    <meta property="og:image" content="/img/logo.png">
+    <meta property="og:description" content="태국정보를 공유하는 커뮤님티입니다.">
+    <title>헬타이</title>
 </head>
 <body>
     <div class="header">

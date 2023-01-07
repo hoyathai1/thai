@@ -2,6 +2,7 @@ package com.travel.thai.bbs.controller;
 
 import com.travel.thai.bbs.domain.*;
 import com.travel.thai.bbs.service.*;
+import com.travel.thai.common.service.BannerService;
 import com.travel.thai.common.util.LogUtil;
 import com.travel.thai.common.util.RSAUtil;
 import com.travel.thai.common.util.StringUtils;
@@ -52,6 +53,9 @@ public class BoardController {
     @Autowired
     private BookMarkService bookMarkService;
 
+    @Autowired
+    private BannerService bannerService;
+
     @Value("${board.img.temp.dir}")
     private String TEMP_DIR;
 
@@ -60,6 +64,7 @@ public class BoardController {
         log.info("[BoardController.list][GET]" + LogUtil.setUserInfo(request, user));
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("banner", bannerService.getBannerForMobile(search.getCategory()));
 
         return "board/list";
     }
@@ -108,6 +113,27 @@ public class BoardController {
         return entity;
     }
 
+    @RequestMapping(value = "/detailInformList", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> detailInformListAjax(HttpServletRequest request, @RequestBody Search search
+            , @AuthenticationPrincipal User user) {
+        log.info("[BoardController.detailInformListAjax][POST]" + LogUtil.setUserInfo(request, user));
+        ResponseEntity<Map<String, Object>> entity;
+
+        try {
+            Map<String, Object> map = new HashMap<>();
+            Page<BoardDto> list = boardService.searchBoardForInformDetail(search);
+            map.put("list", list);
+            map.put("pageDto", new PageDto(list.getTotalElements(), list.getPageable()));
+
+            entity = new ResponseEntity<>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
+    }
+
     @RequestMapping(value = "/inform", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> informListAjax(HttpServletRequest request, @RequestBody Search search
             , @AuthenticationPrincipal User user) {
@@ -135,6 +161,7 @@ public class BoardController {
         log.info("[BoardController.view][GET]" + LogUtil.setUserInfo(request, user));
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("banner", bannerService.getBannerForMobile(search.getCategory()));
 
         BoardDto board = boardService.searchOne(search);
         int likes = likesService.getLikesCount(search.getBoardNum());
@@ -165,6 +192,9 @@ public class BoardController {
     public String viewInform(HttpServletRequest request, @ModelAttribute("search") Search search, Model model
             , @AuthenticationPrincipal User user) {
         log.info("[BoardController.viewInform][GET]" + LogUtil.setUserInfo(request, user));
+        model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
+        model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("banner", bannerService.getBannerForMobile(search.getCategory()));
 
         BoardInformDto boardInform = boardInformService.searchOne(search);
 
@@ -236,6 +266,7 @@ public class BoardController {
         log.info("[BoardController.register][GET]" + LogUtil.setUserInfo(request, user));
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("banner", bannerService.getBannerForMobile(search.getCategory()));
 
         HttpSession session = request.getSession();
         String[] fileList = (String[]) session.getAttribute("fileNameList");
@@ -265,8 +296,13 @@ public class BoardController {
                 board.setIp(LogUtil.etRemoteAddr(request));
             }
 
-            Board result = boardService.saveBoard(board);
             String[] fileNameList = (String[]) session.getAttribute("fileNameList");
+
+            if (fileNameList != null || fileNameList.length > 0) {
+                board.setImg(true);
+            }
+
+            Board result = boardService.saveBoard(board);
 
             boardService.moveImage(fileNameList, board);
 
@@ -326,6 +362,7 @@ public class BoardController {
         log.info("[BoardController.modify][GET]" + LogUtil.setUserInfo(request, user));
         model.addAttribute("boardCategory", boardCategoryService.getBoardCategory(search.getCategory()));
         model.addAttribute("boardType", boardCategoryService.getBoardTypeList(search.getCategory()));
+        model.addAttribute("banner", bannerService.getBannerForMobile(search.getCategory()));
 
         try {
             HttpSession session = request.getSession();
@@ -377,9 +414,16 @@ public class BoardController {
         HttpSession session = request.getSession();
 
         try {
+            String[] fileNameList = (String[]) session.getAttribute("fileNameList");
+
+            if (fileNameList != null || fileNameList.length > 0) {
+                board.setImg(true);
+            } else {
+                board.setImg(false);
+            }
+
             boolean result = boardService.modifyBoard(board, user);
 
-            String[] fileNameList = (String[]) session.getAttribute("fileNameList");
             boardService.moveImage(fileNameList, board);
 
             entity = new ResponseEntity(result, HttpStatus.OK);

@@ -11,8 +11,10 @@ import java.util.List;
 public interface BoardInformRepositoryCustom {
     List<BoardInformDto> search(Search search);
     PageImpl<BoardInformDto> searchForAdmin(Search search, Pageable pageable);
+    PageImpl<BoardInformDto> searchForBanner(Search search, Pageable pageable);
     BoardInformDto searchOne(Search search);
     BoardInformDto searchOneForAdmin(Search search);
+    BoardInformDto searchBannerOneForAdmin(Search search);
     void modifyBoardInform(BoardInform boardInform);
     void deleteBoardInform(Search search);
     void restoreBoardInform(Search search);

@@ -518,8 +518,6 @@
     color: #002875;
 }
 
-
-
 .myNoti .title {
     padding: 20px;
     font-size: 24px;
@@ -629,5 +627,123 @@
 }
 
 .myNoti .content .noti-paging .page-number div.on {
+    color: #002875;
+}
+
+
+/*
+    내게시글보기
+*/
+.myComment .title {
+    padding: 20px;
+    font-size: 24px;
+}
+
+.myComment .content {
+}
+
+.myComment .content .comment-list {
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+}
+
+.myComment .content .comment-list .comment {
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.myComment .content .comment-list .comment .comment-title {
+    font-size: 18px;
+    width: 85%;
+}
+
+.myComment .content .comment-list .comment .moveBtn {
+    width: 15%;
+}
+
+.myComment .content .comment-list .comment .moveBtn button {
+    border: 1px var(--gray) solid;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--gray);
+}
+
+.myComment .content .comment-list .comment .comment-info {
+    font-size: 12px;
+    color: #7c7874;
+    display:flex;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.myComment .content .comment-list .comment .content {
+    font-size: 14px;
+    color: black;
+    margin-top: 5px;
+    width: 100%;
+}
+
+/*paging*/
+.myComment .content .comment-paging {
+    height: 32px;
+    border-bottom: 2px solid #bcbcbc;
+}
+
+.myComment .content .comment-paging .page-prev {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.myComment .content .comment-paging .page-next {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.myComment .content .comment-paging .page-move {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 12.5%;
+    float: left;
+    color: #7c7874;
+    font-weight: bold;
+}
+
+.myComment .content .comment-paging .page-number {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 62.5%;
+    float: left;
+}
+
+.myComment .content .comment-paging .page-number div {
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    color: #7c7874;
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+}
+
+.myComment .content .comment-paging .page-number div.on {
     color: #002875;
 }

@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    if(!detectMobileDevice(window.navigator.userAgent)) {
+        var hUrl = new URL(location.href);
+        location.href = encodeURI("/pc" + hUrl.pathname + hUrl.search);
+    }
 
 });
 
